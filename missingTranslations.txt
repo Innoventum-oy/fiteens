@@ -1,0 +1,7 @@
+{
+  "fi": [
+    "btnAvailabilityInfo",
+    "fieldCannotBeEmpty",
+    "pleaseProvideValidPhoneOrEmail"
+  ]
+}

@@ -1,0 +1,133 @@
+name: luen
+description: Luen Mobile Application
+
+# The following line prevents the package from being accidentally published to
+# pub.dev using `pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+# The following defines the version and build number for your application.
+# A version number is three numbers separated by dots, like 1.2.43
+# followed by an optional build number separated by a +.
+# Both the version and the builder number may be overridden in flutter
+# build by specifying --build-name and --build-number, respectively.
+# In Android, build-name is used as versionName while build-number used as versionCode.
+# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
+# In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
+# Read more about iOS versioning at
+# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+version: 0.5.0+22
+
+environment:
+  sdk: ">=2.17.0 "
+
+dependencies:
+  flutter:
+    sdk: flutter
+   #internationalization:
+  flutter_localizations:
+      sdk: flutter
+  intl: ^0.17.0
+  provider: ^6.0.0
+
+  http: ^0.13.1
+  #scoped_model: "^1.1.0"
+  shared_preferences: ^2.0.5
+  #flushbar: ^1.10.4
+  #local database:
+  sqflite: ^2.0.0+3
+  path_provider: ^2.0.8
+  #calendar day list for the calendar - view
+  table_calendar: ^3.0.0
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^1.0.0
+  #for qr code scanner
+  #qr_code_scanner: ^0.5.2
+  #for getting user location
+  geolocator: ^9.0.1
+  url_launcher: ^6.0.2
+  another_flushbar: ^1.10.17
+  flutter_html: ^3.0.0-alpha.2
+  settings_ui: ^2.0.1
+  percent_indicator: ^4.0.0
+  widget_arrows: ^0.2.0-nullsafety.0
+  font_awesome_flutter: ^9.2.0
+  glob: ^2.0.1
+  package_info: ^2.0.0
+  file_picker: ^5.0.1
+  feedback: ^2.0.0
+  wakelock: ^0.6.0+1
+  graphview: ^1.0.0
+  youtube_player_flutter: ^8.0.0
+  modal_bottom_sheet: ^2.0.0
+  flutter_rating_bar: ^4.0.0
+  # file downloads
+  dio: ^4.0.4
+  permission_handler: ^10.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_native_splash: ^2.1.6
+  flutter_launcher_icons: ^0.10.0
+
+#if you make changes, regenerate with flutter pub run flutter_native_splash:create
+flutter_native_splash:
+  color: 15303D
+  image: images/logo.png
+
+#if you make changes, regenerate with flutter pub run flutter_launcher_icons:main
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "images/icon1024.png"
+
+dependency_overrides:
+  font_awesome_flutter:
+    path: /Users/jleinone/flutter_projects/font_awesome_flutter
+
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter.
+flutter:
+
+  generate: true #for int
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - images/
+  #   - images/a_dot_ham.jpeg
+
+  # An image asset can refer to one or more resolution-specific "variants", see
+  # https://flutter.dev/assets-and-images/#resolution-aware.
+
+  # For details regarding adding assets from package dependencies, see
+  # https://flutter.dev/assets-and-images/#from-packages
+
+  # To add custom fonts to your application, add a fonts section here,
+  # in this "flutter" section. Each entry in this list should have a
+  # "family" key with the font family name, and a "fonts" key with a
+  # list giving the asset and other descriptors for the font. For
+  # example:
+  # fonts:
+  #   - family: Schyler
+  #     fonts:
+  #       - asset: fonts/Schyler-Regular.ttf
+  #       - asset: fonts/Schyler-Italic.ttf
+  #         style: italic
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: fonts/TrajanPro.ttf
+  #       - asset: fonts/TrajanPro_Bold.ttf
+  #         weight: 700
+  #
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/custom-fonts/#from-packages
+flutter_intl:
+  enabled: true

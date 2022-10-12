@@ -1,0 +1,6 @@
+package app.luen.Luen
+
+import io.flutter.embedding.android.FlutterActivity
+
+class MainActivity: FlutterActivity() {
+}
