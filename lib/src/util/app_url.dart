@@ -1,9 +1,9 @@
 class AppUrl {
   static const Map<String,String> servers = {
-    'Lukudiplomi' : 'xn--riveill-cxa.fi',
-    'Kehityspalvelin' : 'dev.xn--riveill-cxa.fi'
+    'Fiteens' : 'fiteens.eu',
+    'Development' : 'dev.fiteens.eu'
   };
-  static const String liveBaseURL = "dev.xn--riveill-cxa.fi";
+  static const String liveBaseURL = "dev.fiteens.eu";
   static const String localBaseURL = "http://10.0.2.2:4000/api/";
   static const int appId = 1; //App id for Lukudiplomi
   static const String baseURL = liveBaseURL;

@@ -1,11 +1,10 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
-
-import 'package:luen/src/providers/auth.dart';
-import 'package:luen/src/util/api_client.dart';
-import 'package:luen/src/util/widgets.dart';
+import 'package:fiteens/src/util/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import 'package:core/core.dart' as core;
 
 class ResetPassword extends StatefulWidget {
   @override
@@ -15,9 +14,10 @@ class ResetPassword extends StatefulWidget {
 class _ResetPasswordState extends State<ResetPassword> {
   final formKey = new GlobalKey<FormState>();
 
-  String? _contact, _confirmkey, _password;
+  String? _contact, _confirmKey, _password;
 
-  ApiClient _apiClient = ApiClient();
+  // core.ApiClient _apiClient = core.ApiClient();
+  core.Auth _auth = core.Auth();
   Widget getConfirmationKeyForm(auth) {
     final _contactController = TextEditingController();
     var getVerificationCode = () {
@@ -26,22 +26,22 @@ class _ResetPasswordState extends State<ResetPassword> {
       if (form!.validate()) {
         form.save();
 
-        final Future<Map<String, dynamic>> successfulMessage =
-        _apiClient.getConfirmationKey(_contact!);
+        final Future<Map<String, dynamic>?> successfulMessage =
+        _auth.getConfirmationKey(_contact!);
 
         successfulMessage.then((response) {
-          if (response['status'] == 'success') {
+          if (response?['status'] == 'success') {
             setState(() {
-              auth.setContactMethodId(response['contactmethodid']);
-              if(response['userid']!=null) auth.setUserId(response['userid']);
-              print('contact method id set to '+response['contactmethodid'].toString());
-              auth.setVerificationStatus(VerificationStatus.CodeReceived);
+              auth.setContactMethodId(response?['contactmethodid']);
+              if(response?['userid']!=null) auth.setUserId(response?['userid']);
+              print('contact method id set to '+response!['contactmethodid'].toString());
+              auth.setVerificationStatus(core.VerificationStatus.codeReceived);
             });
 
           } else {
             Flushbar(
               title: AppLocalizations.of(context)!.requestFailed,
-              message: response['message'].toString(),
+              message: response?['message'].toString(),
               duration: Duration(seconds: 3),
             ).show(context);
           }
@@ -73,7 +73,7 @@ class _ResetPasswordState extends State<ResetPassword> {
       }
       //test for email pattern
       RegExp regex = new RegExp(
-          r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
+          r'^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
       if (!regex.hasMatch(value)) {
         _msg = AppLocalizations.of(context)!.pleaseProvideValidPhoneOrEmail;
       }
@@ -98,7 +98,7 @@ class _ResetPasswordState extends State<ResetPassword> {
         SizedBox(height: 5.0),
         contactField,
         SizedBox(height: 20.0),
-        auth.verificationStatus == VerificationStatus.Validating
+        auth.verificationStatus == core.VerificationStatus.validating
             ? loading
             : longButtons(AppLocalizations.of(context)!.getCode,
             getVerificationCode),
@@ -111,7 +111,7 @@ class _ResetPasswordState extends State<ResetPassword> {
 
   Widget enterConfirmationKeyForm(auth) {
     final _confirmationController = TextEditingController();
-    print('current _confirmkey value: '+_confirmkey.toString());
+    print('current _confirmkey value: '+_confirmKey.toString());
     var loading = Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -125,7 +125,7 @@ class _ResetPasswordState extends State<ResetPassword> {
       controller: _confirmationController,
       validator: (value) =>
       value!.isEmpty ? AppLocalizations.of(context)!.pleaseEnterConfirmationKey : null,
-      onSaved: (value) => _confirmkey = value,
+      onSaved: (value) => _confirmKey = value,
       decoration: buildInputDecoration(
           AppLocalizations.of(context)!.confirmationKey, Icons.vpn_key),
     );
@@ -136,17 +136,17 @@ class _ResetPasswordState extends State<ResetPassword> {
 
       if (form!.validate()) {
         form.save();
-        print('checking confirmationkey - user: '+auth.userId+',  contactmethodid '+auth.contactMethodId.toString()+', key: '+_confirmkey.toString());
+        print('checking confirmationkey - user: '+auth.userId+',  contactmethodid '+auth.contactMethodId.toString()+', key: '+_confirmKey.toString());
 
         final Future<Map<String, dynamic>> successfulMessage =
-        _apiClient.sendConfirmationKey(userid: auth.userId,contact: auth.contactMethodId, code:_confirmkey!.toString());
+        _auth.sendConfirmationKey(userid: auth.userId,contact: auth.contactMethodId, code:_confirmKey!.toString());
 
         successfulMessage.then((response) {
           print('received response from sendConfirmationKey');
           if (response['status'] == 'success') {
             setState(() {
               auth.setSinglePass(response['singlepass']);
-              auth.setVerificationStatus(VerificationStatus.Verified);
+              auth.setVerificationStatus(core.VerificationStatus.verified);
             });
 
           } else {
@@ -175,7 +175,7 @@ class _ResetPasswordState extends State<ResetPassword> {
         confirmationKeyField,
 
         SizedBox(height: 20.0),
-        auth.verificationStatus == VerificationStatus.Validating
+        auth.verificationStatus == core.VerificationStatus.validating
             ? loading
             : longButtons(AppLocalizations.of(context)!.btnSend,
             sendVerificationCode),
@@ -210,13 +210,13 @@ class _ResetPasswordState extends State<ResetPassword> {
       if (form!.validate()) {
         form.save();
         final Future<Map<String, dynamic>> successfulMessage =
-        _apiClient.changePassword(userid: auth.userId, password:_password, singlepass: auth.singlePass);
+        _auth.changePassword(userid: auth.userId, password:_password, singlepass: auth.singlePass);
 
         successfulMessage.then((response) {
           if (response['status'] == 'success') {
             setState(() {
               print('password successfully changed for user');
-              auth.setVerificationStatus(VerificationStatus.PasswordChanged);
+              auth.setVerificationStatus(core.VerificationStatus.passwordChanged);
 
             });
 
@@ -241,7 +241,7 @@ class _ResetPasswordState extends State<ResetPassword> {
         SizedBox(height: 5.0),
         passwordField,
         SizedBox(height: 20.0),
-        auth.loggedInStatus == Status.Authenticating
+        auth.loggedInStatus == core.Status.authenticating
             ? loading
             : longButtons(AppLocalizations.of(context)!.btnSetNewPassword,
             setPassword),
@@ -282,14 +282,14 @@ class _ResetPasswordState extends State<ResetPassword> {
   Widget returnButton(auth)
   {
     switch(auth.verificationStatus){
-      case VerificationStatus.Verified:
+      case core.VerificationStatus.verified:
       // display button to return to code request form
         return TextButton(
             child: Text(AppLocalizations.of(context)!.requestNewCode,
                 style: TextStyle(fontWeight: FontWeight.w300)),
             onPressed: () async {
               setState(() {
-                auth.setVerificationStatus(VerificationStatus.CodeReceived);
+                auth.setVerificationStatus(core.VerificationStatus.codeReceived);
               });
             });
 
@@ -299,7 +299,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                 style: TextStyle(fontWeight: FontWeight.w300)),
             onPressed: () async {
               setState(() {
-                auth.setVerificationStatus(VerificationStatus.CodeNotRequested);
+                auth.setVerificationStatus(core.VerificationStatus.codeNotRequested);
               });
             });
 
@@ -308,7 +308,7 @@ class _ResetPasswordState extends State<ResetPassword> {
 
   @override
   Widget build(BuildContext context) {
-    AuthProvider auth = Provider.of<AuthProvider>(context);
+    core.AuthProvider auth = Provider.of<core.AuthProvider>(context);
 
 
     return SafeArea(
@@ -340,16 +340,16 @@ class _ResetPasswordState extends State<ResetPassword> {
 
     switch(auth.verificationStatus)
     {
-      case VerificationStatus.UserNotFound:
-      case VerificationStatus.CodeNotRequested:
+      case core.VerificationStatus.userNotFound:
+      case core.VerificationStatus.codeNotRequested:
         return getConfirmationKeyForm(auth);
 
-      case VerificationStatus.CodeReceived:
+      case core.VerificationStatus.codeReceived:
         return enterConfirmationKeyForm(auth);
 
-      case VerificationStatus.Verified:
+      case core.VerificationStatus.verified:
         return updatePasswordForm(auth);
-      case VerificationStatus.PasswordChanged:
+      case core.VerificationStatus.passwordChanged:
         return successForm();
       default:
         return Container();

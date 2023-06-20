@@ -8,12 +8,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:luen/main.dart';
+import 'package:fiteens/main.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(Luen());
+    await tester.pumpWidget(Fiteens());
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

@@ -1,52 +1,76 @@
 import 'package:flutter/material.dart';
-import 'package:luen/src/providers/objectprovider.dart' as objectmodel;
+import 'package:intl/intl.dart';
+
+import 'package:fiteens/src/util/widgets.dart';
 import 'package:provider/provider.dart';
-
-import '../objects/score.dart';
-import '../objects/user.dart';
-import '../providers/user_provider.dart';
-import '../util/utils.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:core/core.dart' as core;
 class ScoreList extends StatefulWidget {
-  final objectmodel.ScoreProvider scoreprovider = objectmodel.ScoreProvider();
+  final core.ScoreProvider scoreprovider = core.ScoreProvider();
 
-  ScoreList();
+  ScoreList({super.key});
 
   @override
-  _ScoreListState createState() => _ScoreListState();
+  ScoreListState createState() => ScoreListState();
 }
 
-class _ScoreListState extends State<ScoreList> {
+class ScoreListState extends State<ScoreList> {
+  List<core.Score> myScoreItems = [];
+  core.User? user;
 
-  List<Score> data =[];
-  User? user;
-  LoadingState _loadingState = LoadingState.DONE;
-  //bool _isLoading = false;
-  int iteration =1;
+  int iteration = 1;
   int buildTime = 1;
-  int limit = 20;
+
   //int _pageNumber = 0;
   String? errorMessage;
 
   @override
-  void initState(){
+  void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      super.initState();
+      Provider.of<core.UserProvider>(context, listen: false).getScoreList();
     });
-
-  }
-  @protected
-  //@mustCallSuper
-  void dispose() {
-
-    super.dispose();
+    super.initState();
   }
 
+/*
+  Relies on scorelist provided by userprovider:
+  To update score call userprovider.getScorelist or userprovider.refreshUser
+ */
   @override
   Widget build(BuildContext context) {
+    //User user = Provider.of<UserProvider>(context,listen: false).user;
+    myScoreItems = Provider.of<core.UserProvider>(context).myScore;
+    return Scaffold(
+        appBar: AppBar(
+          title: Text(AppLocalizations.of(context)!.myPoints),
+        ),
+        body: scoreList(),
+        bottomNavigationBar: bottomNavigation(context, currentIndex: 3));
+  }
 
-    User user = Provider.of<UserProvider>(context,listen: false).user;
+  Widget scoreList() {
+    if (myScoreItems.isNotEmpty) {
+      return ListView.builder(
+          itemCount: myScoreItems.length,
+          itemBuilder: (BuildContext context, int index) {
+            return scoreListRow(myScoreItems[index]);
+          });
+    } else {
+      return Text(AppLocalizations.of(context)!.scoreListIsEmpty);
+    }
+  }
 
-    return Placeholder();
+  Widget scoreListRow(core.Score item) {
+    return ListTile(
+      //minLeadingWidth: 80,
+      leading: Text(item.score.toString()),
+      title: Text(
+          (item.description ?? AppLocalizations.of(context)!.noDescription)),
+      subtitle: Text(
+          "${item.scorestatus ?? ''}\n${DateFormat('dd.MM.yyyy').format((item.scoredate ?? DateTime.now()))}",
+          overflow: TextOverflow.ellipsis,
+          maxLines: 10),
+      isThreeLine: true,
+    );
   }
 }

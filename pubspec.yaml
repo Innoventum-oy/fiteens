@@ -1,5 +1,5 @@
-name: luen
-description: Luen Mobile Application
+name: fiteens
+description: Fiteens Mobile Application
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 0.5.0+22
+version: 0.2.0+3
 
 environment:
   sdk: ">=2.17.0 "
@@ -26,10 +26,9 @@ dependencies:
    #internationalization:
   flutter_localizations:
       sdk: flutter
-  intl: ^0.17.0
+  intl: ^0.18.0
   provider: ^6.0.0
 
-  http: ^0.13.1
   #scoped_model: "^1.1.0"
   shared_preferences: ^2.0.5
   #flushbar: ^1.10.4
@@ -64,6 +63,15 @@ dependencies:
   # file downloads
   dio: ^4.0.4
   permission_handler: ^10.1.0
+  cached_network_image: ^3.2.3
+  core:
+    git:
+      url: git@github.com:Innoventum-oy/core.git
+      path: core/
+  qr_code_scanner: ^1.0.1
+  queue: ^3.1.0+2
+  hive_flutter: ^1.1.0
+
 
 dev_dependencies:
   flutter_test:
@@ -80,12 +88,28 @@ flutter_native_splash:
 flutter_icons:
   android: true
   ios: true
-  image_path: "images/icon1024.png"
+  image_path: "images/logo.png"
 
 dependency_overrides:
   font_awesome_flutter:
     path: /Users/jleinone/flutter_projects/font_awesome_flutter
-
+  #dependency updates in local package
+  wakelock:
+    git:
+      url: https://github.com/amb-jannel/wakelock/
+      path: wakelock/
+  wakelock_windows:
+    git:
+      url: https://github.com/amb-jannel/wakelock/
+      path: wakelock_windows
+  webviewx:
+    git:
+      url: https://github.com/amb-jannel/webviewx/
+  date_range_form_field:
+    git:
+      url: https://github.com/jleinone/date_range_form_field.git
+  core:
+    path: /Users/jleinone/flutter_projects/core/core
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -101,6 +125,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - assets/config/
     - images/
   #   - images/a_dot_ham.jpeg
 

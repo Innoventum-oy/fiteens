@@ -60,6 +60,76 @@ class S {
     );
   }
 
+  /// `Activities`
+  String get activities {
+    return Intl.message(
+      'Activities',
+      name: 'activities',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Activity`
+  String get activity {
+    return Intl.message(
+      'Activity',
+      name: 'activity',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Activity calendar`
+  String get activityCalendar {
+    return Intl.message(
+      'Activity calendar',
+      name: 'activityCalendar',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Registration saved`
+  String get activityRegistrationSaved {
+    return Intl.message(
+      'Registration saved',
+      name: 'activityRegistrationSaved',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Registering for activity failed`
+  String get activityRegistrationFailed {
+    return Intl.message(
+      'Registering for activity failed',
+      name: 'activityRegistrationFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Activity recorded`
+  String get activityRecorded {
+    return Intl.message(
+      'Activity recorded',
+      name: 'activityRecorded',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Visit removed`
+  String get visitRemoved {
+    return Intl.message(
+      'Visit removed',
+      name: 'visitRemoved',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Account created`
   String get accountCreated {
     return Intl.message(
@@ -90,21 +160,11 @@ class S {
     );
   }
 
-  /// `Activities`
-  String get activities {
+  /// `Activity level`
+  String get activityLevel {
     return Intl.message(
-      'Activities',
-      name: 'activities',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Activity calendar`
-  String get activityCalendar {
-    return Intl.message(
-      'Activity calendar',
-      name: 'activityCalendar',
+      'Activity level',
+      name: 'activityLevel',
       desc: '',
       args: [],
     );
@@ -150,10 +210,10 @@ class S {
     );
   }
 
-  /// `Lukudiplomi`
+  /// `FiTeens *DRAFT*`
   String get appName {
     return Intl.message(
-      'Lukudiplomi',
+      'FiTeens *DRAFT*',
       name: 'appName',
       desc: '',
       args: [],
@@ -165,6 +225,16 @@ class S {
     return Intl.message(
       'Authenticating ... Please wait',
       name: 'authenticating',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Benefits`
+  String get benefits {
+    return Intl.message(
+      'Benefits',
+      name: 'benefits',
       desc: '',
       args: [],
     );
@@ -390,6 +460,16 @@ class S {
     );
   }
 
+  /// `No camera available`
+  String get cameraNotAvailable {
+    return Intl.message(
+      'No camera available',
+      name: 'cameraNotAvailable',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Cancel`
   String get cancel {
     return Intl.message(
@@ -595,6 +675,16 @@ class S {
     return Intl.message(
       'Current station',
       name: 'currentStation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Date range`
+  String get dateRange {
+    return Intl.message(
+      'Date range',
+      name: 'dateRange',
       desc: '',
       args: [],
     );
@@ -890,6 +980,16 @@ class S {
     );
   }
 
+  /// `Forms`
+  String get forms {
+    return Intl.message(
+      'Forms',
+      name: 'forms',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Front Camera`
   String get frontCamera {
     return Intl.message(
@@ -960,6 +1060,26 @@ class S {
     );
   }
 
+  /// `Healthy lifestyle`
+  String get healthyLifestyle {
+    return Intl.message(
+      'Healthy lifestyle',
+      name: 'healthyLifestyle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Healthy food`
+  String get healthyFood {
+    return Intl.message(
+      'Healthy food',
+      name: 'healthyFood',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Failed to join group with given code`
   String get joiningGroupFailed {
     return Intl.message(
@@ -1015,6 +1135,36 @@ class S {
     return Intl.message(
       'Loading',
       name: 'loading',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loading benefits`
+  String get loadingBenefits {
+    return Intl.message(
+      'Loading benefits',
+      name: 'loadingBenefits',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Location retrieved`
+  String get locationRetrieved {
+    return Intl.message(
+      'Location retrieved',
+      name: 'locationRetrieved',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Locations`
+  String get locations {
+    return Intl.message(
+      'Locations',
+      name: 'locations',
       desc: '',
       args: [],
     );
@@ -1130,11 +1280,41 @@ class S {
     );
   }
 
+  /// `My Score`
+  String get myScore {
+    return Intl.message(
+      'My Score',
+      name: 'myScore',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `no`
   String get no {
     return Intl.message(
       'no',
       name: 'no',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Could not find any activities`
+  String get noActivitiesFound {
+    return Intl.message(
+      'Could not find any activities',
+      name: 'noActivitiesFound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No active benefits`
+  String get noActiveBenefits {
+    return Intl.message(
+      'No active benefits',
+      name: 'noActiveBenefits',
       desc: '',
       args: [],
     );
@@ -1150,11 +1330,81 @@ class S {
     );
   }
 
+  /// `No description`
+  String get noDescription {
+    return Intl.message(
+      'No description',
+      name: 'noDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No resources currently available`
+  String get noResourcesFound {
+    return Intl.message(
+      'No resources currently available',
+      name: 'noResourcesFound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No forms found`
+  String get noFormsFound {
+    return Intl.message(
+      'No forms found',
+      name: 'noFormsFound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No visits today`
+  String get noVisitsToday {
+    return Intl.message(
+      'No visits today',
+      name: 'noVisitsToday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No visits found`
+  String get noVisitsFound {
+    return Intl.message(
+      'No visits found',
+      name: 'noVisitsFound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No users found`
+  String get noUsersFound {
+    return Intl.message(
+      'No users found',
+      name: 'noUsersFound',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `No tasks`
   String get noTasks {
     return Intl.message(
       'No tasks',
       name: 'noTasks',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No thank you`
+  String get noThankYou {
+    return Intl.message(
+      'No thank you',
+      name: 'noThankYou',
       desc: '',
       args: [],
     );
@@ -1280,6 +1530,16 @@ class S {
     );
   }
 
+  /// `Participants`
+  String get participants {
+    return Intl.message(
+      'Participants',
+      name: 'participants',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Pause`
   String get pause {
     return Intl.message(
@@ -1310,11 +1570,31 @@ class S {
     );
   }
 
+  /// `Physical activities`
+  String get physicalActivities {
+    return Intl.message(
+      'Physical activities',
+      name: 'physicalActivities',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Please complete the form properly`
   String get pleaseCompleteFormProperly {
     return Intl.message(
       'Please complete the form properly',
       name: 'pleaseCompleteFormProperly',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enable camera for scanning QR codes`
+  String get pleaseEnableCamera {
+    return Intl.message(
+      'Please enable camera for scanning QR codes',
+      name: 'pleaseEnableCamera',
       desc: '',
       args: [],
     );
@@ -1560,6 +1840,16 @@ class S {
     );
   }
 
+  /// `Scanner ready`
+  String get readyToScan {
+    return Intl.message(
+      'Scanner ready',
+      name: 'readyToScan',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Rear Camera`
   String get rearCamera {
     return Intl.message(
@@ -1630,6 +1920,16 @@ class S {
     );
   }
 
+  /// `Resources`
+  String get resources {
+    return Intl.message(
+      'Resources',
+      name: 'resources',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Retrieving coordinates`
   String get retrievingCoordinates {
     return Intl.message(
@@ -1645,6 +1945,16 @@ class S {
     return Intl.message(
       'Returned',
       name: 'returned',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Routines`
+  String get routines {
+    return Intl.message(
+      'Routines',
+      name: 'routines',
       desc: '',
       args: [],
     );
@@ -1675,6 +1985,36 @@ class S {
     return Intl.message(
       'Score',
       name: 'score',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save data`
+  String get saveData {
+    return Intl.message(
+      'Save data',
+      name: 'saveData',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save answer`
+  String get saveAnswer {
+    return Intl.message(
+      'Save answer',
+      name: 'saveAnswer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No score earned yet`
+  String get scoreListIsEmpty {
+    return Intl.message(
+      'No score earned yet',
+      name: 'scoreListIsEmpty',
       desc: '',
       args: [],
     );
@@ -1770,6 +2110,16 @@ class S {
     );
   }
 
+  /// `Today`
+  String get today {
+    return Intl.message(
+      'Today',
+      name: 'today',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Transit to station`
   String get transitToStation {
     return Intl.message(
@@ -1810,11 +2160,11 @@ class S {
     );
   }
 
-  /// `Unnamed station`
-  String get unnamedStation {
+  /// `Untitled page`
+  String get unnamedWebPage {
     return Intl.message(
-      'Unnamed station',
-      name: 'unnamedStation',
+      'Untitled page',
+      name: 'unnamedWebPage',
       desc: '',
       args: [],
     );
@@ -1835,6 +2185,26 @@ class S {
     return Intl.message(
       'Use code',
       name: 'useCode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `User not found`
+  String get userNotFound {
+    return Intl.message(
+      'User not found',
+      name: 'userNotFound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Untitled`
+  String get untitled {
+    return Intl.message(
+      'Untitled',
+      name: 'untitled',
       desc: '',
       args: [],
     );

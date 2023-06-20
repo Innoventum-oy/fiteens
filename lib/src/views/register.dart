@@ -1,15 +1,9 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
-import 'package:luen/src/objects/user.dart';
-import 'package:luen/src/providers/auth.dart';
-import 'package:luen/src/providers/user_provider.dart';
-import 'package:luen/src/util/api_client.dart';
-
-import 'package:luen/src/util/widgets.dart';
+import 'package:fiteens/src/util/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:luen/src/util/shared_preference.dart';
-
+import 'package:core/core.dart' as core;
 
 enum ContactMethod{
   Phone,
@@ -24,7 +18,8 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   final formKey = new GlobalKey<FormState>();
-  final ApiClient _apiClient = ApiClient();
+  //final core.ApiClient _apiClient = core.ApiClient();
+  final core.Auth _auth = core.Auth();
   String? _firstname,
       _lastname,
       _guardianname,
@@ -53,7 +48,7 @@ class _RegisterState extends State<Register> {
       final form = formKey.currentState;
       if (form!.validate()) {
         form.save();
-        _apiClient.register(
+        _auth.register(
             firstname:_firstname.toString(),
             lastname: _lastname.toString(),
             email:_email.toString(),
@@ -81,17 +76,17 @@ class _RegisterState extends State<Register> {
                 if (response['user'] != null) {
                   var userData = response['user'];
                   print('saving users to UserPreferences');
-                  User authUser = User.fromJson(userData);
+                  core.User authUser = core.User.fromJson(userData);
 
-                  UserPreferences().saveUser(authUser);
+                  core.UserPreferences().saveUser(authUser);
 
-                  auth.setLoggedInStatus(Status.LoggedIn);
+                  auth.setLoggedInStatus(core.Status.loggedIn);
                   auth.setContactMethodId(response['contactmethodid']);
-                  Provider.of<UserProvider>(context, listen: false).setUser(
+                  Provider.of<core.UserProvider>(context, listen: false).setUser(
                       authUser);
                   setState(() {
                     print('setting registeredStatus to Registered');
-                    auth.setRegisteredStatus(Status.Registered);
+                    auth.setRegisteredStatus(core.Status.registered);
                   });
                 }
             }
@@ -266,7 +261,7 @@ class _RegisterState extends State<Register> {
       lastnameField,
       SizedBox(height:10.0),
       label(AppLocalizations.of(context)!.ageOver13),
-      AgeSelectDisplay(options:[{'value':'Kyllä','id':1},{'value':'En','id':0}]),
+      AgeSelectDisplay(options:[{'value':'Yes','id':1},{'value':'No','id':0}]),
 
       ];
       if(!this.isOver13){
@@ -334,7 +329,7 @@ class _RegisterState extends State<Register> {
     formfields.add(SizedBox(height: 5.0));
     formfields.add(codeField);
    formfields.add( SizedBox(height: 10.0));
-    formfields.add( auth.registeredStatus == Status.Authenticating
+    formfields.add( auth.registeredStatus == core.Status.authenticating
     ? loading
         : longButtons(AppLocalizations.of(context)!.createAccount, doRegister));
     formfields.add(ElevatedButton(
@@ -362,7 +357,7 @@ class _RegisterState extends State<Register> {
 
     switch(auth.registeredStatus){
 
-      case Status.NotRegistered:
+      case core.Status.notRegistered:
        return Container(
           padding: EdgeInsets.all(40.0),
           child: Form(
@@ -377,12 +372,12 @@ class _RegisterState extends State<Register> {
         );
 
 
-      case Status.Registering:
+      case core.Status.registering:
         // display spinner
       return loading;
 
 
-      case Status.Registered:
+      case core.Status.registered:
         //print('Status.Registered switch handler');
 
         return  Column(
@@ -426,7 +421,7 @@ class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
    print('building registration form');
-    AuthProvider auth = Provider.of<AuthProvider>(context);
+   core.AuthProvider auth = Provider.of<core.AuthProvider>(context);
 
     return SafeArea(
       child: Scaffold(

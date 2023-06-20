@@ -12,7 +12,9 @@
   "answerSaved" : "Vastaus tallennettu",
   "appName" : "Riveillä",
   "authenticating" : "Kirjautuminen käynnissä",
+  "activityRecorded" : "Kirjaus tallenettu",
 
+  "benefits" : "Edut",
   "books" : "Kirjat",
   "bookStatusUpdated": "Kirjan tila päivitetty",
   "bookIsRead" : "Luettu",
@@ -35,6 +37,7 @@
   "buggers" : "Voi harmi",
 
   "calendar": "Kalenteri",
+  "cameraNotAvailable" : "Kamera ei ole käytettävissä",
   "cancel" : "Peruuta",
   "cannotOpenStation": "Et voi vielä avata tätä asemaa",
   "challengingBooks" : "Haastavat kirjat",
@@ -44,6 +47,7 @@
   "city" : "Kaupunki",
   "codeAccepted" : "Koodi hyväksytty",
 
+  "dateRange" : "Aikaväli",
   "groupCode" : "Ryhmäkoodi",
   "guardianInfo" : "Huoltajan tiedot vaaditaan",
   "guardianPhone" : "Huoltajan puhelinnumero",
@@ -93,6 +97,7 @@
   "formIsEmpty" : "Lomake on tyhjä",
   "cannotSaveEmptyForm" : "Täytä lomake ennen lähettämistä",
   "forgotPassword" : "Unohditko salasanan?",
+  "forms" : "Lomakkeet",
   "frontCamera" : "Etukamera",
 
   "getCode" : "Pyydä koodi",
@@ -115,10 +120,12 @@
   "myBooks" : "Oma kirjalista",
   "myCard" : "Oma kortti",
   "myPoints" : "Pisteesi",
-
+  "myScore" : "Omat pisteet",
   "no" : "ei",
   "noContactMethodsFound" : "Yhteystietoja ei löytynyt",
+  "noDescription" : "Ei kuvausta",
   "noTasks" : "Ei tehtäviä",
+  "noThankYou" : "Ei kiitos",
   "notVerified" : "Ei vahvistettu",
   "notification" : "Huomio",
   "ok" : "Ok",
@@ -135,6 +142,7 @@
   "phone" : "Puhelin",
   "phoneOrEmail" : "Puhelin tai sähköpostiosoite",
   "pleaseCompleteFormProperly" : "Täytäthän kaikki vaadittavat kohdat",
+  "pleaseEnableCamera": "Salli kameran käyttö jotta voit skannata QR-koodeja",
   "pleaseEnterPassword" : "Anna salasana",
   "pleaseEnterConfirmationKey": "Anna vahvistuskoodi",
   "pleaseProvideValidEmail" : "Anna kelvollinen sähköpostiosoite",
@@ -160,6 +168,7 @@
   "readListIsEmpty" : "Lukulista on tyhjä!",
   "readMore" : "Lue lisää",
   "readingProgress" : "Lukemisen edistyminen",
+  "readyToScan": "Valmis skannaamaan",
   "rearCamera" : "Takakamera",
   "refresh" : "Lataa uudelleen",
   "registrationFailed" : "Tilin luonti epäonnistui",
@@ -168,12 +177,13 @@
   "requestNewPasswordTitle" : "Vaihda salasana",
   "resume" : "Jatka",
   "retrievingCoordinates" : "Haetaan sijaintia",
-
+  "resources" : "Resurssit",
   "returned" : "Palautettu",
-
+  "saveData" : "Tallenna tiedot",
   "savingDataFailed" : "Tallennus epäonnistui",
   "scanCode"  : "Skannaa koodi",
   "score" : "Pisteet",
+  "scoreListIsEmpty" : "Ei ansaittuja pisteitä",
   "sendAnswer" :"Lähetä vastaus",
   "settings" : "Asetukset",
   "signUp" : "Uusi tili",
@@ -187,10 +197,10 @@
 
   "unknownUser" : "tuntematon käyttäjä",
   "unnamedActivity": "Nimetön tapahtuma",
-  "unnamedLibraryItem" : "Nimetön teos",
-  "unnamedStation" : "Nimetön asema",
+  "unnamedWebPage" : "Nimetön sivu",
   "unnamed" : "Nimetön",
   "useCode" : "Lähetä koodi",
+  "userNotFound" : "Käyttäjätiliä ei löytynyt",
 
   "valueIsRequired" : "Tämä tieto on pakollinen",
   "validateContactTitle" : "Vahvista yhteystieto",

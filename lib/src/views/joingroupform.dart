@@ -1,15 +1,9 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
-import 'package:luen/src/objects/user.dart';
-//import 'package:luen/src/providers/auth.dart';
-import 'package:luen/src/providers/user_provider.dart';
-import 'package:luen/src/util/api_client.dart';
-
-import 'package:luen/src/util/widgets.dart';
+import 'package:fiteens/src/util/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-//import 'package:luen/src/util/shared_preference.dart';
-
+import 'package:core/core.dart' as core;
 
 enum CodeStatus {
   Idle,
@@ -24,10 +18,10 @@ class JoinGroupForm extends StatefulWidget {
 
 class _JoinGroupFormState extends State<JoinGroupForm> {
   final formKey = new GlobalKey<FormState>();
-  final ApiClient _apiClient = ApiClient();
+  //final core.ApiClient _apiClient = core.ApiClient();
   String?  _registrationCode;
   CodeStatus formStatus = CodeStatus.Idle;
-  User? user;
+  core.User? user;
 
   Map<String,TextEditingController> controllers = {
 
@@ -40,9 +34,9 @@ class _JoinGroupFormState extends State<JoinGroupForm> {
       final form = formKey.currentState;
       if (form!.validate()) {
         form.save();
-        _apiClient.joinGroup(
+        Provider.of<core.UserProvider>(context).joinGroup(
              _registrationCode.toString(),
-            this.user ?? new User()
+            this.user ?? new core.User()
         ).then((responsedata) {
           var response = responsedata['data'] ?? responsedata;
           if(response!=null) if( response['status']!=null) {
@@ -203,7 +197,7 @@ class _JoinGroupFormState extends State<JoinGroupForm> {
   @override
   Widget build(BuildContext context) {
 
-    this.user = Provider.of<UserProvider>(context).user;
+    this.user = Provider.of<core.UserProvider>(context).user;
     return joinGroupFormBody(this.formStatus);
 
 

@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:luen/src/objects/user.dart';
-import 'package:luen/src/providers/user_provider.dart';
 import 'package:provider/provider.dart';
-//import 'package:luen/src/views/dashboard.dart';
-
+import 'package:core/core.dart' as core;
 
 class Welcome extends StatelessWidget {
-  final User user;
+  final core.User user;
 
   Welcome({Key? key, required this.user}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
 
-    Provider.of<UserProvider>(context).setUser(user);
+    Provider.of<core.UserProvider>(context).setUser(user);
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -38,11 +35,11 @@ class Welcome extends StatelessWidget {
                           children: <Widget>[
                            Center(
                               child:
-                             Image.asset('images/riveillalogo.png'),
+                             Image.asset('images/fiteens-logotext-white.png'),
                               ),
-                             Text("Luen - Lukudiplomi"),
+                             Text("Fiteens"),
                              ElevatedButton(
-                                child: Text('Jatka'),
+                                child: Text('Continue'),
                                onPressed: () {
                               // Navigate to the second screen using a named route.
                                Navigator.pushNamed(context, '/dashboard');

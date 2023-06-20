@@ -1,19 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:luen/src/objects/contactmethod.dart';
-import 'package:luen/src/objects/keyword.dart';
-import 'package:luen/src/objects/user.dart';
-import 'package:luen/src/providers/auth.dart';
-import 'package:luen/src/providers/user_provider.dart';
-import 'package:luen/src/util/utils.dart';
-import 'package:luen/src/util/widgets.dart';
-import 'package:luen/src/views/deleteaccountform.dart';
-import 'package:luen/src/views/validatecontact.dart';
-import 'package:luen/src/views/webpagetextcontent.dart';
+import 'package:fiteens/src/util/utils.dart';
+import 'package:fiteens/src/util/widgets.dart';
+import 'package:fiteens/src/views/deleteaccountform.dart';
+import 'package:fiteens/src/views/validatecontact.dart';
+import 'package:fiteens/src/views/webpagetextcontent.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:luen/src/util/shared_preference.dart';
-import 'package:luen/src/providers/objectprovider.dart' as objectmodel;
+
+import 'package:core/core.dart' as core;
 
 import 'joingroupform.dart';
 
@@ -22,23 +17,27 @@ import 'joingroupform.dart';
 */
 
 class MyCard extends StatefulWidget {
+  final core.User? user;
+
+  MyCard({this.user});
+
   @override
   _MyCardState createState() => _MyCardState();
 }
 
 class _MyCardState extends State<MyCard> {
   List<Widget> contactItems = [];
-  Map<Keyword,int> themes = {};
+  Map<core.Keyword,int> themes = {};
   @override
   void initState(){
-    Provider.of<UserProvider>(context, listen: false).getContactMethods();
+    Provider.of<core.UserProvider>(context, listen: false).getContactMethods();
 
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      loadThemes();
+     // loadThemes();
     });
   }
-
+/*
   Future<void> loadThemes() async{
     print('calling loadThemes');
     User user = Provider.of<UserProvider>(context, listen: false).user;
@@ -68,23 +67,19 @@ class _MyCardState extends State<MyCard> {
             print(   e.toString());
           }
         }
-
-
-
-
     }
   }
-
+*/
   @override
   Widget build(BuildContext context) {
-    User user = Provider.of<UserProvider>(context).user;
+    core.User user = Provider.of<core.UserProvider>(context).user;
     /*if (user.token == null) {
       Navigator.pushNamed(context, '/login');
       return Container();
     }*/
 //print('user themes in build: '+user.themesofbooksread.toString());
 //print('user data in build: '+user.data.toString());
-    List<ContactMethod> myContacts = Provider.of<UserProvider>(context).contacts;
+    List<core.ContactMethod> myContacts = Provider.of<core.UserProvider>(context).contacts;
 
     if(myContacts.isNotEmpty)
       {
@@ -105,10 +100,10 @@ class _MyCardState extends State<MyCard> {
                         flex:2,
                           child:(i.verified! ? Icon(Icons.check_circle_outlined,semanticLabel:AppLocalizations.of(context)!.verified) : TextButton(
                         onPressed: () {
-                          Provider.of<AuthProvider>(context,listen:false).setVerificationStatus(VerificationStatus.CodeNotRequested);
+                          Provider.of<core.AuthProvider>(context,listen:false).setVerificationStatus(core.VerificationStatus.codeNotRequested);
                           Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => ValidateContact(contactmethod:i)),
+                                MaterialPageRoute(builder: (context) => ValidateContact(contactMethod:i)),
                               );
                         },
                         child:Text(
@@ -201,8 +196,8 @@ class _MyCardState extends State<MyCard> {
                         // auth.logout(user);
                         Navigator.pushNamedAndRemoveUntil(context, '/login', (_) => false);
 
-                        Provider.of<UserProvider>(context, listen: false).clearUser();
-                        UserPreferences().removeUser();
+                        Provider.of<core.UserProvider>(context, listen: false).clearUser();
+                        core.UserPreferences().removeUser();
 
                       },
                       child: Text(AppLocalizations.of(context)!.logout),

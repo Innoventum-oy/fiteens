@@ -1,16 +1,14 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
-import 'package:luen/src/objects/user.dart';
-import 'package:luen/src/providers/auth.dart';
-import 'package:luen/src/providers/user_provider.dart';
 
-import 'package:luen/src/util/widgets.dart';
-import 'package:luen/src/views/webpagetextcontent.dart';
+import 'package:fiteens/src/util/widgets.dart';
+import 'package:fiteens/src/views/webpagetextcontent.dart';
 import 'package:provider/provider.dart';
-import 'package:luen/src/util/utils.dart';
-import 'package:luen/src/util/shared_preference.dart';
+import 'package:fiteens/src/util/utils.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:package_info/package_info.dart';
+
+import 'package:core/core.dart' as core;
 
 class Login extends StatefulWidget {
   final dynamic user;
@@ -38,15 +36,15 @@ class _LoginState extends State<Login> {
       buildNumber = packageInfo.buildNumber;
     }));
 
-    Settings().getServerName().then((val) => setState(() {
+    core.Settings().getServerName().then((val) => setState(() {
       serverName = val;
     }));
   }
 
   @override
   Widget build(BuildContext context) {
-    AuthProvider auth = Provider.of<AuthProvider>(context);
-    User? user = widget.user;
+    core.AuthProvider auth = Provider.of<core.AuthProvider>(context);
+    core.User? user = widget.user;
     String contact = '';
     if (user != null) {
       contact = user.phone != null
@@ -118,7 +116,7 @@ class _LoginState extends State<Login> {
 
           child: Text(AppLocalizations.of(context)!.createAccount, style: TextStyle(fontWeight: FontWeight.w300)),
           onPressed: () {
-            auth.setRegisteredStatus(Status.NotRegistered);
+            auth.setRegisteredStatus(core.Status.notRegistered);
             Navigator.pushNamed(context, '/register');
           },
         ),
@@ -154,12 +152,12 @@ class _LoginState extends State<Login> {
 
         successfulMessage.then((response) {
           if (response['status']) {
-            User user = response['user'];
-            Provider.of<UserProvider>(context, listen: false).setUser(user);
+            core.User user = response['user'];
+            Provider.of<core.UserProvider>(context, listen: false).setUser(user);
 
             Navigator.pushReplacementNamed(context, '/dashboard');
           } else {
-            Provider.of<UserProvider>(context, listen: false).clearUser();
+            Provider.of<core.UserProvider>(context, listen: false).clearUser();
             Flushbar(
               title: AppLocalizations.of(context)!.loginFailed,
               message: response['message'].toString(),
@@ -174,19 +172,19 @@ class _LoginState extends State<Login> {
 
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
+    /*    appBar: AppBar(
           title: Text(AppLocalizations.of(context)!.appName+' / '+AppLocalizations.of(context)!.loginTitle),
           elevation: 0.1,
-        ),
+        ),*/
         body:
           Container(
-            color:HexColor.fromHex('#af1e53'),
+            color:HexColor.fromHex('#205c7b'),
           padding: EdgeInsets.all(40.0),
           child: ListView(
               children: <Widget>[
                  Center(
                   child:
-                  Image.asset('images/riveillalogo.png'),
+                  Image.asset('images/fiteens-logotext-white.png'),
                   ),
                 Form(
             key: formKey,
@@ -202,13 +200,13 @@ class _LoginState extends State<Login> {
                 SizedBox(height: 5.0),
                 passwordField,
                 SizedBox(height: 20.0),
-                auth.loggedInStatus == Status.Authenticating
+                auth.loggedInStatus == core.Status.authenticating
                     ? loading
                     : longButtons(AppLocalizations.of(context)!.btnLogin, doLogin),
                 SizedBox(height: 5.0),
                 forgotLabel,
                 SizedBox(height: 15.0),
-                auth.loggedInStatus == Status.Authenticating
+                auth.loggedInStatus == core.Status.authenticating
                     ? cancelButton : Container(),
                 getVersionInfo(),
                 policyLink(),
@@ -231,7 +229,8 @@ class _LoginState extends State<Login> {
   }
   Widget getVersionInfo() {
     return Text(appName + ' v.' + version + '(' + buildNumber + ')',
-        style: TextStyle(color: Color(0xFFffe8d7)));
+      // style: TextStyle(color: Color(0xFFffe8d7))
+        );
   }
   Widget policyLink(){
     return TextButton(

@@ -1,52 +1,49 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart'; // important
-import 'package:luen/src/providers/webpageprovider.dart';
-import 'package:luen/src/views/achievements.dart';
-import 'package:luen/src/views/dashboard.dart';
-//import 'package:luen/src/views/gameboard.dart';
-import 'package:luen/src/views/libraryitemlist.dart';
-import 'package:luen/src/views/loginform.dart';
-import 'package:luen/src/views/register.dart';
-import 'package:luen/src/views/passwordform.dart';
-import 'package:luen/src/util/utils.dart';
-import 'package:luen/src/views/validatecontact.dart';
-//import 'package:luen/src/views/welcome.dart';
-import 'package:luen/src/views/tasklist.dart';
-import 'package:luen/src/providers/auth.dart';
-import 'package:luen/src/providers/user_provider.dart';
-import 'package:luen/src/util/shared_preference.dart';
-//import 'package:luen/src/views/viewform.dart';
-import 'package:provider/provider.dart';
+import 'package:fiteens/src/views/achievements.dart';
+import 'package:fiteens/src/views/dashboard.dart';
+import 'package:fiteens/src/views/pagelist.dart';
+import 'package:fiteens/src/views/loginform.dart';
+import 'package:fiteens/src/views/register.dart';
+import 'package:fiteens/src/views/passwordform.dart';
+import 'package:fiteens/src/util/utils.dart';
+import 'package:fiteens/src/views/validatecontact.dart';
 import 'package:feedback/feedback.dart';
-import 'src/objects/user.dart';
-
+import 'package:core/core.dart' as core;
+import 'package:provider/provider.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 final navigatorKey = GlobalKey<NavigatorState>();
 
-void main() {
+void main() async {
+
+  await Hive.initFlutter();
+
   runApp( BetterFeedback(
-      child:Luen(),
+      child:Fiteens(),
   ));
 }
 
-class Luen extends StatelessWidget {
-  // This widget is the root of Luen application.
+class Fiteens extends StatelessWidget {
+  // This widget is the root of Fiteens  application.
 
   @override
   Widget build(BuildContext context) {
 
-    print('build called for luen application (main.dart)');
-    Future<User>? getUserData() => UserPreferences().getUser();
+    print('build called for application (main.dart)');
+    Future<core.User>? getUserData() => core.UserPreferences().getUser();
 
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => AuthProvider()),
-        ChangeNotifierProvider(create: (_) => UserProvider()),
-        ChangeNotifierProvider(create: (_) => WebPageProvider())
+        ChangeNotifierProvider(create: (_) => core.AuthProvider()),
+        ChangeNotifierProvider(create: (_) => core.UserProvider()),
+        ChangeNotifierProvider(create: (_) => core.WebPageProvider())
       ],
       child: MaterialApp(
-          title: 'Riveillä',
+          title: 'Fiteens',
           debugShowCheckedModeBanner: false,
-          navigatorKey: navigatorKey,
+          navigatorKey: NavigationService.navigatorKey,
           localizationsDelegates:  AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,//const [Locale('fi', 'FI')],
           //AppLocalizations.supportedLocales,
@@ -57,7 +54,7 @@ class Luen extends StatelessWidget {
             canvasColor: Colors.black,
             textButtonTheme: TextButtonThemeData(
               style: TextButton.styleFrom(
-                foregroundColor: createMaterialColor('#FFe5b2d2'), // text button color
+                foregroundColor: createMaterialColor('#FF299fe0'), // text button color: blue
 
               ),
             ),
@@ -68,12 +65,12 @@ class Luen extends StatelessWidget {
             colorScheme: Theme.of(context).colorScheme.copyWith(
               brightness: Brightness.dark,
 
-              primary:createMaterialColor('#FFf47b6a'), //button backgrounds
-              secondary: createMaterialColor('#FF65246d'), // dark purple
+              primary:createMaterialColor('#FFee962b'), //button backgrounds: orange
+              secondary: createMaterialColor('#FF66b42c'), // green
             ),
             cardTheme: CardTheme(
 
-              color: createMaterialColor('#FFaf1e53'),
+              color: createMaterialColor('#FF30b2fa'), // blue
 
           ),
             primaryTextTheme: Typography.whiteHelsinki,
@@ -82,11 +79,11 @@ class Luen extends StatelessWidget {
 
             inputDecorationTheme:  InputDecorationTheme(
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(width: 1, color: createMaterialColor('#FF4f144e')
+                borderSide: BorderSide(width: 1, color: createMaterialColor('#FFee962b')
                 ),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(width: 1, color: createMaterialColor('#FFffe4d2')),
+                borderSide: BorderSide(width: 1, color: createMaterialColor('#FF66b42c')),
               ),
               labelStyle: TextStyle(color: Colors.white),
               hintStyle: TextStyle(color: Colors.white),
@@ -119,33 +116,33 @@ class Luen extends StatelessWidget {
                   default:
 
                     if (snapshot.hasError)
-                      return Text('Error occurred: ${snapshot.error}');
+                      return Padding(padding:EdgeInsets.only(top: 40,left:20,right:20), child: Text('Error occurred: ${snapshot.error} :: ${snapshot.stackTrace}',style:TextStyle(fontSize:12,color:Colors.black,decoration:TextDecoration.none)));
                     else if (snapshot.hasData) //(userdata.token == null)
                        {
                          print("User from snapshot:" + snapshot.toString());
-                         User userdata = snapshot.data as User;
+                         core.User userdata = snapshot.data as core.User;
                          if(userdata.token!=null)
                            {
-                             Provider.of<UserProvider>(context, listen: false).setUserSilent(userdata);
+                             Provider.of<core.UserProvider>(context, listen: false).setUserSilent(userdata);
+                             log('Opening dashboard');
                           return DashBoard();
                            }
                         return Login();
                       }
                     else
-                      UserPreferences().removeUser();
+                      core.UserPreferences().removeUser();
                    // print("Snapshot: "+ snapshot.data);
                     return Login(); //Welcome(user: snapshot.data as User);
                 }
               }),
           routes: {
            // '/gameboard' : (context) => Gameboard(),
-            '/mybooks' : (context) => VerticalItemList(viewtype:'own'),
+            '/resources' : (context) => VerticalPageList(),
             '/dashboard': (context) => DashBoard(),
             '/login': (context) => Login(),
             '/register': (context) => Register(),
             '/reset-password': (context) => ResetPassword(),
             '/validatecontact' : (context) => ValidateContact(),
-            '/tasklist' : (context) => TaskList(),
             '/achievements' : (context)=> AchievementsView(),
 
 

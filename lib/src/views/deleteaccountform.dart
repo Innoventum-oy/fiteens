@@ -1,13 +1,10 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
-import 'package:luen/src/objects/user.dart';
-import 'package:luen/src/providers/user_provider.dart';
-import 'package:luen/src/util/api_client.dart';
-import 'package:luen/src/util/widgets.dart';
+import 'package:fiteens/src/util/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:luen/src/util/shared_preference.dart';
 
+import 'package:core/core.dart' as core;
 
 enum ActionStatus {
   Idle,
@@ -23,16 +20,15 @@ class DeleteAccountAction extends StatefulWidget {
 
 class _DeleteAccountActionState extends State<DeleteAccountAction> {
   final formKey = new GlobalKey<FormState>();
-  final ApiClient _apiClient = ApiClient();
 
   ActionStatus formStatus = ActionStatus.Idle;
-  User? user;
+  core.User? user;
 
   void deleteAccount() {
     //final form = this.formKey.currentState;
 
-    _apiClient.deleteUserAccount(
-        this.user ?? new User()
+    Provider.of<core.UserProvider>(context, listen: false).deleteUserAccount(
+        this.user ?? new core.User()
     ).then((responsedata) async {
       var response = responsedata['data'] ?? responsedata;
       if(response!=null) if( response['status']!=null) {
@@ -56,8 +52,8 @@ class _DeleteAccountActionState extends State<DeleteAccountAction> {
             ).show(context);
             Navigator.pushNamedAndRemoveUntil(context, '/login', (_) => false);
 
-            Provider.of<UserProvider>(context, listen: false).clearUser();
-            UserPreferences().removeUser();
+            Provider.of<core.UserProvider>(context, listen: false).clearUser();
+            core.UserPreferences().removeUser();
         }
       } else {
         Flushbar(
@@ -192,7 +188,7 @@ class _DeleteAccountActionState extends State<DeleteAccountAction> {
   @override
   Widget build(BuildContext context) {
 
-    this.user = Provider.of<UserProvider>(context).user;
+    this.user = Provider.of<core.UserProvider>(context).user;
     return deleteAccountBody(this.formStatus);
 
 

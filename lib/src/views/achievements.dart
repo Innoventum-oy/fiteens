@@ -1,73 +1,60 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:luen/src/objects/badge.dart';
-import 'package:luen/src/objects/user.dart';
-import 'package:luen/src/providers/user_provider.dart';
-import 'package:luen/src/util/app_url.dart';
-//import 'package:luen/src/util/api_client.dart';
-import 'package:luen/src/util/utils.dart';
-import 'package:luen/src/providers/objectprovider.dart' as objectmodel;
-import 'package:luen/src/util/widgets.dart';
-import 'package:luen/src/views/badge.dart';
+import 'package:fiteens/src/util/utils.dart';
+import 'package:fiteens/src/util/widgets.dart';
+import 'package:fiteens/src/views/badge.dart';
 import 'package:provider/provider.dart';
+import 'package:core/core.dart' as core;
 
 class AchievementsView extends StatefulWidget {
   final String viewTitle = 'achievements';
-  final objectmodel.BadgeProvider badgeProvider = objectmodel.BadgeProvider();
+  final core.BadgeProvider badgeProvider = core.BadgeProvider();
+
+  AchievementsView({super.key});
 
   @override
-  _AchievementsViewState createState() => _AchievementsViewState();
+  AchievementsViewState createState() => AchievementsViewState();
 }
 
-class _AchievementsViewState extends State<AchievementsView> {
-
-  Map<String,LoadingState> _loadingStates = {};
-  List<Badge> badgedata = [];
+class AchievementsViewState extends State<AchievementsView> {
+  final Map<String, LoadingState> _loadingStates = {};
+  List<core.Badge> badgedata = [];
   int limit = 50;
   String? errormessage;
 
-  _loadAvailableBadges(user) async{
-    print('loading badges from server');
+  _loadAvailableBadges(user) async {
     final Map<String, String> params = {
       'limit': limit.toString(),
-      'offset':'0',
-      'application' : 'id='+AppUrl.appId.toString(),
-      'fields': 'id,name,color,badgeimageurl,description,badgeimageurl,requiredbookcount,assertionBakedBadgeImageUrl,assertionCertificateAsPdfUrl',
-
+      'offset': '0',
+      'application': 'id=${core.AppSettings().get('appId')}',
+      'fields':
+          'id,name,color,badgeimageurl,description,badgeimageurl,requiredbookcount',
       'api-key': user.token,
       'api_key': user.token,
       'sort': 'name',
     };
     try {
-      List<Badge> badges =
-      (await widget.badgeProvider.loadItems(params))
-          .cast<Badge>();
+      List<core.Badge> badges =
+          (await widget.badgeProvider.loadItems(params)).cast<core.Badge>();
       setState(() {
-        _loadingStates['badges'] = LoadingState.DONE;
+        _loadingStates['badges'] = LoadingState.done;
         badgedata.addAll(badges);
-        print(badgedata.length.toString() + ' badges loaded!');
-
-
       });
-    } catch (e, stack) {
-
-      print('loadItems returned error $e\n Stack trace:\n $stack');
+    } catch (e) {
       errormessage = e.toString();
-      if (_loadingStates['stations'] == LoadingState.LOADING) {
-        setState(() => _loadingStates['stations'] = LoadingState.ERROR);
+      if (_loadingStates['stations'] == LoadingState.loading) {
+        setState(() => _loadingStates['stations'] = LoadingState.error);
       }
-
     }
   }
 
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      User user = Provider.of<UserProvider>(context, listen: false).user;
+      core.User user = Provider.of<core.UserProvider>(context, listen: false).user;
 
       _loadAvailableBadges(user);
-
     });
 
     super.initState();
@@ -75,88 +62,67 @@ class _AchievementsViewState extends State<AchievementsView> {
 
   @override
   Widget build(BuildContext context) {
-
-    //User user = Provider.of<UserProvider>(context, listen: true).user;
-    //List<Badge> collectedBadges = Provider.of<UserProvider>(context).myBadges;
-
-
-/*
-    bool isTester = false;
-    if(user.data!=null) {
-      if (user.data!['istester'] != null) {
-        if (user.data!['istester'] == 'true') isTester = true;
-      }
-    }
-*/
-
-    return
-      Scaffold(
-        appBar: new AppBar(
-            title: new Text(AppLocalizations.of(context)!.achievements),
-            actions: [],
+    return Scaffold(
+        appBar: AppBar(
+          title: Text(AppLocalizations.of(context)!.achievements),
+          actions: const [],
         ),
-        body:
-      Padding(
-      padding: EdgeInsets.all(20.0),
-      child:
-      GridView.count(
-          crossAxisCount:3,
-          crossAxisSpacing:5,
-          mainAxisSpacing:5,
-          scrollDirection:Axis.vertical,
-          shrinkWrap: true,
-          padding:EdgeInsets.all(10),
-          children:allBadges(),
-      ),
-    ), bottomNavigationBar: bottomNavigation(context,currentIndex: 2)
-      );
+        body: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: GridView.count(
+            crossAxisCount: 3,
+            crossAxisSpacing: 5,
+            mainAxisSpacing: 5,
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            padding: const EdgeInsets.all(10),
+            children: allBadges(),
+          ),
+        ),
+        bottomNavigationBar: bottomNavigation(context, currentIndex: 2));
   }
-  /* Widget list creator for collected badges */
-  List<Widget> allBadges()
-  {
 
+  /* Widget list creator for collected badges */
+  List<Widget> allBadges() {
     List<Widget> data = [];
-    if(this.badgedata.isEmpty) return data;
-    for (var badge in this.badgedata) {
+    if (badgedata.isEmpty) return data;
+    for (var badge in badgedata) {
       data.add(badgeIconDisplay(badge));
     }
     return data;
   }
 
-  Widget badgeIconDisplay(Badge badge)
-  {
-    return Container(
+  Widget badgeIconDisplay(core.Badge badge) {
+    return SizedBox(
       height: 150,
-      child:GestureDetector(
+      child: GestureDetector(
         onTap: () {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => BadgeView(badge)),
           );
         },
-        child:Column(
-
-            children:[
-              badge.badgeimageurl != null
-                  ? FadeInImage.assetNetwork(
-                fit: BoxFit.contain,
-                width: double.infinity,
-                height:60,
-                placeholder: 'images/badge-placeholder.jpg',
-                image: badge.badgeimageurl!,
-              ) :
-              FaIcon(
+        child: Column(children: [
+          badge.badgeimageurl != null
+              ? FadeInImage.assetNetwork(
+                  fit: BoxFit.contain,
+                  width: double.infinity,
+                  height: 60,
+                  placeholder: 'images/badge-placeholder.jpg',
+                  image: badge.badgeimageurl!,
+                )
+              : const FaIcon(
                   IconData(0xf091,
                       fontFamily: 'FontAwesomeSolid',
                       fontPackage: 'font_awesome_flutter'),
                   size: 60.0),
-              SizedBox(height:5),
-              Text(badge.name ?? '-',
-                style: TextStyle(fontSize: 12),),
-            ]
-        ),
+          const SizedBox(height: 5),
+          Text(
+            badge.name ?? '-',
+            style: const TextStyle(fontSize: 12),
+          ),
+        ]),
       ),
     );
   }
-
 }

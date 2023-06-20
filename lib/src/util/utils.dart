@@ -1,23 +1,30 @@
 import 'package:feedback/feedback.dart';
 import 'package:intl/intl.dart';
-import 'package:luen/src/objects/user.dart';
-import 'package:luen/src/util/widgets.dart';
-//import 'package:url_launcher/url_launcher.dart';
+import 'package:fiteens/src/util/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart'; // important
-import 'package:luen/src/util/api_client.dart';
 
-enum LoadingState { IDLE,DONE, LOADING, WAITING, ERROR }
+import 'package:core/core.dart';
+enum LoadingState { idle, done, loading, waiting, error }
 
 final dollarFormat = NumberFormat("#,##0.00", "en_US");
 final sourceFormat = DateFormat('yyyy-MM-dd');
 final dateFormat = DateFormat.yMMMMd("en_US");
 
-
+class NavigationService {
+  static GlobalKey<NavigatorState> navigatorKey =
+  GlobalKey<NavigatorState>();
+}
+Widget getInitials(user) {
+  String initials = '';
+  if (user.firstname!= null && user.firstname.isNotEmpty) initials += user.firstname[0];
+  if (user.lastname != null && user.lastname!.isNotEmpty) initials += user.lastname[0];
+  return Text(initials);
+}
 extension HexColor on Color {
   /// String is in the format "aabbcc" or "ffaabbcc" with an optional leading "#".
   static Color fromHex(String hexString) {
@@ -58,17 +65,15 @@ String formatReadtime(int runtime) {
   return '$hours\h $minutes\m';
 }
 
-
 MaterialColor createMaterialColor(hexcode) {
   List strengths = <double>[.05];
-  Map<int,Color> swatch = <int, Color>{};
+  Map<int, Color> swatch = <int, Color>{};
   Color sourceColor = HexColor.fromHex(hexcode);
   for (int i = 1; i < 10; i++) {
     strengths.add(0.1 * i);
   }
   strengths.forEach((strength) {
-      swatch[(strength * 1000).round()] =  sourceColor  ;
-
+    swatch[(strength * 1000).round()] = sourceColor;
   });
   return MaterialColor(sourceColor.value, swatch);
 }
@@ -81,60 +86,60 @@ Future<File> writeImageToStorage(Uint8List feedbackScreenshot) async {
   //return screenshotFilePath;
   return screenshotFile;
 }
-Future<void> feedbackAction(BuildContext context, User user) async {
 
+Future<void> feedbackAction(BuildContext context, User user) async {
   String appName = '';
 
   String version = '';
 
-
-  await PackageInfo.fromPlatform().then((PackageInfo packageInfo){
+  await PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
     appName = packageInfo.appName;
     version = packageInfo.version;
-
   });
 
   final ApiClient _apiClient = ApiClient();
-  BetterFeedback.of(context).show((UserFeedback feedback) async{
-    Map<String,dynamic> params={
-      'method' :'json',
-      'modulename' :'feedback',
-      'moduletype' :'pages',
-      'action' :'saveobject',
+  BetterFeedback.of(context).show((UserFeedback feedback) async {
+    Map<String, dynamic> params = {
+      'method': 'json',
+      'modulename': 'feedback',
+      'moduletype': 'pages',
+      'action': 'saveobject',
       'api_key': user.token
     };
-    final screenshotFile =
-    await writeImageToStorage(feedback.screenshot);
-    Map<String,dynamic> data = {
-      'objecttype' :'feedback',
-      'objectid' :'create',
-      'data_email' : user.email,
-      'data_phone' :user.phone,
-      'data_sender' : user.lastname!+' '+user.firstname!,
-      'data_subject':appName+' '+version+' '+AppLocalizations.of(context)!.feedback,
+    final screenshotFile = await writeImageToStorage(feedback.screenshot);
+    Map<String, dynamic> data = {
+      'objecttype': 'feedback',
+      'objectid': 'create',
+      'data_email': user.email,
+      'data_phone': user.phone,
+      'data_sender': user.lastname! + ' ' + user.firstname!,
+      'data_subject': appName +
+          ' ' +
+          version +
+          ' ' +
+          AppLocalizations.of(context)!.feedback,
       'data_content': feedback.text,
       'file_file': screenshotFile
     };
-    _apiClient.sendFeedback(params,data)!.then((var response) async {
+    _apiClient.sendFeedback(params, data)!.then((var response) async {
       switch (response['status']) {
         case 'success':
           String title = AppLocalizations.of(context)!.feedbackSent;
           String content = AppLocalizations.of(context)!.thankyouForFeedback;
           showDialog<String>(
               context: context,
-              builder:(BuildContext context) =>AlertDialog(
-                title: Text(title),
-                content: Text(content),
-
-                actions:<Widget>[
-                  ElevatedButton(
-                    child: Text('Ok'),
-                    onPressed:() => Navigator.pop(context, 'Ok'),
-                  )
-                ],
-              )
-          );
-      }if(response['error']!=null)
+              builder: (BuildContext context) => AlertDialog(
+                    title: Text(title),
+                    content: Text(content),
+                    actions: <Widget>[
+                      ElevatedButton(
+                        child: Text('Ok'),
+                        onPressed: () => Navigator.pop(context, 'Ok'),
+                      )
+                    ],
+                  ));
+      }
+      if (response['error'] != null)
         handleNotifications([response['error']], context);
     });
   });

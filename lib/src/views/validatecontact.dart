@@ -1,20 +1,14 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
-import 'package:luen/src/objects/user.dart';
-import 'package:luen/src/providers/auth.dart';
-import 'package:luen/src/util/api_client.dart';
-import 'package:luen/src/providers/user_provider.dart';
-
-//import 'package:luen/src/util/utils.dart';
-import 'package:luen/src/util/widgets.dart';
+import 'package:fiteens/src/util/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:luen/src/objects/contactmethod.dart';
+import 'package:core/core.dart' as core;
 
 class ValidateContact extends StatefulWidget {
-  final ContactMethod? contactmethod;
+  final core.ContactMethod? contactMethod;
 
-  ValidateContact({this.contactmethod});
+  ValidateContact({this.contactMethod});
   @override
   _ValidateContactState createState() => _ValidateContactState();
 }
@@ -22,24 +16,19 @@ class ValidateContact extends StatefulWidget {
 class _ValidateContactState extends State<ValidateContact> {
   final formKey = new GlobalKey<FormState>();
   bool contactsLoaded = false;
-  List<ContactMethod> contactItems = [];
-  ContactMethod? selectedMethod;
+  List<core.ContactMethod> contactItems = [];
+  core.ContactMethod? selectedMethod;
 
-  String?  _confirmkey, _contact;
-  String? errormessage;
-  ApiClient _apiClient = ApiClient();
+  String?  _confirmKey, _contact;
+  String? errorMessage;
 
   @override
   void initState(){
 
-    print('initState called for validatecontact');
-    print(widget.contactmethod.toString());
-
-    if(widget.contactmethod!=null) {
-      String address =widget.contactmethod!.address ??'null';
+    if(widget.contactMethod!=null) {
+      String address =widget.contactMethod!.address ??'null';
       _contact = address;
-      selectedMethod = widget.contactmethod;
-      print('Widget called with contactmethod '+address);
+      selectedMethod = widget.contactMethod;
     }
    // WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
 
@@ -52,11 +41,11 @@ class _ValidateContactState extends State<ValidateContact> {
   @mustCallSuper
   void didChangeDependencies() {
     //Provider.of<UserProvider>(context, listen: false).getContactMethods();
-    if(widget.contactmethod!=null) contactItems.add(widget.contactmethod!);
+    if(widget.contactMethod!=null) contactItems.add(widget.contactMethod!);
     else if(!this.contactsLoaded) {
-      print('Loading contactmethods from userprovider');
+
       Provider
-          .of<UserProvider>(context)
+          .of<core.UserProvider>(context)
           . getContactMethods();
 
       this.contactsLoaded = true;
@@ -65,10 +54,10 @@ class _ValidateContactState extends State<ValidateContact> {
   }
   @override
   Widget build(BuildContext context) {
-    AuthProvider auth = Provider.of<AuthProvider>(context);
-    User user = Provider.of<UserProvider>(context).user;
+    core.AuthProvider auth = Provider.of<core.AuthProvider>(context);
+    core.User user = Provider.of<core.UserProvider>(context).user;
     contactItems = Provider
-        .of<UserProvider>(context)
+        .of<core.UserProvider>(context)
         .contacts;
 
     return SafeArea(
@@ -103,14 +92,14 @@ class _ValidateContactState extends State<ValidateContact> {
 
     switch(auth.verificationStatus)
     {
-      case VerificationStatus.UserNotFound:
-      case VerificationStatus.CodeNotRequested:
+      case core.VerificationStatus.userNotFound:
+      case core.VerificationStatus.codeNotRequested:
         return getConfirmationKeyForm(auth,user);
 
-      case VerificationStatus.CodeReceived:
+      case core.VerificationStatus.codeReceived:
         return enterConfirmationKeyForm(auth);
 
-      case VerificationStatus.Verified:
+      case core.VerificationStatus.verified:
         return successForm();
       default:
         return Container();
@@ -125,22 +114,22 @@ class _ValidateContactState extends State<ValidateContact> {
       if (form!.validate()) {
         form.save();
 
-        final Future<Map<String, dynamic>> successfulMessage =
-        _apiClient.getConfirmationKey(_contact!);
+        final Future<Map<String, dynamic>?> successfulMessage =
+        core.Auth().getConfirmationKey(_contact!);
 
         successfulMessage.then((response) {
-          if (response['status'] == 'success') {
+          if (response?['status'] == 'success') {
             setState(() {
-              auth.setContactMethodId(response['contactmethodid']);
-              if(response['userid']!=null) auth.setUserId(response['userid']);
-              print('contact method id set to '+response['contactmethodid'].toString());
-              auth.setVerificationStatus(VerificationStatus.CodeReceived);
+              auth.setContactMethodId(response?['contactmethodid']);
+              if(response?['userid']!=null) auth.setUserId(response?['userid']);
+              print('contact method id set to '+response!['contactmethodid'].toString());
+              auth.setVerificationStatus(core.VerificationStatus.codeReceived);
             });
 
           } else {
             Flushbar(
               title: AppLocalizations.of(context)!.requestFailed,
-              message: response['message'].toString(),
+              message: response?['message'].toString(),
               duration: Duration(seconds: 3),
             ).show(context);
           }
@@ -175,8 +164,8 @@ class _ValidateContactState extends State<ValidateContact> {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             ListTile(
-              leading: Radio<ContactMethod>(
-                onChanged:(ContactMethod? value){
+              leading: Radio<core.ContactMethod>(
+                onChanged:(core.ContactMethod? value){
                   setState(()
                   {
                     selectedMethod = value;
@@ -217,14 +206,14 @@ class _ValidateContactState extends State<ValidateContact> {
         SizedBox(height: 15.0),
         Text(AppLocalizations.of(context)!.contactMethod, style: Theme.of(context).textTheme.headlineSmall,),
         SizedBox(height: 5.0),
-        widget.contactmethod!=null ? Text(_contact ?? '') : Container(
+        widget.contactMethod!=null ? Text(_contact ?? '') : Container(
           height:200,
           child:contactField(user),
         ),
 
 
         SizedBox(height: 20.0),
-        auth.verificationStatus == VerificationStatus.Validating
+        auth.verificationStatus == core.VerificationStatus.validating
             ? loading
             : longButtons(AppLocalizations.of(context)!.getCode,
             getVerificationCode),
@@ -251,8 +240,8 @@ class _ValidateContactState extends State<ValidateContact> {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           ListTile(
-            leading: Radio<ContactMethod>(
-              onChanged:(ContactMethod? value){
+            leading: Radio<core.ContactMethod>(
+              onChanged:(core.ContactMethod? value){
                 setState(()
                 {
                   selectedMethod = value;
@@ -272,7 +261,7 @@ class _ValidateContactState extends State<ValidateContact> {
 
   Widget enterConfirmationKeyForm(auth) {
     final _confirmationController = TextEditingController();
-    print('current _confirmkey value: '+_confirmkey.toString());
+    print('current _confirmkey value: '+_confirmKey.toString());
     var loading = Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -286,7 +275,7 @@ class _ValidateContactState extends State<ValidateContact> {
       controller: _confirmationController,
       validator: (value) =>
       value!.isEmpty ? AppLocalizations.of(context)!.pleaseEnterConfirmationKey : null,
-      onSaved: (value) => _confirmkey = value,
+      onSaved: (value) => _confirmKey = value,
       decoration: buildInputDecoration(
           AppLocalizations.of(context)!.confirmationKey, Icons.vpn_key),
     );
@@ -297,17 +286,17 @@ class _ValidateContactState extends State<ValidateContact> {
 
       if (form!.validate()) {
         form.save();
-        print('checking confirmationkey - user: '+auth.userId+',  contactmethodid '+auth.contactMethodId.toString()+', key: '+_confirmkey.toString());
+        print('checking confirmationkey - user: '+auth.userId+',  contactmethodid '+auth.contactMethodId.toString()+', key: '+_confirmKey.toString());
 
         final Future<Map<String, dynamic>> successfulMessage =
-        _apiClient.sendConfirmationKey(userid: auth.userId,contact: auth.contactMethodId, code:_confirmkey!.toString());
+        core.Auth().sendConfirmationKey(userid: auth.userId,contact: auth.contactMethodId, code:_confirmKey!.toString());
 
         successfulMessage.then((response) {
           print('received response from sendConfirmationKey');
           if (response['status'] == 'success') {
             setState(() {
               auth.setSinglePass(response['singlepass']);
-              auth.setVerificationStatus(VerificationStatus.Verified);
+              auth.setVerificationStatus(core.VerificationStatus.verified);
             });
 
           } else {
@@ -334,7 +323,7 @@ class _ValidateContactState extends State<ValidateContact> {
         confirmationKeyField,
 
         SizedBox(height: 20.0),
-        auth.verificationStatus == VerificationStatus.Validating
+        auth.verificationStatus == core.VerificationStatus.validating
             ? loading
             : longButtons(AppLocalizations.of(context)!.btnConfirm,
             sendVerificationCode),
@@ -358,7 +347,7 @@ class _ValidateContactState extends State<ValidateContact> {
   }
   Widget bottomNavigation(auth) {
     List<Widget> elements = [];
-    if(auth.loggedInStatus != Status.LoggedIn ) {
+    if(auth.loggedInStatus != core.Status.loggedIn ) {
       elements.add(ElevatedButton(
         child: Text(AppLocalizations.of(context)!.login,
             style: TextStyle(fontWeight: FontWeight.w300)),
@@ -385,26 +374,26 @@ class _ValidateContactState extends State<ValidateContact> {
   Widget returnButton(auth)
   {
     switch(auth.verificationStatus){
-      case VerificationStatus.Verified:
+      case core.VerificationStatus.verified:
       // display button to return to code request form
         return ElevatedButton(
             child: Text(AppLocalizations.of(context)!.requestNewCode,
                 style: TextStyle(fontWeight: FontWeight.w300)),
             onPressed: () async {
               setState(() {
-                auth.setVerificationStatus(VerificationStatus.CodeNotRequested);
+                auth.setVerificationStatus(core.VerificationStatus.codeNotRequested);
               });
             });
 
-      case VerificationStatus.Validating:
-      case VerificationStatus.UserNotFound:
-      case VerificationStatus.CodeReceived:
+      case core.VerificationStatus.validating:
+      case core.VerificationStatus.userNotFound:
+      case core.VerificationStatus.codeReceived:
         return ElevatedButton(
             child: Text(AppLocalizations.of(context)!.previous,
                 style: TextStyle(fontWeight: FontWeight.w300)),
             onPressed: () async {
               setState(() {
-                auth.setVerificationStatus(VerificationStatus.CodeNotRequested);
+                auth.setVerificationStatus(core.VerificationStatus.codeNotRequested);
               });
             });
       default:

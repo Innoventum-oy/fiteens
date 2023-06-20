@@ -1,7 +1,31 @@
 {
   "fi": [
+    "activity",
+    "activityRegistrationSaved",
+    "activityRegistrationFailed",
+    "visitRemoved",
+    "activityLevel",
     "btnAvailabilityInfo",
     "fieldCannotBeEmpty",
-    "pleaseProvideValidPhoneOrEmail"
+    "healthyLifestyle",
+    "healthyFood",
+    "loadingBenefits",
+    "locationRetrieved",
+    "locations",
+    "noActivitiesFound",
+    "noActiveBenefits",
+    "noResourcesFound",
+    "noFormsFound",
+    "noVisitsToday",
+    "noVisitsFound",
+    "noUsersFound",
+    "participants",
+    "physicalActivities",
+    "pleaseProvideValidPhoneOrEmail",
+    "routines",
+    "saveAnswer",
+    "today",
+    "unnamedLibraryItem",
+    "untitled"
   ]
 }

@@ -1,6 +1,7 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:luen/src/util/shared_preference.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class EventLogView extends StatefulWidget {
 
   @override
