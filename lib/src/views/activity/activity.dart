@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
@@ -7,18 +9,18 @@ import 'package:provider/provider.dart';
 import 'package:fiteens/src/util/styles.dart';
 import 'package:fiteens/src/util/utils.dart';
 import 'package:fiteens/src/views/activity/activityvisitlist.dart';
-import 'package:fiteens/src/views/utilviews.dart';
 import 'package:fiteens/src/views/meta_section.dart';
 import 'package:fiteens/src/views/qrscanner.dart';
 import 'package:fiteens/src/views/activity/activityparticipantlist.dart';
 import 'package:core/core.dart' as core;
 
+import '../../widgets/bottomgradient.dart';
+
 class ActivityView extends StatefulWidget {
   final core.Activity _activity;
-  final core.ActivityProvider provider;
-  final core.ImageProvider imageProvider;
 
-  ActivityView(this._activity, this.provider, this.imageProvider);
+
+  ActivityView(this._activity);
 
   @override
   _ActivityViewState createState() => _ActivityViewState();
@@ -32,7 +34,8 @@ class _ActivityViewState extends State<ActivityView> {
   int iteration = 1;
   int buildtime = 1;
   //bool _visible = false;
-
+  core.ActivityProvider activityProvider = core.ActivityProvider();
+  core.ImageProvider imageProvider = core.ImageProvider();
   core.User? user;
   dynamic _activityDetails; // this is json data, not converted to activity object!
 
@@ -70,7 +73,9 @@ class _ActivityViewState extends State<ActivityView> {
   @override
   Widget build(BuildContext context) {
     print('rebuilding activity view: apiclient activity status is '+_apiClient.isProcessing.toString());
-    final user = Provider.of<core.UserProvider>(context, listen: false).user;
+    final user = Provider.of<core.UserProvider>(context).user;
+    activityProvider =Provider.of<core.ActivityProvider>(context);
+    imageProvider = Provider.of<core.ImageProvider>(context);
     bool isTester = false;
     if(user.data!=null) {
       print(user.data.toString());
@@ -221,8 +226,8 @@ class _ActivityViewState extends State<ActivityView> {
         ', awaiting provider for details!');
     try {
       dynamic details =
-          await widget.provider.getDetails(widget._activity.id!, user,reload:reload);
-      //print(details.toString());
+          await activityProvider.getDetails(widget._activity.id!, user,reload:reload);
+      print(details.toString());
       // print(details.runtimeType);
 
       setState(() =>_activityDetails =details!=null ? details : false);
@@ -236,7 +241,7 @@ class _ActivityViewState extends State<ActivityView> {
   void _loadActivityDates(user) async {
     try {
       var activityDateData =
-          await widget.provider.getActivityDates(widget._activity, user);
+          await activityProvider.getActivityDates(widget._activity, user);
 
       setState(() {
 
@@ -280,7 +285,7 @@ class _ActivityViewState extends State<ActivityView> {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => ActivityParticipantList(date,activity,widget.provider)));
+                                          builder: (context) => ActivityParticipantList(date,activity,activityProvider)));
                                 },
                                 child:Icon(Icons.table_rows_sharp),
                               ),
@@ -309,6 +314,9 @@ class _ActivityViewState extends State<ActivityView> {
             : 'Today ' + DateFormat('kk:mm ').format(activity.nexteventdate!));
     double dateSectionHeight = activityDates.length*80;
     if(dateSectionHeight > 400) dateSectionHeight = 400;
+    if(kDebugMode) {
+      log("Activity: $activity");
+    }
     List<Widget> slivers = [
       Container(
         decoration: BoxDecoration(color: const Color(0xff222128)),

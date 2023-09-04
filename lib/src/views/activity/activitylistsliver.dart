@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fiteens/src/util/utils.dart';
@@ -7,12 +8,9 @@ import 'package:fiteens/src/util/navigator.dart';
 import 'package:core/core.dart' as core;
 
 class ActivityListSliver extends StatefulWidget {
-  final core.ActivityProvider activityProvider;
-  final core.ImageProvider imageProvider;
   final core.ActivityClass activityClass;
 
-  ActivityListSliver(
-      this.activityProvider, this.imageProvider, this.activityClass);
+  ActivityListSliver(this.activityClass);
 
   @override
   _ActivityListSliverState createState() => _ActivityListSliverState();
@@ -25,22 +23,22 @@ class _ActivityListSliverState extends State<ActivityListSliver> {
   LoadingState _loadingState = LoadingState.loading;
   bool _isLoading = false;
   int iteration = 1;
-  int buildtime = 1;
+  int buildTime = 1;
   int limit = 20;
   int count = 0;
   int _pageNumber = 0;
-  String? errormessage;
+  String? errorMessage;
 
   notify(String text) {
     final snackBar = SnackBar(
       content: Text(text),
     );
 
-    // Find the ScaffoldMessenger in the widget tree
-    // and use it to show a SnackBar.
+    /// Find the ScaffoldMessenger in the widget tree and use it to show a SnackBar.
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
+  /// Calculate difference between now and given date
   int calculateDifference(DateTime date) {
     DateTime now = DateTime.now();
     return DateTime(date.year, date.month, date.day)
@@ -48,10 +46,11 @@ class _ActivityListSliverState extends State<ActivityListSliver> {
         .inDays;
   }
 
-  _loadNextPage(user, activityclass) async {
+  /// Load next set of events
+  _loadNextPage(user, activityclass,{refresh=false}) async {
     _isLoading = true;
     int offset = limit * _pageNumber;
-    DateTime now = DateTime.now();
+   // DateTime now = DateTime.now();
     final Map<String, String> params = {
       'view':'activitylistsliver',
       'activityclass': activityclass.id.toString(),
@@ -60,23 +59,27 @@ class _ActivityListSliverState extends State<ActivityListSliver> {
       'grouping':'activity.id',
       'limit': limit.toString(),
       'offset': offset.toString(),
-      'startfrom': DateFormat('yyyy-MM-dd').format(now),
+     // 'startfrom': DateFormat('yyyy-MM-dd').format(now),
       if(user.token !=null) 'api_key': user.token,
-      if(user.token !=null) 'api_key': user.token,
-
-      'sort': 'nexteventdate',
+      'sort': 'name',
     };
-
-    print('Loading activities (activitylistsliver) page $_pageNumber for '+activityclass.name);
+    if(kDebugMode) {
+      print('Loading activities (activitylistsliver) page $_pageNumber for ' +
+          activityclass.name);
+    }
     try {
-      var nextActivities = await widget.activityProvider.loadItems(params);
+      final core.ActivityProvider activityProvider = Provider.of<core.ActivityProvider>(context,listen:false);
+      var nextActivities = await activityProvider.loadItems(params,refresh: refresh);
       setState(() {
         _loadingState = LoadingState.done;
         if (nextActivities.isNotEmpty) {
           data.addAll(nextActivities);
-          print(data.length.toString() + ' activities currently loaded for '+activityclass.name);
+          if(kDebugMode) {
+            print(data.length.toString() + ' activities currently loaded for ' +
+                activityclass.name);
+          }
           if (nextActivities.length >= limit) {
-            print('advancing pagenumber');
+
             _isLoading = false;
             _pageNumber++;
           }
@@ -86,7 +89,7 @@ class _ActivityListSliverState extends State<ActivityListSliver> {
     } catch (e, stack) {
       _isLoading = false;
       print('loadItems returned error $e\n Stack trace:\n $stack');
-      errormessage = e.toString();
+      errorMessage = e.toString();
       if (_loadingState == LoadingState.loading) {
         setState(() => _loadingState = LoadingState.error);
       }
@@ -98,7 +101,7 @@ class _ActivityListSliverState extends State<ActivityListSliver> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       core.User user = Provider.of<core.UserProvider>(context, listen: false).user;
 
-      _loadNextPage(user, widget.activityClass);
+      _loadNextPage(user, widget.activityClass,refresh: true);
     });
     super.initState();
   }
@@ -107,6 +110,7 @@ class _ActivityListSliverState extends State<ActivityListSliver> {
   Widget build(BuildContext context) {
     core.User user = Provider.of<core.UserProvider>(context, listen: false).user;
 
+    //final core.ImageProvider imageProvider = Provider.of<core.ImageProvider>(context);
     return _getContentSection(user);
   }
 
@@ -144,7 +148,7 @@ class _ActivityListSliverState extends State<ActivityListSliver> {
           child: ListTile(
             leading: Icon(Icons.error),
             title: Text(
-                'Sorry, there was an error loading the data: $errormessage'),
+                'Sorry, there was an error loading the data: $errorMessage'),
           ),
         );
 

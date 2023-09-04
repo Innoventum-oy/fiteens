@@ -1,7 +1,7 @@
 // Single badge view
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:fiteens/src/util/widgets.dart';
+import 'package:fiteens/src/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:fiteens/src/util/styles.dart';
 import 'package:core/core.dart' as core;

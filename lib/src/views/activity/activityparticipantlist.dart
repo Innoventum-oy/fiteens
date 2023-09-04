@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:fiteens/src/views/card.dart';
+import 'package:fiteens/src/views/user/card.dart';
 import 'package:core/core.dart' as core;
 
 import '../../util/utils.dart';

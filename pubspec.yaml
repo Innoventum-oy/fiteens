@@ -110,6 +110,7 @@ dependency_overrides:
       url: https://github.com/jleinone/date_range_form_field.git
   core:
     path: /Users/jleinone/flutter_projects/core/core
+    # local path for faster development
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

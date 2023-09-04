@@ -1120,6 +1120,16 @@ class S {
     );
   }
 
+  /// `Library`
+  String get library {
+    return Intl.message(
+      'Library',
+      name: 'library',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Line map`
   String get lineMap {
     return Intl.message(
@@ -1287,6 +1297,25 @@ class S {
       name: 'myScore',
       desc: '',
       args: [],
+    );
+  }
+
+  /// `{item, select, home{Home} calendar{Calendar} routines{Routines} mywellbeing{My Well-being} library{Library/Resources} dashboard{Dashboard} other{Menu:{item}}}`
+  String navitem(String item) {
+    return Intl.select(
+      item,
+      {
+        'home': 'Home',
+        'calendar': 'Calendar',
+        'routines': 'Routines',
+        'mywellbeing': 'My Well-being',
+        'library': 'Library/Resources',
+        'dashboard': 'Dashboard',
+        'other': 'Menu:$item',
+      },
+      name: 'navitem',
+      desc: 'Menu navigation items map',
+      args: [item],
     );
   }
 
@@ -1765,6 +1794,16 @@ class S {
     return Intl.message(
       'QR Scanner',
       name: 'qrScanner',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Routines`
+  String get routines_title {
+    return Intl.message(
+      'Routines',
+      name: 'routines_title',
       desc: '',
       args: [],
     );

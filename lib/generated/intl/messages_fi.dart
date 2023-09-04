@@ -20,6 +20,15 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'fi';
 
+  static String m0(item) => "${Intl.select(item, {
+            'calendar': 'Kalenteri',
+            'routines': 'Harjoitusohjelma',
+            'mywellbeing': 'Oma hyvinvointi',
+            'library': 'Resurssikirjasto',
+            'home': 'Etusivu',
+            'other': 'Valikko:${item}',
+          })}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "about": MessageLookupByLibrary.simpleMessage("Tietoja"),
@@ -40,7 +49,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Oletko yli 13-vuotias?"),
         "answerSaved":
             MessageLookupByLibrary.simpleMessage("Vastaus tallennettu"),
-        "appName": MessageLookupByLibrary.simpleMessage("Riveillä"),
+        "appName": MessageLookupByLibrary.simpleMessage("Fiteens"),
         "authenticating":
             MessageLookupByLibrary.simpleMessage("Kirjautuminen käynnissä"),
         "benefits": MessageLookupByLibrary.simpleMessage("Edut"),
@@ -165,6 +174,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "joiningToUserGroup":
             MessageLookupByLibrary.simpleMessage("Uuteen ryhmään liittyminen"),
         "lastName": MessageLookupByLibrary.simpleMessage("Sukunimi"),
+        "library": MessageLookupByLibrary.simpleMessage("Resurssit / kirjasto"),
         "lineMap": MessageLookupByLibrary.simpleMessage("Linjakartta"),
         "loading": MessageLookupByLibrary.simpleMessage("ladataan"),
         "login": MessageLookupByLibrary.simpleMessage("Kirjautuminen"),
@@ -182,6 +192,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "myCard": MessageLookupByLibrary.simpleMessage("Oma kortti"),
         "myPoints": MessageLookupByLibrary.simpleMessage("Pisteesi"),
         "myScore": MessageLookupByLibrary.simpleMessage("Omat pisteet"),
+        "navitem": m0,
         "no": MessageLookupByLibrary.simpleMessage("ei"),
         "noContactMethodsFound":
             MessageLookupByLibrary.simpleMessage("Yhteystietoja ei löytynyt"),
@@ -265,6 +276,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "retrievingCoordinates":
             MessageLookupByLibrary.simpleMessage("Haetaan sijaintia"),
         "returned": MessageLookupByLibrary.simpleMessage("Palautettu"),
+        "routines_title": MessageLookupByLibrary.simpleMessage("Harjoitukset"),
         "saveData": MessageLookupByLibrary.simpleMessage("Tallenna tiedot"),
         "savingDataFailed":
             MessageLookupByLibrary.simpleMessage("Tallennus epäonnistui"),

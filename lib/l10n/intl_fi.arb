@@ -10,7 +10,7 @@
   "addedToList" : "Lisätty",
   "ageOver13": "Oletko yli 13-vuotias?",
   "answerSaved" : "Vastaus tallennettu",
-  "appName" : "Riveillä",
+  "appName" : "Fiteens",
   "authenticating" : "Kirjautuminen käynnissä",
   "activityRecorded" : "Kirjaus tallenettu",
 
@@ -106,6 +106,7 @@
   "joinedToGroup" : "Liittyminen uuteen ryhmään onnistui",
   "joiningToUserGroup" : "Uuteen ryhmään liittyminen",
   "lastName" : "Sukunimi",
+  "library" : "Resurssit / kirjasto",
   "lineMap" : "Linjakartta",
   "loading" : "ladataan",
   "login" : "Kirjautuminen",
@@ -121,6 +122,17 @@
   "myCard" : "Oma kortti",
   "myPoints" : "Pisteesi",
   "myScore" : "Omat pisteet",
+
+  "navitem" : "{item, select, calendar{Kalenteri} routines{Harjoitusohjelma} mywellbeing{Oma hyvinvointi} library{Resurssikirjasto} home{Etusivu} other{Valikko:{item}}}",
+  "@navitem" : {
+    "description" : "Menu navigation items map",
+    "placeholders" : {
+      "item" : {
+        "type" : "String"
+      }
+    }
+  },
+
   "no" : "ei",
   "noContactMethodsFound" : "Yhteystietoja ei löytynyt",
   "noDescription" : "Ei kuvausta",
@@ -179,6 +191,7 @@
   "retrievingCoordinates" : "Haetaan sijaintia",
   "resources" : "Resurssit",
   "returned" : "Palautettu",
+  "routines_title" : "Harjoitukset",
   "saveData" : "Tallenna tiedot",
   "savingDataFailed" : "Tallennus epäonnistui",
   "scanCode"  : "Skannaa koodi",

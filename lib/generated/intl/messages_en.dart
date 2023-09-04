@@ -20,6 +20,16 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
+  static String m0(item) => "${Intl.select(item, {
+            'home': 'Home',
+            'calendar': 'Calendar',
+            'routines': 'Routines',
+            'mywellbeing': 'My Well-being',
+            'library': 'Library/Resources',
+            'dashboard': 'Dashboard',
+            'other': 'Menu:${item}',
+          })}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "about": MessageLookupByLibrary.simpleMessage("About"),
@@ -172,6 +182,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "joiningToUserGroup":
             MessageLookupByLibrary.simpleMessage("Joining to new Group"),
         "lastName": MessageLookupByLibrary.simpleMessage("Last name"),
+        "library": MessageLookupByLibrary.simpleMessage("Library"),
         "lineMap": MessageLookupByLibrary.simpleMessage("Line map"),
         "loading": MessageLookupByLibrary.simpleMessage("Loading"),
         "loadingBenefits":
@@ -192,6 +203,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "myCard": MessageLookupByLibrary.simpleMessage("My Card"),
         "myPoints": MessageLookupByLibrary.simpleMessage("My points"),
         "myScore": MessageLookupByLibrary.simpleMessage("My Score"),
+        "navitem": m0,
         "no": MessageLookupByLibrary.simpleMessage("no"),
         "noActiveBenefits":
             MessageLookupByLibrary.simpleMessage("No active benefits"),
@@ -286,6 +298,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Retrieving coordinates"),
         "returned": MessageLookupByLibrary.simpleMessage("Returned"),
         "routines": MessageLookupByLibrary.simpleMessage("Routines"),
+        "routines_title": MessageLookupByLibrary.simpleMessage("Routines"),
         "saveAnswer": MessageLookupByLibrary.simpleMessage("Save answer"),
         "saveData": MessageLookupByLibrary.simpleMessage("Save data"),
         "savingDataFailed":

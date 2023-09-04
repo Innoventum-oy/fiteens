@@ -1,6 +1,5 @@
 import 'package:feedback/feedback.dart';
 import 'package:intl/intl.dart';
-import 'package:fiteens/src/util/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 import 'package:path_provider/path_provider.dart';
@@ -9,6 +8,8 @@ import 'dart:typed_data';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart'; // important
 
 import 'package:core/core.dart';
+
+import '../widgets/handlenotifications.dart';
 enum LoadingState { idle, done, loading, waiting, error }
 
 final dollarFormat = NumberFormat("#,##0.00", "en_US");
@@ -19,12 +20,14 @@ class NavigationService {
   static GlobalKey<NavigatorState> navigatorKey =
   GlobalKey<NavigatorState>();
 }
+/// Return initials for user object
 Widget getInitials(user) {
   String initials = '';
   if (user.firstname!= null && user.firstname.isNotEmpty) initials += user.firstname[0];
   if (user.lastname != null && user.lastname!.isNotEmpty) initials += user.lastname[0];
   return Text(initials);
 }
+/// enable querying color from hex values
 extension HexColor on Color {
   /// String is in the format "aabbcc" or "ffaabbcc" with an optional leading "#".
   static Color fromHex(String hexString) {
@@ -42,9 +45,10 @@ extension HexColor on Color {
       '${blue.toRadixString(16).padLeft(2, '0')}';
 }
 
-String concatListToString(List<dynamic> data, String mapKey) {
+/// Convert List (array) to (comma) - separated string
+String concatListToString(List<dynamic> data, String mapKey,{String separator= ", "}) {
   StringBuffer buffer = StringBuffer();
-  buffer.writeAll(data.map<String>((map) => map[mapKey]).toList(), ", ");
+  buffer.writeAll(data.map<String>((map) => map[mapKey]).toList(), separator);
   return buffer.toString();
 }
 

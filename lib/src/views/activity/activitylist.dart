@@ -1,11 +1,11 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fiteens/src/util/utils.dart';
-import 'package:fiteens/src/util/widgets.dart';
+import 'package:fiteens/src/widgets/widgets.dart';
 import 'package:fiteens/src/views/activity/activitylist_item.dart';
 import 'package:core/core.dart' as core;
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
 
 class ActivityList extends StatefulWidget {
   final String viewTitle = 'activitylist';
@@ -43,7 +43,7 @@ class _ActivityListState extends State<ActivityList>  {
   _loadNextPage(user) async {
     _isLoading = true;
     int offset = limit * _pageNumber;
-    DateTime now = DateTime.now();
+    // DateTime now = DateTime.now();
 
     final Map<String, String> params = {
       'view':'activitylist',
@@ -66,14 +66,14 @@ class _ActivityListState extends State<ActivityList>  {
       case 'own':
         params['activitytype'] = 'activity';
         params['accesslevel']='modify';
-        params['startfrom'] = DateFormat('yyyy-MM-dd').format(now);
+     //   params['startfrom'] = DateFormat('yyyy-MM-dd').format(now);
         params['grouping']='activity.id';
         //   params['limit']='NULL';
       break;
       default:
         params['activitytype'] = 'activity';
-        params['startfrom'] = DateFormat('yyyy-MM-dd').format(now);
-        params['sort'] ='nexteventdate';
+    //    params['startfrom'] = DateFormat('yyyy-MM-dd').format(now);
+        params['sort'] ='name';
         params['grouping']='activity.id';
 
 
@@ -87,13 +87,16 @@ class _ActivityListState extends State<ActivityList>  {
         _loadingState = LoadingState.done;
         if(nextActivities.isNotEmpty) {
           data.addAll(nextActivities);
-          print(data.length.toString() + ' activities currently loaded!');
+          if(kDebugMode) {
+            print(data.length.toString() + ' activities currently loaded!');
+          }
           _isLoading = false;
           _pageNumber++;
         }
         else
-          {
+          {if(kDebugMode) {
             print('no more activities were found');
+          }
           }
       });
     } catch (e,stack) {

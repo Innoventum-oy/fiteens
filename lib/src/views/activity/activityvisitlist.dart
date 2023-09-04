@@ -4,8 +4,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:fiteens/src/util/utils.dart';
-import 'package:fiteens/src/views/card.dart';
-import 'package:fiteens/src/views/webpagetextcontent.dart';
+import 'package:fiteens/src/views/user/card.dart';
+import 'package:fiteens/src/views/webpage/webpagetextcontent.dart';
 import 'package:date_range_form_field/date_range_form_field.dart';
 import 'package:core/core.dart' as core;
 
@@ -19,6 +19,7 @@ class ActivityVisitList extends StatefulWidget {
   _ActivityVisitListState createState() =>
       _ActivityVisitListState();
 }
+
 class _ActivityVisitListState extends State<ActivityVisitList> {
 
   core.User user = new core.User();
@@ -228,22 +229,5 @@ class _ActivityVisitListState extends State<ActivityVisitList> {
       )
           : Text(AppLocalizations.of(context)!.noActiveBenefits), */
     );
-
-
   }
-
-  Widget _userBenefitListItem(benefit) {
-    return Container(
-        child: Column(
-          children: [
-            CircleAvatar(
-              backgroundImage: NetworkImage(benefit.iconurl),
-              backgroundColor: Colors.white10,
-              radius: 20.0,
-            ),
-            Text(benefit.title ?? AppLocalizations.of(context)!.unnamed)
-          ],
-        ));
-  }
-
 }

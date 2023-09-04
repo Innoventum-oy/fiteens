@@ -113,6 +113,7 @@
   "joinedToGroup" : "You have joined a new group",
   "joiningToUserGroup" : "Joining to new Group",
   "lastName" : "Last name",
+  "library" : "Library",
   "lineMap" : "Line map",
   "loading" : "Loading",
   "loadingBenefits" : "Loading benefits",
@@ -132,6 +133,15 @@
   "myPoints" : "My points",
   "myScore" : "My Score",
 
+  "navitem" : "{item, select, home{Home} calendar{Calendar} routines{Routines} mywellbeing{My Well-being} library{Library/Resources} dashboard{Dashboard} other{Menu:{item}}}",
+  "@navitem" : {
+    "description" : "Menu navigation items map",
+    "placeholders" : {
+      "item" : {
+        "type" : "String"
+      }
+    }
+  },
   "no" : "no",
   "noActivitiesFound" : "Could not find any activities",
   "noActiveBenefits" : "No active benefits",
@@ -181,7 +191,7 @@
   "processing" : "Processing",
 
   "qrScanner" : "QR Scanner",
-
+  "routines_title" : "Routines",
   "rateBook"  : "Rate book",
   "readBooksList" : "Read books",
   "readList" : "Book list",

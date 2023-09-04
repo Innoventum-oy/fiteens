@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fiteens/src/util/utils.dart';
-import 'package:fiteens/src/util/widgets.dart';
-import 'package:fiteens/src/views/pagelist_item.dart';
+import 'package:fiteens/src/widgets/widgets.dart';
+import 'package:fiteens/src/views/webpage/pagelist_item.dart';
 import 'package:provider/provider.dart';
-import 'package:fiteens/src/views/webpagetextcontent.dart';
+import 'package:fiteens/src/views/webpage/webpagetextcontent.dart';
 import 'package:core/core.dart' as core;
 class VerticalPageList extends StatefulWidget {
   final String viewTitle = 'pagelist';

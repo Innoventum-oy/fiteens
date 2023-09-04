@@ -1,19 +1,17 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fiteens/src/util/styles.dart';
 import 'package:fiteens/src/util/utils.dart';
-import 'package:fiteens/src/util/widgets.dart';
+import 'package:fiteens/src/widgets/widgets.dart';
 import 'package:fiteens/src/views/activity/activitylistsliver.dart';
 import 'package:provider/provider.dart';
 import 'package:core/core.dart' as core;
 
 class CategorisedActivityList extends StatefulWidget {
-
-  final core.ImageProvider imageProvider;
   final String viewType;
 
-  CategorisedActivityList( this.imageProvider,
-      {this.viewType = 'all'});
+  CategorisedActivityList( {this.viewType = 'all'});
 
   @override
   _CategorisedActivityListState createState() =>
@@ -41,7 +39,7 @@ class _CategorisedActivityListState extends State<CategorisedActivityList> {
     // and use it to show a SnackBar.
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
-
+  // Load next set of  activityclasses
   _loadNextPage(user) async {
     _isLoading = true;
     int offset = limit * _pageNumber;
@@ -54,8 +52,9 @@ class _CategorisedActivityListState extends State<CategorisedActivityList> {
 
       'sort': 'name',
     };
-    print("categorised activitylist viewtype: " + widget.viewType);
-
+    if(kDebugMode) {
+      print("categorised activitylist viewtype: " + widget.viewType);
+    }
     core.ActivityClassProvider activityClassProvider = core.ActivityClassProvider();
 
 
@@ -131,6 +130,8 @@ class _CategorisedActivityListState extends State<CategorisedActivityList> {
             _pageNumber = 0;
             _loadingState = LoadingState.loading;
             _isLoading = false;
+            /// Clear local data
+            core.FileStorage().clear('activities');
             _loadNextPage(user);
           });
         }),]
@@ -200,7 +201,6 @@ class _CategorisedActivityListState extends State<CategorisedActivityList> {
   }
 
   Widget activityClassView(activityClass) {
-    core.ActivityProvider activityProvider = core.ActivityProvider();
     print('creating activity list for class '+activityClass.name);
     return
       Container(
@@ -223,7 +223,7 @@ class _CategorisedActivityListState extends State<CategorisedActivityList> {
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child:
-                      ActivityListSliver(  activityProvider, widget.imageProvider, activityClass),
+                      ActivityListSliver( activityClass),
                   ),
                 ),
               ]

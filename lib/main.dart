@@ -1,16 +1,16 @@
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart'; // important
 import 'package:fiteens/src/views/achievements.dart';
-import 'package:fiteens/src/views/dashboard.dart';
-import 'package:fiteens/src/views/pagelist.dart';
-import 'package:fiteens/src/views/loginform.dart';
-import 'package:fiteens/src/views/register.dart';
-import 'package:fiteens/src/views/passwordform.dart';
+import 'package:fiteens/src/views/dashboard/dashboard.dart';
+import 'package:fiteens/src/views/webpage/pagelist.dart';
+import 'package:fiteens/src/views/user/loginform.dart';
+import 'package:fiteens/src/views/user/register.dart';
+import 'package:fiteens/src/views/user/passwordform.dart';
 import 'package:fiteens/src/util/utils.dart';
-import 'package:fiteens/src/views/validatecontact.dart';
-import 'package:feedback/feedback.dart';
+import 'package:fiteens/src/views/user/validatecontact.dart';
 import 'package:core/core.dart' as core;
 import 'package:provider/provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -20,9 +20,8 @@ void main() async {
 
   await Hive.initFlutter();
 
-  runApp( BetterFeedback(
-      child:Fiteens(),
-  ));
+  runApp( Fiteens(),
+  );
 }
 
 class Fiteens extends StatelessWidget {
@@ -30,15 +29,19 @@ class Fiteens extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if(kDebugMode) {
+      log('build called for application (main.dart)');
 
-    print('build called for application (main.dart)');
+    }
     Future<core.User>? getUserData() => core.UserPreferences().getUser();
 
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => core.AuthProvider()),
         ChangeNotifierProvider(create: (_) => core.UserProvider()),
-        ChangeNotifierProvider(create: (_) => core.WebPageProvider())
+        ChangeNotifierProvider(create: (_) => core.WebPageProvider()),
+        ChangeNotifierProvider(create: (_) => core.ActivityProvider()),
+        ChangeNotifierProvider(create: (_) => core.ImageProvider())
       ],
       child: MaterialApp(
           title: 'Fiteens',
@@ -46,7 +49,7 @@ class Fiteens extends StatelessWidget {
           navigatorKey: NavigationService.navigatorKey,
           localizationsDelegates:  AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,//const [Locale('fi', 'FI')],
-          //AppLocalizations.supportedLocales,
+
           theme: ThemeData(
             // This is the theme of the application.
             //  brightness: Brightness.light,
@@ -74,8 +77,6 @@ class Fiteens extends StatelessWidget {
 
           ),
             primaryTextTheme: Typography.whiteHelsinki,
-
-
 
             inputDecorationTheme:  InputDecorationTheme(
               enabledBorder: OutlineInputBorder(
@@ -107,8 +108,10 @@ class Fiteens extends StatelessWidget {
           home: FutureBuilder(
               future: getUserData(),
               builder: (context, snapshot) {
-                print('main.dart: snapshot connectionState: ' +
-                    snapshot.connectionState.toString());
+                if(kDebugMode) {
+                  log("main.dart: snapshot connectionState: ${ snapshot
+                      .connectionState.toString()}");
+                }
                 switch (snapshot.connectionState) {
                   case ConnectionState.none:
                   case ConnectionState.waiting:
