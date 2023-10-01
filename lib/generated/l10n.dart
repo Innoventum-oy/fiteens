@@ -1379,6 +1379,16 @@ class S {
     );
   }
 
+  /// `No routines found`
+  String get noRoutinesFound {
+    return Intl.message(
+      'No routines found',
+      name: 'noRoutinesFound',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `No forms found`
   String get noFormsFound {
     return Intl.message(
@@ -2204,6 +2214,16 @@ class S {
     return Intl.message(
       'Untitled page',
       name: 'unnamedWebPage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Untitled routine`
+  String get unnamedRoutine {
+    return Intl.message(
+      'Untitled routine',
+      name: 'unnamedRoutine',
       desc: '',
       args: [],
     );

@@ -21,7 +21,8 @@ Widget bottomNavigation(BuildContext context, {int currentIndex = 0}) {
               if(kDebugMode){
                 log('$index ${navItem.view.toString()} ');
               }
-              constants.Router.navigate(context,navItem.view);
+
+              constants.Router.navigate(context,navItem.view,index);
              // Navigator.pushNamedAndRemoveUntil(context, navItem.route, (Route<dynamic> route) => false);
             }
           }

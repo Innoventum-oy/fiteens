@@ -69,7 +69,7 @@ class _ActivityListSliverState extends State<ActivityListSliver> {
     }
     try {
       final core.ActivityProvider activityProvider = Provider.of<core.ActivityProvider>(context,listen:false);
-      var nextActivities = await activityProvider.loadItems(params,refresh: refresh);
+      var nextActivities = await activityProvider.getItems(params,reload: refresh);
       setState(() {
         _loadingState = LoadingState.done;
         if (nextActivities.isNotEmpty) {

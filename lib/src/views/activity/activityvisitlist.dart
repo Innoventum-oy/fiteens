@@ -35,7 +35,7 @@ class _ActivityVisitListState extends State<ActivityVisitList> {
   void initState() {
     print('initState '+widget.viewTitle);
     this.user = Provider.of<core.UserProvider>(context,listen:false).user;
-    widget.visitListProvider.setUser(this.user);
+    widget.visitListProvider.user = this.user;
     _loadWebPage(this.user);
 
 
@@ -71,7 +71,7 @@ class _ActivityVisitListState extends State<ActivityVisitList> {
     //current user
     print('build '+widget.viewTitle);
 
-    this.page = Provider.of<core.WebPageProvider>(context).page;
+    this.page = Provider.of<core.WebPageProvider>(context).current!;
     visits = widget.visitListProvider.list ?? [];
 
     // Future<List<ActivityVisit>?> getVisits() => widget.visitListProvider.loadActivityVisits(widget._activity);

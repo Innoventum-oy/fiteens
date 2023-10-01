@@ -262,7 +262,7 @@ class _QRScannerState extends State<QRScanner> {
     }
     else { //set the user for activitylistprovider
       core.ActivityProvider alp = Provider.of<core.ActivityProvider>(context, listen: false);
-      alp.setUser(user);
+      alp.user = this.user;
       alp.loadMyItems();
     }
     getCameraPermission();

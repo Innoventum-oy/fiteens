@@ -21,6 +21,7 @@ environment:
   sdk: ">=2.17.0 "
 
 dependencies:
+  build_runner: ^2.4.5
   flutter:
     sdk: flutter
    #internationalization:
@@ -71,6 +72,8 @@ dependencies:
   qr_code_scanner: ^1.0.1
   queue: ^3.1.0+2
   hive_flutter: ^1.1.0
+  flutter_settings_ui: ^2.0.1
+  loading_gifs: ^0.3.0
 
 
 dev_dependencies:
@@ -78,6 +81,7 @@ dev_dependencies:
     sdk: flutter
   flutter_native_splash: ^2.1.6
   flutter_launcher_icons: ^0.10.0
+  flutter_lints: ^2.0.0
 
 #if you make changes, regenerate with flutter pub run flutter_native_splash:create
 flutter_native_splash:

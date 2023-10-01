@@ -4,8 +4,6 @@ import 'package:fiteens/src/views/activity/activity.dart';
 import 'package:fiteens/src/views/dashboard/dashboard.dart';
 import 'package:fiteens/src/views/library/libraryscreen.dart';
 import 'package:fiteens/src/views/routines/routinesscreen.dart';
-import 'package:fiteens/src/views/webpage/webpageview.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -46,7 +44,7 @@ class NavigationItem {
 // navItems is used for Dashboard tiles and bottomNavigation
 List<NavigationItem> navItems = [
   NavigationItem(navigationIndex: 0, label: 'home', icon: Icon(Icons.home), route: '/dashboard',view: 'dashboard',displayInDashboard:false),
-  NavigationItem(navigationIndex: 1, label: 'calendar', icon: Icon(Icons.sports_gymnastics), route: '/routines', view: 'routines',),
+  NavigationItem(navigationIndex: 1, label: 'calendar', icon: Icon(Icons.calendar_month_rounded), route: '/calendar', view: 'calendar',),
   NavigationItem(navigationIndex: 2, label: 'routines', icon: Icon(Icons.sports_gymnastics), route: '/routines', view: 'routines',),
   NavigationItem(navigationIndex: 3, label: 'mywellbeing', icon: Icon(Icons.monitor_heart_outlined), route: '/mywellbeing', view: 'mywellbeing'),
   NavigationItem(navigationIndex: 4,label: 'library', icon: Icon(Icons.my_library_books_outlined),route: '/library', view: 'library')
@@ -54,7 +52,7 @@ List<NavigationItem> navItems = [
 
 /// This router class takes care of navigating to different page routes defined by NavigationItems
 class Router {
-    static void navigate(BuildContext context,String view,{dynamic data}) {
+    static void navigate(BuildContext context,String view,int navIndex,{refresh=false,dynamic data}) {
       if(kDebugMode){
         log("Navigating to route $view");
       }
@@ -62,22 +60,22 @@ class Router {
       Widget targetWidget = Container(child: Text('Error: view not found'));
       switch(view) {
         case 'activity' :
-            targetWidget = ActivityView(data);
+            targetWidget = ActivityView(data,navIndex:navIndex,refresh:refresh);
             routeFound = true;
           break;
         case 'dashboard' :
-          targetWidget = DashBoard();
+          targetWidget = DashBoard(navIndex: navIndex,refresh:refresh);
           routeFound = true;
           break;
         case 'library' :
-          targetWidget = LibraryScreen();
+          targetWidget = LibraryScreen(navIndex: navIndex,refresh:refresh);
           routeFound = true;
           break;
         case 'mywellbeing' :
 
           break;
         case 'routines' :
-          targetWidget = RoutinesScreen();
+          targetWidget = RoutinesScreen(navIndex: navIndex,refresh:refresh);
           routeFound = true;
           break;
         case 'webpage' :
@@ -90,7 +88,8 @@ class Router {
       if (routeFound) {
         MaterialPageRoute route = MaterialPageRoute(
             builder: (context) => targetWidget);
-        Navigator.push(context, route);
+
+        Navigator.pushReplacement(context, route);
       }
       else {
         // Display error

@@ -14,7 +14,9 @@ goToWebPage(BuildContext context, core.WebPage item, {replace = false}) {
   _pushWidgetWithFade(context, WebPageView(item, provider, imageprovider),
       replace: replace);
 }
-
+goToWidget(BuildContext context, Widget widget,{replace = false}){
+  _pushWidgetWithFade(context, widget,replace: replace);
+}
 _pushWidgetWithFade(BuildContext context, Widget widget, {replace = false}) {
   PageRouteBuilder route = PageRouteBuilder(
       transitionsBuilder: (context, animation, secondaryAnimation, child) =>

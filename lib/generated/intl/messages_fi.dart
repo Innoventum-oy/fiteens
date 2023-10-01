@@ -197,6 +197,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "noContactMethodsFound":
             MessageLookupByLibrary.simpleMessage("Yhteystietoja ei löytynyt"),
         "noDescription": MessageLookupByLibrary.simpleMessage("Ei kuvausta"),
+        "noRoutinesFound":
+            MessageLookupByLibrary.simpleMessage("Ei harjoitusohjelmia"),
         "noTasks": MessageLookupByLibrary.simpleMessage("Ei tehtäviä"),
         "noThankYou": MessageLookupByLibrary.simpleMessage("Ei kiitos"),
         "notVerified": MessageLookupByLibrary.simpleMessage("Ei vahvistettu"),
@@ -304,6 +306,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "unnamed": MessageLookupByLibrary.simpleMessage("Nimetön"),
         "unnamedActivity":
             MessageLookupByLibrary.simpleMessage("Nimetön tapahtuma"),
+        "unnamedRoutine":
+            MessageLookupByLibrary.simpleMessage("Nimetön harjoitusohjelma"),
         "unnamedWebPage": MessageLookupByLibrary.simpleMessage("Nimetön sivu"),
         "useCode": MessageLookupByLibrary.simpleMessage("Lähetä koodi"),
         "userNotFound":

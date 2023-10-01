@@ -2,6 +2,7 @@
 appName: Fiteens
 servers:
   primary: fiteens.eu
+  development: dev.fiteens.eu
 endpoints:
   login: /api/login
   logout: /api/logout

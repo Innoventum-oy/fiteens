@@ -1,8 +1,10 @@
 import 'package:another_flushbar/flushbar.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:fiteens/src/widgets/widgets.dart';
 import 'package:fiteens/src/views/webpage/webpagetextcontent.dart';
+import 'package:flutter_settings_ui/flutter_settings_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:fiteens/src/util/utils.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -23,11 +25,12 @@ class _LoginState extends State<Login> {
 
   String? _contact, _password;
   String serverName = '';
+  String serverUrl ='';
   String appName = '';
   String packageName = '';
   String version = '';
   String buildNumber = '';
-
+  late final Map? servers;
   _LoginState() {
     PackageInfo.fromPlatform().then((PackageInfo packageInfo) => setState(() {
       appName = packageInfo.appName;
@@ -41,6 +44,15 @@ class _LoginState extends State<Login> {
     }));
   }
 
+  @override void initState() {
+    // TODO: implement initState
+    super.initState();
+    getServers();
+
+  }
+  void getServers() async{
+    servers = await core.AppSettings().getMap('servers');
+  }
   @override
   Widget build(BuildContext context) {
     core.AuthProvider auth = Provider.of<core.AuthProvider>(context);
@@ -170,6 +182,7 @@ class _LoginState extends State<Login> {
       }
     };
 
+
     return SafeArea(
       child: Scaffold(
     /*    appBar: AppBar(
@@ -208,7 +221,11 @@ class _LoginState extends State<Login> {
                 SizedBox(height: 15.0),
                 auth.loggedInStatus == core.Status.authenticating
                     ? cancelButton : Container(),
-                getVersionInfo(),
+                Row(children:[
+                  if(kDebugMode) GestureDetector(child: Text("[$serverName] "), onTap: () {
+                    serverSelectDialog(context);
+                  },),getVersionInfo(),
+                ]),
                 policyLink(),
               ],
 
@@ -247,5 +264,73 @@ class _LoginState extends State<Login> {
             color: Color(0xFFffe8d7)
         ))
     );
+  }
+  void serverSelectDialog(BuildContext context){
+    showDialog(
+      context: context,
+      builder: (_) => new AlertDialog(
+          title: new Text(
+              'Server'),
+          content: Container(
+            width: double.maxFinite,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                  maxHeight:
+                  MediaQuery.of(context).size.height *
+                      0.9,
+                  minHeight:
+                  MediaQuery.of(context).size.height *
+                      0.5,
+                  maxWidth:
+                  MediaQuery.of(context).size.width * 0.9,
+                  minWidth:
+                  MediaQuery.of(context).size.width *
+                      0.9),
+              child: SettingsSection(
+                  tiles: environmentOptions(context)),
+            ),
+          ),
+          insetPadding: EdgeInsets.symmetric(horizontal: 20),
+          actions: <Widget>[
+            ElevatedButton(
+              child:
+              Text('Close'),
+              onPressed: () {
+                Navigator.of(context, rootNavigator: true).pop();
+              },
+            ),
+          ]),
+    );
+
+  }
+  List<SettingsTile> environmentOptions(BuildContext context) {
+    
+    List<SettingsTile> tiles = [];
+    servers?.forEach((serverTitle, itemUrl) {
+      tiles.add(SettingsTile(
+        title: serverTitle,
+        titleTextStyle:TextStyle(fontSize:13),
+        // subtitle: serverUrl,
+
+        leading: trailingWidget(serverTitle),
+        onPressed: (BuildContext context) {
+          
+          serverName = serverTitle;
+          serverUrl = itemUrl;
+          
+          core.Settings().setValue('server', serverUrl);
+          core.Settings().setValue('servername', serverTitle);
+
+          core.UserPreferences().removeUser();
+          //  Provider.of<UserProvider>(context, listen: false).clearUser();
+          //  Navigator.pushReplacementNamed(context, '/login');
+          Navigator.of(context, rootNavigator: true).pop();
+          setState(() {
+            print('updating state');
+          });
+        },
+      ));
+    });
+    return tiles;
   }
 }

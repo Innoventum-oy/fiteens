@@ -72,7 +72,7 @@ class _WebPageViewState extends State<WebPageView> {
 
     try {
       dynamic details =
-          await widget.provider.getDetails(widget._webPage.id!, user);
+          await widget.provider.getDetails(widget._webPage.id!);
 
       setState(() {
         if (details != null) {

@@ -215,6 +215,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "noFormsFound": MessageLookupByLibrary.simpleMessage("No forms found"),
         "noResourcesFound": MessageLookupByLibrary.simpleMessage(
             "No resources currently available"),
+        "noRoutinesFound":
+            MessageLookupByLibrary.simpleMessage("No routines found"),
         "noTasks": MessageLookupByLibrary.simpleMessage("No tasks"),
         "noThankYou": MessageLookupByLibrary.simpleMessage("No thank you"),
         "noUsersFound": MessageLookupByLibrary.simpleMessage("No users found"),
@@ -329,6 +331,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Unnamed activity"),
         "unnamedLibraryItem":
             MessageLookupByLibrary.simpleMessage("Unnamed item"),
+        "unnamedRoutine":
+            MessageLookupByLibrary.simpleMessage("Untitled routine"),
         "unnamedWebPage": MessageLookupByLibrary.simpleMessage("Untitled page"),
         "untitled": MessageLookupByLibrary.simpleMessage("Untitled"),
         "useCode": MessageLookupByLibrary.simpleMessage("Use code"),

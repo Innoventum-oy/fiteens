@@ -11,7 +11,9 @@ class ScreenScaffold extends StatefulWidget{
   final Widget child; // Page contents
   final List<Widget>? appBarButtons;  // Buttons to show on top appBar
   final int navigationIndex;  // index for bottomNavigation
-  const ScreenScaffold({Key? key, required this.title, required this.child, this.appBarButtons,this.navigationIndex=1}) : super(key:key);
+  final bool refresh; // refresh view indicator
+  final Function? onRefresh;// refresh functionality, causes refresh button to appear
+  const ScreenScaffold({Key? key, required this.title, required this.child, this.appBarButtons,this.navigationIndex=1,this.refresh=false,this.onRefresh}) : super(key:key);
 
   @override
   State<ScreenScaffold> createState() => _ScreenScaffoldState();
@@ -35,18 +37,22 @@ class _ScreenScaffoldState extends State<ScreenScaffold>{
 
         title: Text(widget.title),
         elevation: 0.1,
-        leading: const BackButton(),
+        leading: Navigator.canPop(context) ? const BackButton() : ClipOval(child:Image.asset('images/logo.png',
+          fit: BoxFit.scaleDown,
+        )
+        ),
         actions: [
           CircleAvatar(
             radius:20,
             child: user.image != null ? Image.network(user.image ??'') : const Icon(Icons.account_circle_outlined),
           ),
-
+          if(widget.onRefresh!=null) IconButton(onPressed: ()=> widget.onRefresh!(), icon: Icon(Icons.refresh)),
           ...?widget.appBarButtons,
           IconButton(
               icon: const Icon(Icons.logout),
               onPressed: () async {
                 Provider.of<UserProvider>(context, listen: false).clearUser();
+                UserPreferences().removeUser();
                 setState(() {
                   Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
                 });

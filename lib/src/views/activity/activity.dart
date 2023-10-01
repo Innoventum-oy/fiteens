@@ -1,3 +1,5 @@
+/// TODO: Rewriting this view to use screenscaffold and properly use providers
+
 import 'dart:async';
 import 'dart:developer';
 
@@ -18,9 +20,9 @@ import '../../widgets/bottomgradient.dart';
 
 class ActivityView extends StatefulWidget {
   final core.Activity _activity;
-
-
-  ActivityView(this._activity);
+  final int navIndex;
+  final bool refresh;
+  ActivityView(this._activity,{this.refresh=false,this.navIndex=1});
 
   @override
   _ActivityViewState createState() => _ActivityViewState();
@@ -226,7 +228,7 @@ class _ActivityViewState extends State<ActivityView> {
         ', awaiting provider for details!');
     try {
       dynamic details =
-          await activityProvider.getDetails(widget._activity.id!, user,reload:reload);
+          await activityProvider.getDetails(widget._activity.id!,reload:reload);
       print(details.toString());
       // print(details.runtimeType);
 
