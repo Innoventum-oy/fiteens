@@ -210,10 +210,10 @@ class S {
     );
   }
 
-  /// `FiTeens *DRAFT*`
+  /// `FiTeens`
   String get appName {
     return Intl.message(
-      'FiTeens *DRAFT*',
+      'FiTeens',
       name: 'appName',
       desc: '',
       args: [],
@@ -225,56 +225,6 @@ class S {
     return Intl.message(
       'Authenticating ... Please wait',
       name: 'authenticating',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Benefits`
-  String get benefits {
-    return Intl.message(
-      'Benefits',
-      name: 'benefits',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Books`
-  String get books {
-    return Intl.message(
-      'Books',
-      name: 'books',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Book read`
-  String get bookIsRead {
-    return Intl.message(
-      'Book read',
-      name: 'bookIsRead',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Book status updated`
-  String get bookStatusUpdated {
-    return Intl.message(
-      'Book status updated',
-      name: 'bookStatusUpdated',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Availability information`
-  String get btnAvailabilityInfo {
-    return Intl.message(
-      'Availability information',
-      name: 'btnAvailabilityInfo',
       desc: '',
       args: [],
     );
@@ -320,11 +270,11 @@ class S {
     );
   }
 
-  /// `Map`
-  String get btnMap {
+  /// `Mark as done`
+  String get btnMarkAsDone {
     return Intl.message(
-      'Map',
-      name: 'btnMap',
+      'Mark as done',
+      name: 'btnMarkAsDone',
       desc: '',
       args: [],
     );
@@ -335,16 +285,6 @@ class S {
     return Intl.message(
       'Show',
       name: 'btnShow',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Read`
-  String get btnRead {
-    return Intl.message(
-      'Read',
-      name: 'btnRead',
       desc: '',
       args: [],
     );
@@ -480,26 +420,6 @@ class S {
     );
   }
 
-  /// `You cannot access this station yet`
-  String get cannotOpenStation {
-    return Intl.message(
-      'You cannot access this station yet',
-      name: 'cannotOpenStation',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Challenging Books`
-  String get challengingBooks {
-    return Intl.message(
-      'Challenging Books',
-      name: 'challengingBooks',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Choose`
   String get choose {
     return Intl.message(
@@ -520,11 +440,11 @@ class S {
     );
   }
 
-  /// `Choose start station`
-  String get chooseStartStation {
+  /// `Click picture to choose an avatar`
+  String get clickPictureToChooseAvatar {
     return Intl.message(
-      'Choose start station',
-      name: 'chooseStartStation',
+      'Click picture to choose an avatar',
+      name: 'clickPictureToChooseAvatar',
       desc: '',
       args: [],
     );
@@ -535,6 +455,16 @@ class S {
     return Intl.message(
       'City',
       name: 'city',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Collected badges`
+  String get collectedBadges {
+    return Intl.message(
+      'Collected badges',
+      name: 'collectedBadges',
       desc: '',
       args: [],
     );
@@ -635,16 +565,6 @@ class S {
     return Intl.message(
       'Content not found',
       name: 'contentNotFound',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Could not load station information, sorry`
-  String get couldNotLoadStation {
-    return Intl.message(
-      'Could not load station information, sorry',
-      name: 'couldNotLoadStation',
       desc: '',
       args: [],
     );
@@ -1060,21 +980,21 @@ class S {
     );
   }
 
-  /// `Healthy lifestyle`
-  String get healthyLifestyle {
-    return Intl.message(
-      'Healthy lifestyle',
-      name: 'healthyLifestyle',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Healthy food`
   String get healthyFood {
     return Intl.message(
       'Healthy food',
       name: 'healthyFood',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Healthy lifestyle`
+  String get healthyLifestyle {
+    return Intl.message(
+      'Healthy lifestyle',
+      name: 'healthyLifestyle',
       desc: '',
       args: [],
     );
@@ -1130,11 +1050,11 @@ class S {
     );
   }
 
-  /// `Line map`
-  String get lineMap {
+  /// `Library is currently empty`
+  String get libraryIsEmpty {
     return Intl.message(
-      'Line map',
-      name: 'lineMap',
+      'Library is currently empty',
+      name: 'libraryIsEmpty',
       desc: '',
       args: [],
     );
@@ -1145,16 +1065,6 @@ class S {
     return Intl.message(
       'Loading',
       name: 'loading',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Loading benefits`
-  String get loadingBenefits {
-    return Intl.message(
-      'Loading benefits',
-      name: 'loadingBenefits',
       desc: '',
       args: [],
     );
@@ -1220,26 +1130,6 @@ class S {
     );
   }
 
-  /// `Metro map`
-  String get metroMap {
-    return Intl.message(
-      'Metro map',
-      name: 'metroMap',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Moderate books`
-  String get moderateBooks {
-    return Intl.message(
-      'Moderate books',
-      name: 'moderateBooks',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `More information`
   String get moreInformation {
     return Intl.message(
@@ -1265,16 +1155,6 @@ class S {
     return Intl.message(
       'My Card',
       name: 'myCard',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `My booklist`
-  String get myBooks {
-    return Intl.message(
-      'My booklist',
-      name: 'myBooks',
       desc: '',
       args: [],
     );
@@ -1316,6 +1196,16 @@ class S {
       name: 'navitem',
       desc: 'Menu navigation items map',
       args: [item],
+    );
+  }
+
+  /// `Next`
+  String get next {
+    return Intl.message(
+      'Next',
+      name: 'next',
+      desc: '',
+      args: [],
     );
   }
 
@@ -2099,51 +1989,11 @@ class S {
     );
   }
 
-  /// `Station`
-  String get station {
+  /// `Start new assessment`
+  String get startAssessment {
     return Intl.message(
-      'Station',
-      name: 'station',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `You have passed this station`
-  String get stationIsPassed {
-    return Intl.message(
-      'You have passed this station',
-      name: 'stationIsPassed',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Stations`
-  String get stationList {
-    return Intl.message(
-      'Stations',
-      name: 'stationList',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Subway Map`
-  String get subwayMap {
-    return Intl.message(
-      'Subway Map',
-      name: 'subwayMap',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Submission rejected`
-  String get submissionRejected {
-    return Intl.message(
-      'Submission rejected',
-      name: 'submissionRejected',
+      'Start new assessment',
+      name: 'startAssessment',
       desc: '',
       args: [],
     );
@@ -2334,36 +2184,6 @@ class S {
     return Intl.message(
       'Yes',
       name: 'yes',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `No station selected`
-  String get youAreNotOnAnyStation {
-    return Intl.message(
-      'No station selected',
-      name: 'youAreNotOnAnyStation',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `You have read this book`
-  String get youHaveReadThisBook {
-    return Intl.message(
-      'You have read this book',
-      name: 'youHaveReadThisBook',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `You have opened this station`
-  String get youHaveOpenedThisStation {
-    return Intl.message(
-      'You have opened this station',
-      name: 'youHaveOpenedThisStation',
       desc: '',
       args: [],
     );

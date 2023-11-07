@@ -1,6 +1,6 @@
-import 'dart:developer';
 
 import 'package:core/core.dart';
+import 'package:fiteens/src/views/routines/components/dayitem.dart';
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
@@ -29,7 +29,7 @@ class _WeekViewState extends State<WeekView> {
 
 
       List<RoutineItem>? dayItems = widget.items?.where((element) => element.weekday==i).toList();
-      log('Adding ${dayItems?.length} dayItems where weekday is $i');
+     // log('Adding ${dayItems?.length} dayItems where weekday is $i');
       days.add(
         weekDayCard(calendarDay,items:dayItems)
       );
@@ -47,31 +47,39 @@ class _WeekViewState extends State<WeekView> {
 
   Widget weekDayCard(calendarDay,{List<RoutineItem>? items})
   {
-    return Card(
-        child: Container(
-            width: 120,
-            height: 100,
-            child:InkWell(
-                child:
+    List<Widget>dayActivities = [];
+    if(items!=null && items.length>0) {
+      items.forEach((element) { dayActivities.add(
+        dayItem(element.activity??Activity())
+      );
+      });
+    }
+      return Card(
+          child: Container(
+              width: 120,
+              height: 100,
+              child:InkWell(
+                  child:
 
-                Column(
-                  children: [
-                    Text(DateFormat('EEEE').format(calendarDay)),
-                    Padding(
-                        padding:EdgeInsets.all(5),
-                        child: Column(
-                            children:[
-                              if(items!=null && items.length>0)Text("${items?.length} events today!")
-                            ]
-                        )
+                  Column(
+                    children: [
+                      Text(DateFormat('EEEE').format(calendarDay)),
+                      Padding(
+                          padding:EdgeInsets.all(5),
+                          child: Column(
+                              children:
+                              dayActivities
 
-                    )
+                          )
 
-                  ],
-                )
-            )
-        )
-    );
-  }
+                      )
+
+                    ],
+                  )
+              )
+          )
+      );
+    }
+
 
 }

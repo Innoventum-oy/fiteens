@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../util/constants.dart' as constants;
-import '../views/activity/categorisedactivitylist.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 

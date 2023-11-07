@@ -8,12 +8,13 @@ import 'package:core/core.dart' as core;
 
 import '../../util/utils.dart';
 
+/// TODO: update this view
+
 class ActivityParticipantList extends StatefulWidget {
   final core.ActivityDate _activityDate;
   final core.Activity _activity;
-  final core.ActivityProvider activityProvider;
 
-  ActivityParticipantList(this._activityDate,this._activity, this.activityProvider);
+  ActivityParticipantList(this._activityDate,this._activity);
 
   @override
   _ActivityParticipantListState createState() =>
@@ -36,17 +37,18 @@ class _ActivityParticipantListState extends State<ActivityParticipantList> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  void _loadActivityUsers(activityDate,user) async {
+  void _loadActivityUsers(activityDate) async {
     try {
       var activityUserData =
-      await widget.activityProvider.getActivityUsers(widget._activity.id!,user);
+      await Provider.of<core.ActivityProvider>(context).getActivityUsers(widget._activity.id!);
+
 
       setState(() {
         userListLoaded = true;
         if (activityUserData.isNotEmpty) {
           users.addAll(activityUserData);
           print(activityUserData.length.toString() + ' users loaded');
-          _loadActivityVisits(widget._activity.id!,widget._activityDate,user);
+          _loadActivityVisits(widget._activity.id!,widget._activityDate);
         } else {
           print('no users found for activity');
         }
@@ -57,10 +59,10 @@ class _ActivityParticipantListState extends State<ActivityParticipantList> {
       e.toString();
     }
   }
-  void _loadActivityVisits(activity,activitydate,user) async {
+  void _loadActivityVisits(activity,activitydate) async {
     try {
       this.activityVisitData =
-      await widget.activityProvider.getActivityDateVisits(widget._activity.id!,activitydate,user);
+      await Provider.of<core.ActivityProvider>(context).getActivityDateVisits(widget._activity.id!,activitydate);
 
       setState(() {
         visitListLoaded = true;
@@ -81,8 +83,8 @@ class _ActivityParticipantListState extends State<ActivityParticipantList> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      core.User user = Provider.of<core.UserProvider>(context, listen: false).user; //current user
-      _loadActivityUsers(widget._activityDate,user);
+
+      _loadActivityUsers(widget._activityDate);
 
     });
 

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 
 popupDialog(String? titleText, Widget dialogContent, BuildContext context,
-    {List<Widget>? actions}) {
-  print(context.toString());
-  showDialog<String>(
+    {List<Widget>? actions}) async {
+
+  return await showDialog(
       context: context,
       builder: (BuildContext context) => AlertDialog(
         title: Text(titleText != null

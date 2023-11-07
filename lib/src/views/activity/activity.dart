@@ -3,43 +3,39 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:flutter/foundation.dart';
+import 'package:fiteens/src/widgets/screenscaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:fiteens/src/util/styles.dart';
-import 'package:fiteens/src/util/utils.dart';
 import 'package:fiteens/src/views/activity/activityvisitlist.dart';
-import 'package:fiteens/src/views/meta_section.dart';
-import 'package:fiteens/src/views/qrscanner.dart';
+
 import 'package:fiteens/src/views/activity/activityparticipantlist.dart';
 import 'package:core/core.dart' as core;
 
-import '../../widgets/bottomgradient.dart';
-
-class ActivityView extends StatefulWidget {
+/// Display single activity information
+class ActivityScreen extends StatefulWidget {
   final core.Activity _activity;
-  final int navIndex;
+  final int? navIndex;
   final bool refresh;
-  ActivityView(this._activity,{this.refresh=false,this.navIndex=1});
+  ActivityScreen(this._activity,{this.refresh=false,this.navIndex});
 
   @override
-  _ActivityViewState createState() => _ActivityViewState();
+  _ActivityScreenState createState() => _ActivityScreenState();
 }
 
-class _ActivityViewState extends State<ActivityView> {
+class _ActivityScreenState extends State<ActivityScreen> {
   final core.ApiClient _apiClient = core.ApiClient();
-  Map<String, dynamic>? map;
+  core.Activity activity = core.Activity();
   List<core.ActivityDate> activityDates = [];
   Timer? _timer;
   int iteration = 1;
   int buildtime = 1;
-  //bool _visible = false;
+
   core.ActivityProvider activityProvider = core.ActivityProvider();
   core.ImageProvider imageProvider = core.ImageProvider();
   core.User? user;
-  dynamic _activityDetails; // this is json data, not converted to activity object!
 
   int calculateDifference(DateTime date) {
     DateTime now = DateTime.now();
@@ -62,55 +58,37 @@ class _ActivityViewState extends State<ActivityView> {
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      core.User user = Provider.of<core.UserProvider>(context, listen: false).user;
-      print('running addPostFrameCallback (initstate');
-      _loadDetails(user);
-      if (widget._activity.accesslevel >= 20)  _loadActivityDates(user);
-    });
-
-   // Timer(Duration(milliseconds: 100), () => setState(() => _visible = true));
+   load();
   }
+  load() async{
+    log('Loading activity details');
+    core.ActivityProvider activityProvider = Provider.of<core.ActivityProvider>(context,listen:false);
+    dynamic activityData = await activityProvider.getDetails(widget._activity.id!,reload:!widget._activity.loaded);
 
+    if(activityData!=null) {
+      log('Loaded details for ${widget._activity.id} : $activityData');
+      activity = core.Activity.fromJson(activityData);
+      activity.loaded = true;
+      activityProvider.current = activity;
+
+    }
+  }
   @override
   Widget build(BuildContext context) {
-    print('rebuilding activity view: apiclient activity status is '+_apiClient.isProcessing.toString());
-    final user = Provider.of<core.UserProvider>(context).user;
-    activityProvider =Provider.of<core.ActivityProvider>(context);
+
+    activityProvider = Provider.of<core.ActivityProvider>(context);
+    activity = activityProvider.current ?? widget._activity;
     imageProvider = Provider.of<core.ImageProvider>(context);
-    bool isTester = false;
-    if(user.data!=null) {
-      print(user.data.toString());
-      if (user.data!['istester'] != null) {
-        if (user.data!['istester'] == 'true') isTester = true;
-      }
-    }
-    return Scaffold(
-        appBar: AppBar(
-            title: Text(widget._activity.name?? AppLocalizations.of(context)!.activity),
-            elevation: 0.1,
-            actions: [
-              if(isTester) IconButton(
-                  icon: Icon(Icons.bug_report),
-                  onPressed:(){feedbackAction(context,user); }
-              ),
-          IconButton(
-          icon: Icon(Icons.refresh),
-          onPressed: () {
-            print('Refreshing view');
-            setState(() {
-              _loadDetails(user,reload:true);
-            });
-          }),
-        ],
-        ),
-        backgroundColor: primary,
-        body: CustomScrollView(
+
+    return ScreenScaffold(title: activity.name?? AppLocalizations.of(context)!.activity,
+        navigationIndex: widget.navIndex,
+        child: CustomScrollView(
           slivers: <Widget>[
-            _buildAppBar(widget._activity),
-            _buildContentSection(widget._activity),
+            _buildAppBar(activity),
+            _buildContentSection(activity),
           ],
         ));
+
   }
 
   List<Widget> buttons(core.Activity activity) {
@@ -118,10 +96,7 @@ class _ActivityViewState extends State<ActivityView> {
     final user = Provider.of<core.UserProvider>(context, listen: false).user;
     List<Widget> buttons = [];
 
-    if(activity.registration
-        && ( activity.maxvisitors==null || (activity.maxvisitors??0) > (activity.registeredvisitorcount??0) )
-        && ( activity.registrationenddate==null || activity.registrationenddate!.isAfter(DateTime.now()))
-        && user.token!=null) {
+    if(user.token!=null) {
 
 
       buttons.add(ElevatedButton(
@@ -131,7 +106,7 @@ class _ActivityViewState extends State<ActivityView> {
             child: CircularProgressIndicator(
           value: null,
           semanticsLabel: AppLocalizations.of(context)!.loading,
-        )) : Text(AppLocalizations.of(context)!.signUp),
+        )) : Text(AppLocalizations.of(context)!.btnMarkAsDone),
         onPressed: () {
           registerForActivity(activity,user);
           setState(() {
@@ -143,8 +118,11 @@ class _ActivityViewState extends State<ActivityView> {
       ));
 
 
-    }else print('registration not enabled for activity :'+activity.registration.toString());
+    }
+
+
     if (activity.accesslevel >= 20) {
+      /*
       buttons.add(ElevatedButton(
         child: Text(AppLocalizations.of(context)!.qrScanner),
         onPressed: () {
@@ -154,7 +132,7 @@ class _ActivityViewState extends State<ActivityView> {
                   builder: (context) => QRScanner(activity: activity)));
         },
       ));
-
+*/
       buttons.add(ElevatedButton(
         child: Text(AppLocalizations.of(context)!.eventLog),
         onPressed: () {
@@ -169,25 +147,28 @@ class _ActivityViewState extends State<ActivityView> {
   }
 
   Widget _buildAppBar(core.Activity activity) {
+
+    double screenHeight = MediaQuery.of(context).size.height;
     return SliverAppBar(
-      expandedHeight: 240.0,
+      expandedHeight: screenHeight / 3,
       pinned: true,
+      automaticallyImplyLeading: false,
       flexibleSpace: FlexibleSpaceBar(
         background: Stack(
           fit: StackFit.expand,
           children: <Widget>[
             Hero(
-              tag: "Activity-Tag-${widget._activity.id}",
-              child: widget._activity.coverpictureurl != null
+              tag: "Activity-Tag-${activity.id}",
+              child: activity.coverpictureurl != null
                   ? FadeInImage.assetNetwork(
-                      fit: BoxFit.cover,
+                      fit: BoxFit.contain,
                       width: double.infinity,
-                      placeholder: 'images/activity-placeholder.png',
-                      image: widget._activity.coverpictureurl!,
+                      placeholder: 'images/logo.png',
+                      image: activity.coverpictureurl!,
                     )
-                  : Image(image: AssetImage('images/activity-placeholder.png')),
+                  : Image(image: AssetImage('images/logo.png')),
             ),
-            BottomGradient(),
+          //  BottomGradient(),
             //_buildMetaSection(activity)
           ],
         ),
@@ -196,9 +177,9 @@ class _ActivityViewState extends State<ActivityView> {
   }
   void registerForActivity(activity,user) async
   {
-    print('registerForActivity called');
+
     if (!_apiClient.isProcessing) {
-     print ('apiClient is not processing so we try again');
+
       Map<String,dynamic> result = await _apiClient.registerForActivity(
           activity.id, user);
       setState(() {
@@ -217,49 +198,12 @@ class _ActivityViewState extends State<ActivityView> {
             showMessage(context, AppLocalizations.of(context)!.activityRegistrationFailed,message);
 
         }
-       print(result.toString()+', apiclient status: '+_apiClient.isProcessing.toString());
 
       });
     }
   }
-  void _loadDetails(user,{bool reload=false}) async {
-    print('called _loadDetails for activity ' +
-        widget._activity.id.toString() +
-        ', awaiting provider for details!');
-    try {
-      dynamic details =
-          await activityProvider.getDetails(widget._activity.id!,reload:reload);
-      print(details.toString());
-      // print(details.runtimeType);
 
-      setState(() =>_activityDetails =details!=null ? details : false);
-    } catch (e, stack) {
-      print('loadDetails returned error $e\n Stack trace:\n $stack');
-      //Notify(e.toString());
-      e.toString();
-    }
-  }
 
-  void _loadActivityDates(user) async {
-    try {
-      var activityDateData =
-          await activityProvider.getActivityDates(widget._activity, user);
-
-      setState(() {
-
-        if (activityDateData.isNotEmpty) {
-          activityDates.addAll(activityDateData);
-          print(activityDates.length.toString() + ' activity dates loaded');
-        } else {
-          print('no more activities were found');
-        }
-      });
-    } catch (e, stack) {
-      print('loadActivityDates returned error $e\n Stack trace:\n $stack');
-      //Notify(e.toString());
-      e.toString();
-    }
-  }
   Widget activityDateRow(date,activity)
   {
     String dateinfo = date.startdate == null
@@ -287,7 +231,7 @@ class _ActivityViewState extends State<ActivityView> {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => ActivityParticipantList(date,activity,activityProvider)));
+                                          builder: (context) => ActivityParticipantList(date,activity)));
                                 },
                                 child:Icon(Icons.table_rows_sharp),
                               ),
@@ -309,16 +253,7 @@ class _ActivityViewState extends State<ActivityView> {
           .inDays;
     }
 
-    String dateinfo = activity.nexteventdate == null
-        ? ''
-        : (calculateDifference(activity.nexteventdate!) != 0
-            ? DateFormat('kk:mm dd.MM.yyyy').format(activity.nexteventdate!)
-            : 'Today ' + DateFormat('kk:mm ').format(activity.nexteventdate!));
-    double dateSectionHeight = activityDates.length*80;
-    if(dateSectionHeight > 400) dateSectionHeight = 400;
-    if(kDebugMode) {
-      log("Activity: $activity");
-    }
+
     List<Widget> slivers = [
       Container(
         decoration: BoxDecoration(color: const Color(0xff222128)),
@@ -332,19 +267,16 @@ class _ActivityViewState extends State<ActivityView> {
                 activity.name != null
                     ? activity.name.toString()
                     : AppLocalizations.of(context)!.unnamedActivity,
-                style: const TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.white, fontSize: 20),
               ),
-              Container(
-                height: 8.0,
-              ),
-              Text(dateinfo, style: const TextStyle(color: Colors.white)),
-              Container(
+
+              SizedBox(
                 height: 8.0,
               ),
               Text(activity.description!,
                   style:
                   const TextStyle(color: Colors.white, fontSize: 12.0)),
-              Container(
+              SizedBox(
                 height: 8.0,
               ),
               Row(
@@ -357,42 +289,13 @@ class _ActivityViewState extends State<ActivityView> {
       ),
     ];
 
-    if(activity.accesslevel >=20)
-      slivers.add(
-        Container(
-          height: dateSectionHeight,
-          decoration: BoxDecoration(color: primaryDark),
-          //child: Padding(
-          //  padding: const EdgeInsets.all(16.0),
-          child: activityDates.isEmpty
-              ? Center(
-            child: ListTile(
-              leading: CircularProgressIndicator(),
-              title: Text(
 
-                  AppLocalizations.of(context)!.loading,
-                  textAlign: TextAlign.center),
-            ),
-          )
-              : ListView.builder(
-            // padding: const EdgeInsets.all(8),
-              itemCount: activityDates.length,
-              itemBuilder: (BuildContext context, int index) {
-                core.ActivityDate date = activityDates[index];
-
-
-                return activityDateRow(date,activity);
-              }),
-          //),
-        ),
-
-      );
 
     slivers.add(Container(
-      decoration: BoxDecoration(color: primaryDark),
+        //decoration: BoxDecoration(color: primaryDark),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: _activityDetails == null
+        child: !activity.loaded
             ? Center(
           child: ListTile(
             leading: CircularProgressIndicator(),
@@ -400,7 +303,7 @@ class _ActivityViewState extends State<ActivityView> {
                 textAlign: TextAlign.center),
           ),
         )
-            : MetaSection(_activityDetails),
+            : activity.data?['reasoning']!=null && activity.data?['reasoning'].length >0 ? _parseHtml(activity.data?['reasoning']?? ''):Container(),
       ),
     ));
     return SliverList(
@@ -411,7 +314,13 @@ class _ActivityViewState extends State<ActivityView> {
       ),
     );
   }
-
+  Widget _parseHtml(content){
+    //print('returning parsed content for '+content.toString());
+    return Html(
+        data: content,
+        style: {"*" : Style(color:Colors.white)}
+    );
+  }
   void showMessage(BuildContext context, String title, Widget content) {
     showDialog(context: context, builder: (BuildContext builderContext) {
       _timer = Timer(Duration(seconds: 5), () {

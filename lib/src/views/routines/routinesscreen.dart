@@ -22,9 +22,47 @@ class RoutinesScreen extends StatefulWidget {
 
 class _RoutinesScreenState extends State<RoutinesScreen> {
 
+
+  @override
+  void initState(){
+    super.initState();
+    log('Initing routinesview state, refresh: ${widget.refresh}');
+    Map<String,dynamic> params = {};
+    Provider.of<RoutineProvider>(context,listen: false).getItems(params,reload:widget.refresh);
+  }
+
   @override
   Widget build(BuildContext context) {
-    log('Building routinesscreen, refresh: ${widget.refresh}');
+
+    RoutineProvider routineProvider = Provider.of<RoutineProvider>(context);
+    Widget routineView = defaultContent(Row(children:[CircularProgressIndicator(),
+      Text(routineProvider.loadingStatus.toString())]));
+    if (routineProvider.loadingStatus == DataLoadingStatus.loaded) {
+
+      if (routineProvider.list != null && routineProvider.list?.length !=null) {
+        List<Routine>? items = routineProvider.list;
+        routineView = items!=null ? ListView.builder(
+            itemCount: items.length,
+            itemBuilder: (BuildContext context, int index){
+              final item = items[index];
+              return Dismissible(
+                  key: Key(item.toString()),
+              onDismissed: (direction){
+              setState(()
+              {
+                items.removeAt(index);
+              });
+              },
+                  background: Container(color:Colors.red),
+              child:RoutinesScreenItem(item)
+              );
+            }) : Text(AppLocalizations.of(context)!.noRoutinesFound);
+      }
+      else {
+        routineView = defaultContent(Text(AppLocalizations.of(context)!.noRoutinesFound));
+      }
+    }
+
     return ScreenScaffold(
         title: AppLocalizations.of(context)!.routines_title,
         navigationIndex: widget.navIndex,
@@ -37,48 +75,9 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
 
           }
           constants.Router.navigate(context,'routines',widget.navIndex,refresh: true);
-          },
-        child: RoutinesView(refresh: widget.refresh,));
+        },
+        child: routineView);
   }
-}
-
-class RoutinesView extends StatefulWidget {
-  RoutinesView({this.refresh=false,super.key});
-  final bool refresh;
-  @override
-  State<RoutinesView> createState() => _RoutinesViewState();
-}
-
-class _RoutinesViewState extends State<RoutinesView> {
-
-  @override
-  void initState(){
-    super.initState();
-    log('Initing routinesview state, refresh: ${widget.refresh}');
-    Map<String,dynamic> params = {};
-    Provider.of<RoutineProvider>(context,listen: false).getItems(params,reload:widget.refresh);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    RoutineProvider routineProvider = Provider.of<RoutineProvider>(context);
-
-    if (routineProvider.loadingStatus == DataLoadingStatus.loaded) {
-
-      if (routineProvider.list != null) {
-        List<Routine>? items = routineProvider.list;
-        return items!=null ? ListView.builder(
-            itemCount: items.length,
-            itemBuilder: (BuildContext context, int index){
-              return RoutinesScreenItem(items[index]);
-            }) : Text(AppLocalizations.of(context)!.noRoutinesFound);
-      }
-      else {
-        return defaultContent(Text(AppLocalizations.of(context)!.noRoutinesFound));
-      }
-    }
-    return defaultContent(Row(children:[CircularProgressIndicator(),
-      Text(routineProvider.loadingStatus.toString())]));
   }
 Widget defaultContent(contentChild){
   return Padding(
@@ -87,5 +86,5 @@ Widget defaultContent(contentChild){
           child:contentChild)
 
       );
-}
+
 }

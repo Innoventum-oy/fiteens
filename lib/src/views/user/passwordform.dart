@@ -259,23 +259,25 @@ class _ResetPasswordState extends State<ResetPassword> {
   Widget bottomNavigation(auth) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        TextButton(
+        Expanded(child:ElevatedButton(
           child: Text(AppLocalizations.of(context)!.login,
               style: TextStyle(fontWeight: FontWeight.w300)),
           onPressed: () {
             Navigator.pushReplacementNamed(context, '/login');
           },
-        ),
-        TextButton(
+        )),
+        SizedBox(width:10),
+        Expanded(child:ElevatedButton(
 
           child: Text(AppLocalizations.of(context)!.signUp,
               style: TextStyle(fontWeight: FontWeight.w300)),
           onPressed: () {
             Navigator.pushNamed(context, '/register');
           },
-        ),
-        returnButton(auth),
+        ),),
+      // returnButton(auth),
       ],
     );
   }
@@ -325,7 +327,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                   key: formKey,
                   child: passwordRetrievalFormBody(auth)
               ),
-                bottomNavigation(auth),
+             //   bottomNavigation(auth),
               ]
           ),
         ),

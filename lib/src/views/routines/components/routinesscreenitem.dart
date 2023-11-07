@@ -1,6 +1,3 @@
-/// Single item in the routines screen
-/// 
-import 'dart:developer';
 import 'package:core/core.dart';
 import 'package:fiteens/src/views/routines/routinescreen.dart';
 import 'package:flutter/foundation.dart';
@@ -20,7 +17,7 @@ class RoutinesScreenItem extends StatelessWidget{
      // log('Displaying RoutinesScreenItem, routine raw data:');
     //  routine.data?.forEach((key, value) {log("$key:$value");});
     }
-    return Center(
+    return  Center(
         child:
         Card(
             child: InkWell(
@@ -45,6 +42,7 @@ class RoutinesScreenItem extends StatelessWidget{
                 )
             )
         )
+
     );
   }
 

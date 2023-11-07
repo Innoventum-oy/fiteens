@@ -44,26 +44,26 @@ dependencies:
   #for qr code scanner
   #qr_code_scanner: ^0.5.2
   #for getting user location
-  geolocator: ^9.0.1
+  geolocator: ^10.1.0
   url_launcher: ^6.0.2
   another_flushbar: ^1.10.17
   flutter_html: ^3.0.0-alpha.2
   settings_ui: ^2.0.1
   percent_indicator: ^4.0.0
-  widget_arrows: ^0.2.0-nullsafety.0
+  widget_arrows: ^0.6.0
   font_awesome_flutter: ^9.2.0
   glob: ^2.0.1
   package_info: ^2.0.0
   file_picker: ^5.0.1
-  feedback: ^2.0.0
+  feedback: ^3.0.0
   wakelock: ^0.6.0+1
   graphview: ^1.0.0
   youtube_player_flutter: ^8.0.0
   modal_bottom_sheet: ^2.0.0
   flutter_rating_bar: ^4.0.0
   # file downloads
-  dio: ^4.0.4
-  permission_handler: ^10.1.0
+  dio: ^5.3.3
+  permission_handler: ^11.0.1
   cached_network_image: ^3.2.3
   core:
     git:
@@ -74,14 +74,16 @@ dependencies:
   hive_flutter: ^1.1.0
   flutter_settings_ui: ^2.0.1
   loading_gifs: ^0.3.0
+  flutter_radar_chart: ^0.2.1
+  collection: ^1.17.2
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_native_splash: ^2.1.6
-  flutter_launcher_icons: ^0.10.0
-  flutter_lints: ^2.0.0
+  flutter_launcher_icons: ^0.13.1
+  flutter_lints: ^3.0.0
 
 #if you make changes, regenerate with flutter pub run flutter_native_splash:create
 flutter_native_splash:
@@ -132,6 +134,7 @@ flutter:
   assets:
     - assets/config/
     - images/
+    - images/avatar/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -159,5 +162,12 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+fonts:
+  - family: Nunito
+    fonts:
+      - asset: assets/fonts/Nunito/Nunito-VariableFont_wght.ttf
+      - asset: assets/fonts/Nunito/Nunito-Italic-VariableFont_wght.ttf
+        style: italic
+
 flutter_intl:
   enabled: true

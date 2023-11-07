@@ -196,8 +196,8 @@ class _MyCardState extends State<MyCard> {
                         // auth.logout(user);
                         Navigator.pushNamedAndRemoveUntil(context, '/login', (_) => false);
 
-                        Provider.of<core.UserProvider>(context, listen: false).clearUser();
-                        core.UserPreferences().removeUser();
+                        Provider.of<core.UserProvider>(context, listen: false).clearCurrentUser();
+
 
                       },
                       child: Text(AppLocalizations.of(context)!.logout),

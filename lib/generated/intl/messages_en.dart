@@ -56,22 +56,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "ageOver13":
             MessageLookupByLibrary.simpleMessage("Are you 13+ years old?"),
         "answerSaved": MessageLookupByLibrary.simpleMessage("Answer saved"),
-        "appName": MessageLookupByLibrary.simpleMessage("FiTeens *DRAFT*"),
+        "appName": MessageLookupByLibrary.simpleMessage("FiTeens"),
         "authenticating": MessageLookupByLibrary.simpleMessage(
             "Authenticating ... Please wait"),
-        "benefits": MessageLookupByLibrary.simpleMessage("Benefits"),
-        "bookIsRead": MessageLookupByLibrary.simpleMessage("Book read"),
-        "bookStatusUpdated":
-            MessageLookupByLibrary.simpleMessage("Book status updated"),
-        "books": MessageLookupByLibrary.simpleMessage("Books"),
-        "btnAvailabilityInfo":
-            MessageLookupByLibrary.simpleMessage("Availability information"),
         "btnConfirm": MessageLookupByLibrary.simpleMessage("Confirm"),
         "btnContinue": MessageLookupByLibrary.simpleMessage("Continue"),
         "btnDashboard": MessageLookupByLibrary.simpleMessage("Open Dashboard"),
         "btnLogin": MessageLookupByLibrary.simpleMessage("Login"),
-        "btnMap": MessageLookupByLibrary.simpleMessage("Map"),
-        "btnRead": MessageLookupByLibrary.simpleMessage("Read"),
+        "btnMarkAsDone": MessageLookupByLibrary.simpleMessage("Mark as done"),
         "btnReturn": MessageLookupByLibrary.simpleMessage("Return"),
         "btnReturnBook": MessageLookupByLibrary.simpleMessage("Return book"),
         "btnSend": MessageLookupByLibrary.simpleMessage("Send"),
@@ -90,19 +82,17 @@ class MessageLookup extends MessageLookupByLibrary {
         "cameraNotAvailable":
             MessageLookupByLibrary.simpleMessage("No camera available"),
         "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
-        "cannotOpenStation": MessageLookupByLibrary.simpleMessage(
-            "You cannot access this station yet"),
         "cannotSaveEmptyForm":
             MessageLookupByLibrary.simpleMessage("Cannot save empty form"),
-        "challengingBooks":
-            MessageLookupByLibrary.simpleMessage("Challenging Books"),
         "choose": MessageLookupByLibrary.simpleMessage("Choose"),
         "chooseFile": MessageLookupByLibrary.simpleMessage("Choose file"),
-        "chooseStartStation":
-            MessageLookupByLibrary.simpleMessage("Choose start station"),
         "city": MessageLookupByLibrary.simpleMessage("City"),
+        "clickPictureToChooseAvatar": MessageLookupByLibrary.simpleMessage(
+            "Click picture to choose an avatar"),
         "codeAccepted": MessageLookupByLibrary.simpleMessage("Code accepted"),
         "codeScanned": MessageLookupByLibrary.simpleMessage("Code scanned"),
+        "collectedBadges":
+            MessageLookupByLibrary.simpleMessage("Collected badges"),
         "confirmDeletingAccount": MessageLookupByLibrary.simpleMessage(
             "Confirm user account deletion"),
         "confirmPassword":
@@ -118,8 +108,6 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Contact methods"),
         "contentNotFound":
             MessageLookupByLibrary.simpleMessage("Content not found"),
-        "couldNotLoadStation": MessageLookupByLibrary.simpleMessage(
-            "Could not load station information, sorry"),
         "couldNotOpenLink":
             MessageLookupByLibrary.simpleMessage("Could not open link"),
         "createAccount": MessageLookupByLibrary.simpleMessage("Create account"),
@@ -183,10 +171,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Joining to new Group"),
         "lastName": MessageLookupByLibrary.simpleMessage("Last name"),
         "library": MessageLookupByLibrary.simpleMessage("Library"),
-        "lineMap": MessageLookupByLibrary.simpleMessage("Line map"),
+        "libraryIsEmpty":
+            MessageLookupByLibrary.simpleMessage("Library is currently empty"),
         "loading": MessageLookupByLibrary.simpleMessage("Loading"),
-        "loadingBenefits":
-            MessageLookupByLibrary.simpleMessage("Loading benefits"),
         "locationRetrieved":
             MessageLookupByLibrary.simpleMessage("Location retrieved"),
         "locations": MessageLookupByLibrary.simpleMessage("Locations"),
@@ -194,16 +181,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "loginFailed": MessageLookupByLibrary.simpleMessage("Login failed"),
         "loginTitle": MessageLookupByLibrary.simpleMessage("Login"),
         "logout": MessageLookupByLibrary.simpleMessage("Logout"),
-        "metroMap": MessageLookupByLibrary.simpleMessage("Metro map"),
-        "moderateBooks": MessageLookupByLibrary.simpleMessage("Moderate books"),
         "moreInformation":
             MessageLookupByLibrary.simpleMessage("More information"),
         "myActivities": MessageLookupByLibrary.simpleMessage("My activities"),
-        "myBooks": MessageLookupByLibrary.simpleMessage("My booklist"),
         "myCard": MessageLookupByLibrary.simpleMessage("My Card"),
         "myPoints": MessageLookupByLibrary.simpleMessage("My points"),
         "myScore": MessageLookupByLibrary.simpleMessage("My Score"),
         "navitem": m0,
+        "next": MessageLookupByLibrary.simpleMessage("Next"),
         "no": MessageLookupByLibrary.simpleMessage("no"),
         "noActiveBenefits":
             MessageLookupByLibrary.simpleMessage("No active benefits"),
@@ -312,13 +297,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "sendAnswer": MessageLookupByLibrary.simpleMessage("Send answer"),
         "settings": MessageLookupByLibrary.simpleMessage("settings"),
         "signUp": MessageLookupByLibrary.simpleMessage("Sign up"),
-        "station": MessageLookupByLibrary.simpleMessage("Station"),
-        "stationIsPassed": MessageLookupByLibrary.simpleMessage(
-            "You have passed this station"),
-        "stationList": MessageLookupByLibrary.simpleMessage("Stations"),
-        "submissionRejected":
-            MessageLookupByLibrary.simpleMessage("Submission rejected"),
-        "subwayMap": MessageLookupByLibrary.simpleMessage("Subway Map"),
+        "startAssessment":
+            MessageLookupByLibrary.simpleMessage("Start new assessment"),
         "tasks": MessageLookupByLibrary.simpleMessage("Tasks"),
         "thankyouForFeedback":
             MessageLookupByLibrary.simpleMessage("Thank you for your input!"),
@@ -349,12 +329,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "writeAnswerHere":
             MessageLookupByLibrary.simpleMessage("Write your answer here for "),
         "yes": MessageLookupByLibrary.simpleMessage("Yes"),
-        "youAreNotOnAnyStation":
-            MessageLookupByLibrary.simpleMessage("No station selected"),
-        "youHaveOpenedThisStation": MessageLookupByLibrary.simpleMessage(
-            "You have opened this station"),
-        "youHaveReadThisBook":
-            MessageLookupByLibrary.simpleMessage("You have read this book"),
         "youHaveThisBadge":
             MessageLookupByLibrary.simpleMessage("You have this achievement"),
         "yourAnswerHasBeenSaved":

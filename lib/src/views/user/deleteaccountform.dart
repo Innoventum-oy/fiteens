@@ -53,7 +53,7 @@ class _DeleteAccountActionState extends State<DeleteAccountAction> {
             Navigator.pushNamedAndRemoveUntil(context, '/login', (_) => false);
 
             Provider.of<core.UserProvider>(context, listen: false).clearUser();
-            core.UserPreferences().removeUser();
+            core.UserPreferences.removeUser();
         }
       } else {
         Flushbar(

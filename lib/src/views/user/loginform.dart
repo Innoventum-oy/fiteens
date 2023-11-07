@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +24,7 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   final formKey = new GlobalKey<FormState>();
-
+  bool isLoading = false;
   String? _contact, _password;
   String serverName = '';
   String serverUrl ='';
@@ -30,7 +32,13 @@ class _LoginState extends State<Login> {
   String packageName = '';
   String version = '';
   String buildNumber = '';
+
+  bool _showPassword = false;
+  late core.AuthProvider auth;
+  late core.UserProvider userProvider;
   late final Map? servers;
+
+
   _LoginState() {
     PackageInfo.fromPlatform().then((PackageInfo packageInfo) => setState(() {
       appName = packageInfo.appName;
@@ -45,8 +53,11 @@ class _LoginState extends State<Login> {
   }
 
   @override void initState() {
-    // TODO: implement initState
+    if(kDebugMode){
+      log("Initing loginform state");
+    }
     super.initState();
+    userProvider = Provider.of<core.UserProvider>(context, listen: false);
     getServers();
 
   }
@@ -54,11 +65,25 @@ class _LoginState extends State<Login> {
     servers = await core.AppSettings().getMap('servers');
   }
   @override
+  void didChangeDependencies() {
+     auth = Provider.of<core.AuthProvider>(context);
+     userProvider = Provider.of<core.UserProvider>(context, listen: false);
+    super.didChangeDependencies();
+  }
+  @override
+  void dispose(){
+    log('disposing loginform state');
+  //  auth.dispose();
+  //  userProvider.dispose();
+    super.dispose();
+  }
+  @override
   Widget build(BuildContext context) {
-    core.AuthProvider auth = Provider.of<core.AuthProvider>(context);
+    userProvider = Provider.of<core.UserProvider>(context);
+    auth = Provider.of<core.AuthProvider>(context);
     core.User? user = widget.user;
-    String contact = '';
-    if (user != null) {
+    String? contact = _contact ;
+    if (user != null && contact == null ) {
       contact = user.phone != null
           ? user.phone!
           : user.email != null
@@ -66,6 +91,23 @@ class _LoginState extends State<Login> {
           : '';
     }
 
+    Widget showTextIconButton(){
+      return IconButton(
+        icon: Icon(
+          // Based on passwordVisible state choose the icon
+            _showPassword
+              ? Icons.visibility
+              : Icons.visibility_off,
+        //  color:  Theme.of(context).colorScheme.primary,
+        ),
+        onPressed: () {
+          // Update the state i.e. toogle the state of passwordVisible variable
+          setState(() {
+            _showPassword = !_showPassword;
+          });
+        },
+      );
+    }
 
     String? validateContact(String? value)
     {
@@ -98,11 +140,15 @@ class _LoginState extends State<Login> {
 
     final passwordField = TextFormField(
       autofocus: false,
-      obscureText: true,
+      obscureText: !_showPassword,
+      initialValue: _password,
       style: TextStyle(color: Colors.white),
       validator: (value) => value!.isEmpty ? AppLocalizations.of(context)!.pleaseEnterPassword : null,
       onSaved: (value) => _password = value,
-      decoration: buildInputDecoration(AppLocalizations.of(context)!.password, Icons.lock),
+      decoration: buildInputDecoration(
+          AppLocalizations.of(context)!.password, Icons.lock,
+      suffixIcon: showTextIconButton() ),
+
     );
 
     var loading = Row(
@@ -116,14 +162,21 @@ class _LoginState extends State<Login> {
     final forgotLabel = Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        ElevatedButton(
+        Expanded(
+          flex:3,
+    child:ElevatedButton(
 
           child: Text(AppLocalizations.of(context)!.forgotPassword,
               style: TextStyle(fontWeight: FontWeight.w300)),
           onPressed: () {
-            Navigator.pushReplacementNamed(context, '/reset-password');
+            Navigator.pushNamed(context, '/reset-password');
           },
         ),
+        ),
+        SizedBox(width:10),
+        Expanded(
+          flex:2,
+          child:
         ElevatedButton(
 
           child: Text(AppLocalizations.of(context)!.createAccount, style: TextStyle(fontWeight: FontWeight.w300)),
@@ -132,7 +185,7 @@ class _LoginState extends State<Login> {
             Navigator.pushNamed(context, '/register');
           },
         ),
-
+        ),
       ],
     );
     final cancelButton = Row(
@@ -146,7 +199,7 @@ class _LoginState extends State<Login> {
           onPressed: () async {
 
             //auth.logout(user);
-            auth.cancellogin();
+            auth.cancelLogin();
           },
         ),
       ],
@@ -158,6 +211,9 @@ class _LoginState extends State<Login> {
 
       if (form!.validate()) {
         form.save();
+        setState(() {
+          isLoading = true;
+        });
 
         final Future<Map<String, dynamic>> successfulMessage =
         auth.login(_contact!, _password!);
@@ -165,12 +221,12 @@ class _LoginState extends State<Login> {
         successfulMessage.then((response) {
           if (response['status']) {
             core.User user = response['user'];
-            Provider.of<core.UserProvider>(context, listen: false).setUser(user);
-
-            Navigator.pushReplacementNamed(context, '/dashboard');
+            userProvider.setUser(user);
+            // No longer required since main listens to auth state and reloads view
+            // Navigator.pushReplacementNamed(context, '/dashboard');
           } else {
-            Provider.of<core.UserProvider>(context, listen: false).clearUser();
-            Flushbar(
+            // userProvider.clearUser();
+            if(mounted) Flushbar(
               title: AppLocalizations.of(context)!.loginFailed,
               message: response['message'].toString(),
               duration: Duration(seconds: 3),
@@ -180,6 +236,9 @@ class _LoginState extends State<Login> {
       } else {
         print("form is invalid");
       }
+      setState(() {
+        isLoading = false;
+      });
     };
 
 
@@ -213,7 +272,7 @@ class _LoginState extends State<Login> {
                 SizedBox(height: 5.0),
                 passwordField,
                 SizedBox(height: 20.0),
-                auth.loggedInStatus == core.Status.authenticating
+                isLoading
                     ? loading
                     : longButtons(AppLocalizations.of(context)!.btnLogin, doLogin),
                 SizedBox(height: 5.0),
@@ -320,8 +379,12 @@ class _LoginState extends State<Login> {
           
           core.Settings().setValue('server', serverUrl);
           core.Settings().setValue('servername', serverTitle);
-
-          core.UserPreferences().removeUser();
+          core.ApiClient().reset();
+          core.UserPreferences.removeUser();
+          if(kDebugMode){
+            /// Clear hive
+            core.FileStorage().empty();
+          }
           //  Provider.of<UserProvider>(context, listen: false).clearUser();
           //  Navigator.pushReplacementNamed(context, '/login');
           Navigator.of(context, rootNavigator: true).pop();

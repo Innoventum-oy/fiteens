@@ -5,10 +5,11 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:fiteens/src/util/utils.dart';
 import 'package:fiteens/src/views/user/card.dart';
-import 'package:fiteens/src/views/webpage/webpagetextcontent.dart';
 import 'package:date_range_form_field/date_range_form_field.dart';
 import 'package:core/core.dart' as core;
 
+/// TODO: update this view
+///
 class ActivityVisitList extends StatefulWidget {
   final String viewTitle = 'activityvisitlist';
   final core.Activity _activity;
@@ -68,37 +69,16 @@ class _ActivityVisitListState extends State<ActivityVisitList> {
   }
   @override
   Widget build(BuildContext context) {
-    //current user
-    print('build '+widget.viewTitle);
 
-    this.page = Provider.of<core.WebPageProvider>(context).current!;
+
     visits = widget.visitListProvider.list ?? [];
 
-    // Future<List<ActivityVisit>?> getVisits() => widget.visitListProvider.loadActivityVisits(widget._activity);
-    bool hasInfoPage = this.page.id != null ? true : false;
-    bool isTester = false;
-    print('VISITS '+visits.length.toString());
-    if(user.data!=null) {
-      if (user.data!['istester'] != null) {
-        if (user.data!['istester'] == 'true') isTester = true;
-      }
-    }
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget._activity.name!+': '+AppLocalizations.of(context)!.eventLog),
+        title: Text("${widget._activity.name??'Activity'}: ${AppLocalizations.of(context)!.eventLog}"),
         elevation: 0.1,
         actions: [
-          if(hasInfoPage)IconButton(
-              icon: Icon(Icons.info_outline_rounded),
-              onPressed:(){
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (_) => ContentPageView(widget.viewTitle,providedPage:this.page),
-                ));}
-          ),
-          if(isTester) IconButton(
-              icon: Icon(Icons.bug_report),
-              onPressed:(){feedbackAction(context,user); }
-          ),
+
           IconButton(
               icon: Icon(Icons.refresh),
               onPressed: () {

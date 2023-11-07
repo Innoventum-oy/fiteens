@@ -15,33 +15,28 @@ Widget badgeIconDisplay(core.Badge badge, BuildContext context) {
           MaterialPageRoute(builder: (context) => BadgeView(badge)),
         );
       },
-      child: Stack(
+      child: Column(
 
         //    mainAxisSize: MainAxisSize.max,
           children: [
-            hasImage
-                    ? FadeInImage.assetNetwork(
-
-                  fit: BoxFit.contain,
-
-
-                  placeholder: 'images/badge-placeholder.jpg',
-                  image: badgeUrl,
-                )
-                    : Image(
-
-                    image: AssetImage('images/badge-placeholder.jpg')),
-
-
-            Positioned(
-              width: MediaQuery.of(context).size.width,
-              bottom:5,
- child:Text(
+            ClipRRect(
+              borderRadius: BorderRadius.circular(35.0),
+              child:  hasImage
+                  ? FadeInImage.assetNetwork(
+                fit: BoxFit.cover,
+                height: 70,
+                width:70,
+                placeholder: 'images/logo.png',
+                image: badgeUrl,
+              )
+                  : Image(image: AssetImage('images/logo.png')),
+            ),
+            Text(
               overflow: TextOverflow.ellipsis,
               badge.name ?? '-',
               maxLines: 2,
-              style: TextStyle(fontSize: 12),
-            ),
+              style: TextStyle(fontSize: 14),
+
 
             ),
           ]),

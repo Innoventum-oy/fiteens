@@ -52,17 +52,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "appName": MessageLookupByLibrary.simpleMessage("Fiteens"),
         "authenticating":
             MessageLookupByLibrary.simpleMessage("Kirjautuminen käynnissä"),
-        "benefits": MessageLookupByLibrary.simpleMessage("Edut"),
-        "bookIsRead": MessageLookupByLibrary.simpleMessage("Luettu"),
-        "bookStatusUpdated":
-            MessageLookupByLibrary.simpleMessage("Kirjan tila päivitetty"),
-        "books": MessageLookupByLibrary.simpleMessage("Kirjat"),
         "btnConfirm": MessageLookupByLibrary.simpleMessage("Vahvista"),
         "btnContinue": MessageLookupByLibrary.simpleMessage("Jatka"),
         "btnDashboard": MessageLookupByLibrary.simpleMessage("Etusivu"),
         "btnLogin": MessageLookupByLibrary.simpleMessage("Kirjaudu"),
-        "btnMap": MessageLookupByLibrary.simpleMessage("Kartta"),
-        "btnRead": MessageLookupByLibrary.simpleMessage("Lisää lukulistalle"),
+        "btnMarkAsDone":
+            MessageLookupByLibrary.simpleMessage("Merkitse tehdyksi"),
         "btnReturn": MessageLookupByLibrary.simpleMessage("Takaisin"),
         "btnReturnBook":
             MessageLookupByLibrary.simpleMessage("Poista lukulistalta"),
@@ -84,20 +79,17 @@ class MessageLookup extends MessageLookupByLibrary {
         "cameraNotAvailable":
             MessageLookupByLibrary.simpleMessage("Kamera ei ole käytettävissä"),
         "cancel": MessageLookupByLibrary.simpleMessage("Peruuta"),
-        "cannotOpenStation": MessageLookupByLibrary.simpleMessage(
-            "Et voi vielä avata tätä asemaa"),
         "cannotSaveEmptyForm": MessageLookupByLibrary.simpleMessage(
             "Täytä lomake ennen lähettämistä"),
-        "challengingBooks":
-            MessageLookupByLibrary.simpleMessage("Haastavat kirjat"),
         "choose": MessageLookupByLibrary.simpleMessage("Valitse"),
         "chooseFile": MessageLookupByLibrary.simpleMessage("Valitse tiedosto"),
-        "chooseStartStation":
-            MessageLookupByLibrary.simpleMessage("Valitse aloitusasema"),
         "city": MessageLookupByLibrary.simpleMessage("Kaupunki"),
+        "clickPictureToChooseAvatar": MessageLookupByLibrary.simpleMessage(
+            "Voit valita itsellesi avatar - kuvan"),
         "codeAccepted":
             MessageLookupByLibrary.simpleMessage("Koodi hyväksytty"),
         "codeScanned": MessageLookupByLibrary.simpleMessage("Koodi skannattu"),
+        "collectedBadges": MessageLookupByLibrary.simpleMessage("Ansiomerkit"),
         "confirmDeletingAccount": MessageLookupByLibrary.simpleMessage(
             "Vahvista käyttäjätilin poistaminen"),
         "confirmPassword":
@@ -112,13 +104,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "contactMethods": MessageLookupByLibrary.simpleMessage("Yhteystiedot"),
         "contentNotFound":
             MessageLookupByLibrary.simpleMessage("Sisältöä ei voitu ladata"),
-        "couldNotLoadStation":
-            MessageLookupByLibrary.simpleMessage("Asemaa ei voitu ladata"),
         "couldNotOpenLink":
             MessageLookupByLibrary.simpleMessage("Linkkiä ei voitu avata"),
         "createAccount":
             MessageLookupByLibrary.simpleMessage("Luo käyttäjätili"),
-        "currentStation": MessageLookupByLibrary.simpleMessage("Asemasi"),
         "dateRange": MessageLookupByLibrary.simpleMessage("Aikaväli"),
         "deleteAccount": MessageLookupByLibrary.simpleMessage("Poista tili"),
         "deleteYourAccount":
@@ -132,7 +121,6 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Lataa sertifikaatti"),
         "downloadOpenBadge":
             MessageLookupByLibrary.simpleMessage("Lataa Open Badge"),
-        "easyBooks": MessageLookupByLibrary.simpleMessage("Helpot kirjat"),
         "edit": MessageLookupByLibrary.simpleMessage("Muokkaa"),
         "email": MessageLookupByLibrary.simpleMessage("Sähköpostiosoite"),
         "emailOrPhoneNumber": MessageLookupByLibrary.simpleMessage(
@@ -175,24 +163,22 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Uuteen ryhmään liittyminen"),
         "lastName": MessageLookupByLibrary.simpleMessage("Sukunimi"),
         "library": MessageLookupByLibrary.simpleMessage("Resurssit / kirjasto"),
-        "lineMap": MessageLookupByLibrary.simpleMessage("Linjakartta"),
+        "libraryIsEmpty":
+            MessageLookupByLibrary.simpleMessage("Sisältöä ei voitu ladata"),
         "loading": MessageLookupByLibrary.simpleMessage("ladataan"),
         "login": MessageLookupByLibrary.simpleMessage("Kirjautuminen"),
         "loginFailed":
             MessageLookupByLibrary.simpleMessage("kirjautuminen epäonnistui"),
         "loginTitle": MessageLookupByLibrary.simpleMessage("Kirjaudu sisään"),
         "logout": MessageLookupByLibrary.simpleMessage("kirjaudu ulos"),
-        "metroMap": MessageLookupByLibrary.simpleMessage("Metrokartta"),
-        "moderateBooks":
-            MessageLookupByLibrary.simpleMessage("Keskitason kirjat"),
         "moreInformation": MessageLookupByLibrary.simpleMessage("lisätiedot"),
         "myActivities":
             MessageLookupByLibrary.simpleMessage("Omat harrastukset"),
-        "myBooks": MessageLookupByLibrary.simpleMessage("Oma kirjalista"),
         "myCard": MessageLookupByLibrary.simpleMessage("Oma kortti"),
         "myPoints": MessageLookupByLibrary.simpleMessage("Pisteesi"),
         "myScore": MessageLookupByLibrary.simpleMessage("Omat pisteet"),
         "navitem": m0,
+        "next": MessageLookupByLibrary.simpleMessage("Seuraava"),
         "no": MessageLookupByLibrary.simpleMessage("ei"),
         "noContactMethodsFound":
             MessageLookupByLibrary.simpleMessage("Yhteystietoja ei löytynyt"),
@@ -205,10 +191,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "notification": MessageLookupByLibrary.simpleMessage("Huomio"),
         "ok": MessageLookupByLibrary.simpleMessage("Ok"),
         "oops": MessageLookupByLibrary.simpleMessage("Hups!"),
-        "openStation": MessageLookupByLibrary.simpleMessage("Avaa asema"),
         "otherItems": MessageLookupByLibrary.simpleMessage("Muut"),
         "pageContent": MessageLookupByLibrary.simpleMessage("Sivusisältö"),
-        "pageCount": MessageLookupByLibrary.simpleMessage("Sivuja "),
         "password": MessageLookupByLibrary.simpleMessage("Salasana"),
         "passwordChanged":
             MessageLookupByLibrary.simpleMessage("Salasana vaihdettu"),
@@ -246,21 +230,15 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Käsitellään koodia"),
         "postcode": MessageLookupByLibrary.simpleMessage("Postinumero"),
         "previous": MessageLookupByLibrary.simpleMessage("Edellinen"),
-        "priceToOpen": MessageLookupByLibrary.simpleMessage("Avaamisen hinta"),
         "privacyPolicy":
             MessageLookupByLibrary.simpleMessage("Tietosuojakäytäntö"),
         "processing": MessageLookupByLibrary.simpleMessage("Käsitellään"),
         "qrScanner": MessageLookupByLibrary.simpleMessage("QR-skanneri"),
-        "rateBook": MessageLookupByLibrary.simpleMessage("Arvostele kirja"),
         "ratingSaved":
             MessageLookupByLibrary.simpleMessage("Arvio tallennettu"),
-        "readBooksList": MessageLookupByLibrary.simpleMessage("Luetut kirjat"),
         "readList": MessageLookupByLibrary.simpleMessage("Lukulista"),
         "readListIsEmpty":
             MessageLookupByLibrary.simpleMessage("Lukulista on tyhjä!"),
-        "readMore": MessageLookupByLibrary.simpleMessage("Lue lisää"),
-        "readingProgress":
-            MessageLookupByLibrary.simpleMessage("Lukemisen edistyminen"),
         "readyToScan":
             MessageLookupByLibrary.simpleMessage("Valmis skannaamaan"),
         "rearCamera": MessageLookupByLibrary.simpleMessage("Takakamera"),
@@ -277,7 +255,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "resume": MessageLookupByLibrary.simpleMessage("Jatka"),
         "retrievingCoordinates":
             MessageLookupByLibrary.simpleMessage("Haetaan sijaintia"),
-        "returned": MessageLookupByLibrary.simpleMessage("Palautettu"),
         "routines_title": MessageLookupByLibrary.simpleMessage("Harjoitukset"),
         "saveData": MessageLookupByLibrary.simpleMessage("Tallenna tiedot"),
         "savingDataFailed":
@@ -289,18 +266,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "sendAnswer": MessageLookupByLibrary.simpleMessage("Lähetä vastaus"),
         "settings": MessageLookupByLibrary.simpleMessage("Asetukset"),
         "signUp": MessageLookupByLibrary.simpleMessage("Uusi tili"),
-        "station": MessageLookupByLibrary.simpleMessage("Asema"),
-        "stationIsPassed":
-            MessageLookupByLibrary.simpleMessage("Olet läpäissyt aseman"),
-        "stationList": MessageLookupByLibrary.simpleMessage("Asemat"),
-        "submissionRejected":
-            MessageLookupByLibrary.simpleMessage("Palautus hylätty"),
-        "subwayMap": MessageLookupByLibrary.simpleMessage("Metrokartta"),
         "tasks": MessageLookupByLibrary.simpleMessage("Tehtävät"),
         "thankyouForFeedback":
             MessageLookupByLibrary.simpleMessage("Kiitos palautteestasi!"),
-        "transitToStation":
-            MessageLookupByLibrary.simpleMessage("Matkusta asemalle"),
         "unknownUser":
             MessageLookupByLibrary.simpleMessage("tuntematon käyttäjä"),
         "unnamed": MessageLookupByLibrary.simpleMessage("Nimetön"),
@@ -323,12 +291,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "writeAnswerHere": MessageLookupByLibrary.simpleMessage(
             "Kirjoita tähän vastauksesi kysymykseen "),
         "yes": MessageLookupByLibrary.simpleMessage("kyllä"),
-        "youAreNotOnAnyStation":
-            MessageLookupByLibrary.simpleMessage("Valitse asema"),
-        "youHaveOpenedThisStation":
-            MessageLookupByLibrary.simpleMessage("Olet avannut aseman"),
-        "youHaveReadThisBook":
-            MessageLookupByLibrary.simpleMessage("Olet lukenut tämän kirjan"),
         "youHaveThisBadge": MessageLookupByLibrary.simpleMessage(
             "Olet ansainnut tämän saavutuksen"),
         "yourAnswerHasBeenSaved": MessageLookupByLibrary.simpleMessage(

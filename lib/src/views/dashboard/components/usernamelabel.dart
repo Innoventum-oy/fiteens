@@ -4,7 +4,7 @@ Padding userNameLabel(BuildContext context, String label) {
   TextTheme nameTheme = TextTheme(
       headlineMedium: TextStyle(
           color: Colors.white,
-          backgroundColor: Colors.black38,
+       //   backgroundColor: Colors.black38,
           fontSize: 30));
   return Padding(
     padding: const EdgeInsets.all(16.0),

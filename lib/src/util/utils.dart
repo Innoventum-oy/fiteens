@@ -27,6 +27,7 @@ Widget getInitials(user) {
   if (user.lastname != null && user.lastname!.isNotEmpty) initials += user.lastname[0];
   return Text(initials);
 }
+
 /// enable querying color from hex values
 extension HexColor on Color {
   /// String is in the format "aabbcc" or "ffaabbcc" with an optional leading "#".

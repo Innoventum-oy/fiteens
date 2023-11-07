@@ -5,7 +5,7 @@ import 'package:core/core.dart' as core;
 
 goToActivity(BuildContext context, core.Activity item) {
 
-  _pushWidgetWithFade(context, ActivityView(item));
+  _pushWidgetWithFade(context, ActivityScreen(item));
 }
 goToWebPage(BuildContext context, core.WebPage item, {replace = false}) {
 

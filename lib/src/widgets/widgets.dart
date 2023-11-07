@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 
 export 'popupdialog.dart';
@@ -27,10 +28,13 @@ MaterialButton longButtons(String title, Function()? fun,
 
 label(String title) => Text(title);
 
-InputDecoration buildInputDecoration(String hintText, IconData icon) {
+InputDecoration buildInputDecoration(String hintText, IconData? icon,{Widget? suffixIcon,String? labelText}) {
+
   return InputDecoration(
     prefixIcon: Icon(icon),
     hintText: hintText,
+    labelText: labelText,
+    suffixIcon: suffixIcon,
     contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
     border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
   );

@@ -1,8 +1,10 @@
 import 'dart:developer';
 
 import 'package:fiteens/src/views/activity/activity.dart';
+import 'package:fiteens/src/views/calendar/calendarscreen.dart';
 import 'package:fiteens/src/views/dashboard/dashboard.dart';
-import 'package:fiteens/src/views/library/libraryscreen.dart';
+import 'package:fiteens/src/views/library/libraryScreen.dart';
+import 'package:fiteens/src/views/mywellbeing/wellbeingscreen.dart';
 import 'package:fiteens/src/views/routines/routinesscreen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -60,11 +62,15 @@ class Router {
       Widget targetWidget = Container(child: Text('Error: view not found'));
       switch(view) {
         case 'activity' :
-            targetWidget = ActivityView(data,navIndex:navIndex,refresh:refresh);
+            targetWidget = ActivityScreen(data,navIndex:navIndex,refresh:refresh);
             routeFound = true;
           break;
         case 'dashboard' :
           targetWidget = DashBoard(navIndex: navIndex,refresh:refresh);
+          routeFound = true;
+          break;
+        case 'calendar' :
+          targetWidget = CalendarScreen(navIndex: navIndex,refresh: refresh,);
           routeFound = true;
           break;
         case 'library' :
@@ -72,7 +78,8 @@ class Router {
           routeFound = true;
           break;
         case 'mywellbeing' :
-
+          targetWidget = WellbeingScreen(navIndex: navIndex,refresh: refresh,);
+          routeFound = true;
           break;
         case 'routines' :
           targetWidget = RoutinesScreen(navIndex: navIndex,refresh:refresh);
