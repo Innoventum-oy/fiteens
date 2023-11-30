@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:another_flushbar/flushbar.dart';
+import 'package:fiteens/src/util/styles.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -79,6 +80,11 @@ class _LoginState extends State<Login> {
   }
   @override
   Widget build(BuildContext context) {
+
+    if(kDebugMode){
+      log('Building loginform');
+    }
+
     userProvider = Provider.of<core.UserProvider>(context);
     auth = Provider.of<core.AuthProvider>(context);
     core.User? user = widget.user;
@@ -163,7 +169,7 @@ class _LoginState extends State<Login> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Expanded(
-          flex:3,
+          flex:2,
     child:ElevatedButton(
 
           child: Text(AppLocalizations.of(context)!.forgotPassword,
@@ -213,6 +219,9 @@ class _LoginState extends State<Login> {
         form.save();
         setState(() {
           isLoading = true;
+          if(kDebugMode){
+            log('logging in(isLoading set to true)');
+          }
         });
 
         final Future<Map<String, dynamic>> successfulMessage =
@@ -232,13 +241,17 @@ class _LoginState extends State<Login> {
               duration: Duration(seconds: 3),
             ).show(context);
           }
+          setState(() {
+            isLoading = false;
+            if(kDebugMode){
+              log('isLoading set to false');
+            }
+          });
         });
       } else {
         print("form is invalid");
       }
-      setState(() {
-        isLoading = false;
-      });
+
     };
 
 
@@ -250,7 +263,8 @@ class _LoginState extends State<Login> {
         ),*/
         body:
           Container(
-            color:HexColor.fromHex('#205c7b'),
+           //color: appBackground,
+            //color:HexColor.fromHex('#205c7b'),
           padding: EdgeInsets.all(40.0),
           child: ListView(
               children: <Widget>[
@@ -275,7 +289,7 @@ class _LoginState extends State<Login> {
                 isLoading
                     ? loading
                     : longButtons(AppLocalizations.of(context)!.btnLogin, doLogin),
-                SizedBox(height: 5.0),
+                SizedBox(height: 15.0),
                 forgotLabel,
                 SizedBox(height: 15.0),
                 auth.loggedInStatus == core.Status.authenticating
@@ -320,7 +334,7 @@ class _LoginState extends State<Login> {
         },
         child: Text(AppLocalizations.of(context)!.privacyPolicy,style: TextStyle(
             fontWeight: FontWeight.w300,
-            color: Color(0xFFffe8d7)
+           //color: Color(0xFFffe8d7)
         ))
     );
   }

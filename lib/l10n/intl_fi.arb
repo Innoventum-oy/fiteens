@@ -8,14 +8,13 @@
   "activityCalendar": "Tapahtumakalenteri",
   "address" : "Osoite",
   "addedToList" : "Lisätty",
+  "addingRoutineFailed" : "Ohjelman lisääminen kalenteriin epäonnistui",
   "ageOver13": "Oletko yli 13-vuotias?",
   "answerSaved" : "Vastaus tallennettu",
   "appName" : "Fiteens",
   "authenticating" : "Kirjautuminen käynnissä",
-  "activityRecorded" : "Kirjaus tallenettu",
-
-  "benefits" : "Edut",
-
+  "activityRecorded" : "Kirjaus tallennettu",
+  "btnAddToCalendar" : "Lisää kalenteriin",
   "btnConfirm" : "Vahvista",
   "btnContinue" : "Jatka",
   "btnDashboard" : "Etusivu",
@@ -47,6 +46,8 @@
   "guardianInfo" : "Huoltajan tiedot vaaditaan",
   "guardianPhone" : "Huoltajan puhelinnumero",
   "guardianName" : "Huoltajan nimi",
+  "challenges" : "Haasteet",
+  "calendarUpdated" : "Kalenteri päivitetty",
   "codeScanned": "Koodi skannattu" ,
   "confirmationKey" : "Vahvistusavain",
   "confirmDeletingAccount" : "Vahvista käyttäjätilin poistaminen",
@@ -78,6 +79,15 @@
   "error" : "Virhe",
   "errorsInForm": "Lomakkeen sisällössä on virheitä",
   "error_invalid_password" : "Salasana on virheellinen",
+  "eventInFuture" : "Tapahtuma on tulevaisuudessa",
+  "eventCannotBeMarkedBeforeDate" : "Voit merkitä tapahtuman suoritetuksi aikaisintaan {startdate}",
+  "@eventCannotBeMarkedBeforeDate" : {
+    "placeholders" : {
+      "startdate" : {
+        "type" : "String"
+      }
+    }
+  },
 
   "failedToSaveAnswer" : "Vastausta ei voitu tallentaa",
   "feedback" : "Palaute",
@@ -174,6 +184,7 @@
   "resume" : "Jatka",
   "retrievingCoordinates" : "Haetaan sijaintia",
   "resources" : "Resurssit",
+  "routineAddedToCalendar" : "Harjoitus lisätty kalenteriin",
   "routines_title" : "Harjoitukset",
   "saveData" : "Tallenna tiedot",
   "savingDataFailed" : "Tallennus epäonnistui",

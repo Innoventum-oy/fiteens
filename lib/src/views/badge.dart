@@ -53,7 +53,7 @@ class BadgeViewState extends State<BadgeView> {
     myBadges = Provider.of<core.UserProvider>(context).myBadges;
 
     return Scaffold(
-        backgroundColor: primary,
+        //backgroundColor: primary,
         body: CustomScrollView(
           slivers: <Widget>[
             _buildAppBar(),

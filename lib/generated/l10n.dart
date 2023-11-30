@@ -90,20 +90,20 @@ class S {
     );
   }
 
-  /// `Registration saved`
+  /// `Activity marked as done`
   String get activityRegistrationSaved {
     return Intl.message(
-      'Registration saved',
+      'Activity marked as done',
       name: 'activityRegistrationSaved',
       desc: '',
       args: [],
     );
   }
 
-  /// `Registering for activity failed`
+  /// `Updating activity status failed`
   String get activityRegistrationFailed {
     return Intl.message(
-      'Registering for activity failed',
+      'Updating activity status failed',
       name: 'activityRegistrationFailed',
       desc: '',
       args: [],
@@ -115,6 +115,16 @@ class S {
     return Intl.message(
       'Activity recorded',
       name: 'activityRecorded',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Adding routine to calendar failed`
+  String get addingRoutineFailed {
+    return Intl.message(
+      'Adding routine to calendar failed',
+      name: 'addingRoutineFailed',
       desc: '',
       args: [],
     );
@@ -225,6 +235,16 @@ class S {
     return Intl.message(
       'Authenticating ... Please wait',
       name: 'authenticating',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add to calendar`
+  String get btnAddToCalendar {
+    return Intl.message(
+      'Add to calendar',
+      name: 'btnAddToCalendar',
       desc: '',
       args: [],
     );
@@ -400,6 +420,16 @@ class S {
     );
   }
 
+  /// `Calendar updated`
+  String get calendarUpdated {
+    return Intl.message(
+      'Calendar updated',
+      name: 'calendarUpdated',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `No camera available`
   String get cameraNotAvailable {
     return Intl.message(
@@ -415,6 +445,16 @@ class S {
     return Intl.message(
       'Cancel',
       name: 'cancel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Challenges`
+  String get challenges {
+    return Intl.message(
+      'Challenges',
+      name: 'challenges',
       desc: '',
       args: [],
     );
@@ -690,16 +730,6 @@ class S {
     );
   }
 
-  /// `Easy books`
-  String get easyBooks {
-    return Intl.message(
-      'Easy books',
-      name: 'easyBooks',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Edit`
   String get edit {
     return Intl.message(
@@ -767,6 +797,26 @@ class S {
       name: 'eventLog',
       desc: '',
       args: [],
+    );
+  }
+
+  /// `The activity is planned in the future`
+  String get eventInFuture {
+    return Intl.message(
+      'The activity is planned in the future',
+      name: 'eventInFuture',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You cannot mark this activity as done before {startdate}`
+  String eventCannotBeMarkedBeforeDate(String startdate) {
+    return Intl.message(
+      'You cannot mark this activity as done before $startdate',
+      name: 'eventCannotBeMarkedBeforeDate',
+      desc: '',
+      args: [startdate],
     );
   }
 
@@ -1894,6 +1944,16 @@ class S {
     return Intl.message(
       'Routines',
       name: 'routines',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Routine added to calendar`
+  String get routineAddedToCalendar {
+    return Intl.message(
+      'Routine added to calendar',
+      name: 'routineAddedToCalendar',
       desc: '',
       args: [],
     );

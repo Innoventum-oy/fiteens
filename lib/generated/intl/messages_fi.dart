@@ -20,7 +20,10 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'fi';
 
-  static String m0(item) => "${Intl.select(item, {
+  static String m0(startdate) =>
+      "Voit merkitä tapahtuman suoritetuksi aikaisintaan ${startdate}";
+
+  static String m1(item) => "${Intl.select(item, {
             'calendar': 'Kalenteri',
             'routines': 'Harjoitusohjelma',
             'mywellbeing': 'Oma hyvinvointi',
@@ -42,8 +45,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "activityCalendar":
             MessageLookupByLibrary.simpleMessage("Tapahtumakalenteri"),
         "activityRecorded":
-            MessageLookupByLibrary.simpleMessage("Kirjaus tallenettu"),
+            MessageLookupByLibrary.simpleMessage("Kirjaus tallennettu"),
         "addedToList": MessageLookupByLibrary.simpleMessage("Lisätty"),
+        "addingRoutineFailed": MessageLookupByLibrary.simpleMessage(
+            "Ohjelman lisääminen kalenteriin epäonnistui"),
         "address": MessageLookupByLibrary.simpleMessage("Osoite"),
         "ageOver13":
             MessageLookupByLibrary.simpleMessage("Oletko yli 13-vuotias?"),
@@ -52,6 +57,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "appName": MessageLookupByLibrary.simpleMessage("Fiteens"),
         "authenticating":
             MessageLookupByLibrary.simpleMessage("Kirjautuminen käynnissä"),
+        "btnAddToCalendar":
+            MessageLookupByLibrary.simpleMessage("Lisää kalenteriin"),
         "btnConfirm": MessageLookupByLibrary.simpleMessage("Vahvista"),
         "btnContinue": MessageLookupByLibrary.simpleMessage("Jatka"),
         "btnDashboard": MessageLookupByLibrary.simpleMessage("Etusivu"),
@@ -76,11 +83,14 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Myöhemmin"),
         "buggers": MessageLookupByLibrary.simpleMessage("Voi harmi"),
         "calendar": MessageLookupByLibrary.simpleMessage("Kalenteri"),
+        "calendarUpdated":
+            MessageLookupByLibrary.simpleMessage("Kalenteri päivitetty"),
         "cameraNotAvailable":
             MessageLookupByLibrary.simpleMessage("Kamera ei ole käytettävissä"),
         "cancel": MessageLookupByLibrary.simpleMessage("Peruuta"),
         "cannotSaveEmptyForm": MessageLookupByLibrary.simpleMessage(
             "Täytä lomake ennen lähettämistä"),
+        "challenges": MessageLookupByLibrary.simpleMessage("Haasteet"),
         "choose": MessageLookupByLibrary.simpleMessage("Valitse"),
         "chooseFile": MessageLookupByLibrary.simpleMessage("Valitse tiedosto"),
         "city": MessageLookupByLibrary.simpleMessage("Kaupunki"),
@@ -133,6 +143,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "error": MessageLookupByLibrary.simpleMessage("Virhe"),
         "errorsInForm": MessageLookupByLibrary.simpleMessage(
             "Lomakkeen sisällössä on virheitä"),
+        "eventCannotBeMarkedBeforeDate": m0,
+        "eventInFuture": MessageLookupByLibrary.simpleMessage(
+            "Tapahtuma on tulevaisuudessa"),
         "eventLog": MessageLookupByLibrary.simpleMessage("Tapahtumaloki"),
         "failedToSaveAnswer": MessageLookupByLibrary.simpleMessage(
             "Vastausta ei voitu tallentaa"),
@@ -177,7 +190,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "myCard": MessageLookupByLibrary.simpleMessage("Oma kortti"),
         "myPoints": MessageLookupByLibrary.simpleMessage("Pisteesi"),
         "myScore": MessageLookupByLibrary.simpleMessage("Omat pisteet"),
-        "navitem": m0,
+        "navitem": m1,
         "next": MessageLookupByLibrary.simpleMessage("Seuraava"),
         "no": MessageLookupByLibrary.simpleMessage("ei"),
         "noContactMethodsFound":
@@ -255,6 +268,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "resume": MessageLookupByLibrary.simpleMessage("Jatka"),
         "retrievingCoordinates":
             MessageLookupByLibrary.simpleMessage("Haetaan sijaintia"),
+        "routineAddedToCalendar": MessageLookupByLibrary.simpleMessage(
+            "Harjoitus lisätty kalenteriin"),
         "routines_title": MessageLookupByLibrary.simpleMessage("Harjoitukset"),
         "saveData": MessageLookupByLibrary.simpleMessage("Tallenna tiedot"),
         "savingDataFailed":

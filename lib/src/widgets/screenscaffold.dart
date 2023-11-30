@@ -59,15 +59,19 @@ class _ScreenScaffoldState extends State<ScreenScaffold>{
         )
         ),
         actions: [
-          CircleAvatar(
+          if(user.id!=null)CircleAvatar(
             radius:20,
               backgroundImage: image,
           ),
           if(widget.onRefresh!=null) IconButton(onPressed: ()=> widget.onRefresh!(), icon: Icon(Icons.refresh)),
           ...?widget.appBarButtons,
-          IconButton(
+          if(user.id!=null) IconButton(
               icon: const Icon(Icons.logout),
               onPressed: () async {
+                core.User loggedInUser =
+                    Provider.of<core.UserProvider>(context, listen: false).user;
+                await Provider.of<core.AuthProvider>(context, listen: false)
+                    .logout(loggedInUser);
                 Provider.of<core.UserProvider>(context, listen: false).clearCurrentUser();
 
                 setState(() {
@@ -77,7 +81,7 @@ class _ScreenScaffoldState extends State<ScreenScaffold>{
         ],
       ),
       body: widget.child,
-      bottomNavigationBar: bottomNavigation(context,currentIndex: widget.navigationIndex??1),
+      bottomNavigationBar: (user.id!=null) ? bottomNavigation(context,currentIndex: widget.navigationIndex??1):null,
     );
   }
 }

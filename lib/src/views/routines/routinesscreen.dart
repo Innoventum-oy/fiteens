@@ -22,22 +22,32 @@ class RoutinesScreen extends StatefulWidget {
 
 class _RoutinesScreenState extends State<RoutinesScreen> {
 
-
+  bool loaded = false;
   @override
-  void initState(){
+  void initState() {
     super.initState();
     log('Initing routinesview state, refresh: ${widget.refresh}');
-    Map<String,dynamic> params = {};
-    Provider.of<RoutineProvider>(context,listen: false).getItems(params,reload:widget.refresh);
+    Map<String, dynamic> params = {
+    };
+    RoutineProvider routineProvider = Provider.of<RoutineProvider>(
+        context, listen: false);
+    routineProvider.getItems(params,reload:widget.refresh || loaded == false ? true : false);
+  loaded = true;
   }
+
 
   @override
   Widget build(BuildContext context) {
 
     RoutineProvider routineProvider = Provider.of<RoutineProvider>(context);
-    Widget routineView = defaultContent(Row(children:[CircularProgressIndicator(),
-      Text(routineProvider.loadingStatus.toString())]));
-    if (routineProvider.loadingStatus == DataLoadingStatus.loaded) {
+//    routineProvider.language = Localizations.localeOf(context).toString();
+    Widget routineView = defaultContent(Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children:[
+      CircularProgressIndicator(),
+      Text(AppLocalizations.of(context)!.loading)])
+    );
+    if (loaded) {
 
       if (routineProvider.list != null && routineProvider.list?.length !=null) {
         List<Routine>? items = routineProvider.list;

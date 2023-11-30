@@ -45,7 +45,7 @@ class _VerticalPageListState extends State<VerticalPageList> {
   _loadPages(user) async {
     final Map<String, String> params = {
       'fields':
-          'id,pagetitle,textcontents,thumbnailurl,accesslevel,commonname,category',
+          'id,pagetitle,textcontents,thumbnailurl,accesslevel,commonname,pagecategory',
       'api_key': user.token,
       'sort': 'pagetitle',
       'status': '2',

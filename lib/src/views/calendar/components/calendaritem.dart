@@ -1,6 +1,9 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:core/core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:html/parser.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -11,10 +14,10 @@ import '../../../util/navigator.dart';
 class CalendarItem extends StatefulWidget {
 
   final ApiClient _apiClient = ApiClient();
-  final Activity activityItem;
+  final Map<String,dynamic> activityData;
 
 
-  CalendarItem(this.activityItem);
+  CalendarItem(this.activityData);
 
   int calculateDifference(DateTime date) {
     DateTime now = DateTime.now();
@@ -35,51 +38,55 @@ class CalendarItem extends StatefulWidget {
     @override
     Widget build(BuildContext context){
       User user = Provider.of<UserProvider>(context).user;
-      String dateinfo = widget.activityItem.nexteventdate==null ? '':(widget.calculateDifference(widget.activityItem.nexteventdate!)!=0 ? DateFormat('kk:mm dd.MM.yyyy').format(widget.activityItem.nexteventdate!) : 'Today '+DateFormat('kk:mm ').format(widget.activityItem.nexteventdate!));
+      Activity activityItem = widget.activityData['activity'];
+      ActivityVisit? activityVisit = widget.activityData['activityVisit'];
+      if(kDebugMode){
+        log("Building calendaritem for activity ${activityItem.name} visit ${activityVisit?.id}");
+      }
+      String dateinfo = activityItem.nexteventdate==null ? '':(widget.calculateDifference(activityItem.nexteventdate!)!=0 ? DateFormat('kk:mm dd.MM.yyyy').format(activityItem.nexteventdate!) : 'Today '+DateFormat('kk:mm ').format(activityItem.nexteventdate!));
       List<Widget> buttons=[];
       buttons.add(ElevatedButton(
         child: Text(AppLocalizations.of(context)!.readMore),
         onPressed: () {
           /* open activity view */
-          goToActivity(context, widget.activityItem);
+          goToActivity(context, activityItem,visit:activityVisit);
         },
       ));
       buttons.add(const SizedBox(width: 8));
 
-      if(widget.activityItem.registration
-          && ( widget.activityItem.maxvisitors==null || (widget.activityItem.maxvisitors??0) > (widget.activityItem.registeredvisitorcount??0) )
-          && ( widget.activityItem.registrationenddate==null || widget.activityItem.registrationenddate!.isAfter(DateTime.now()))
+      if(activityItem.registration
+          && ( activityItem.maxvisitors==null || (activityItem.maxvisitors??0) > (activityItem.registeredvisitorcount??0) )
+          && ( activityItem.registrationenddate==null || activityItem.registrationenddate!.isAfter(DateTime.now()))
           && user.token!=null) {
         buttons.add(ElevatedButton(
           child: Text(AppLocalizations.of(context)!.signUp),
           onPressed: () {
-            print('signing up for activity {$widget.activityItem.name}');
-            widget._apiClient.registerForActivity(widget.activityItem.id, user);
+            print('signing up for activity {$activityItem.name}');
+            widget._apiClient.registerForActivity(activityItem.id, user,visit:activityVisit);
           },
         ));
         buttons.add(const SizedBox(width: 8));
       }
-      //  print(widget.activityItem.name!+' access:'+ widget.activityItem.accesslevel.toString());
+      //  print(activityItem.name!+' access:'+ activityItem.accesslevel.toString());
 
       String subtitle= dateinfo ;
-      if(widget.activityItem.registration){
-        subtitle+=' ['+(widget.activityItem.registeredvisitorcount!=null ? widget.activityItem.registeredvisitorcount.toString() : '0')+(widget.activityItem.maxvisitors!=null ? '/'+widget.activityItem.maxvisitors.toString() :'') +']';
+      if(activityItem.registration){
+        subtitle+=' ['+(activityItem.registeredvisitorcount!=null ? activityItem.registeredvisitorcount.toString() : '0')+(activityItem.maxvisitors!=null ? '/'+activityItem.maxvisitors.toString() :'') +']';
       }
-      if(widget.activityItem.description!=null)subtitle+= '\n'+widget.activityItem.description!;
+      if(activityItem.description!=null)subtitle+= '\n'+activityItem.description!;
       return Center(
           child:
           Card(
               child: InkWell(
-                  onTap: () => goToActivity(context, widget.activityItem),
+                  onTap: () => goToActivity(context, activityItem,visit:activityVisit),
                   child:Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         ListTile(
                           leading: Icon(Icons.event),
-                          title: Text((widget.activityItem.name != null ? widget.activityItem.name: AppLocalizations.of(context)!.unnamedActivity)!),
-                          subtitle: Text(subtitle,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines:5),
+                          title: Text((activityItem.name != null ? activityItem.name: AppLocalizations.of(context)!.unnamedActivity)!),
+                          subtitle: Text(parse(subtitle).body!.text,maxLines: 3,style: TextStyle(overflow: TextOverflow.ellipsis),
+                             ),
                           isThreeLine: true,
                         ),
                         Row(

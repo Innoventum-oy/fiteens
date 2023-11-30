@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:fiteens/src/widgets/widgets.dart';
@@ -30,6 +32,7 @@ class _ResetPasswordState extends State<ResetPassword> {
         _auth.getConfirmationKey(_contact!);
 
         successfulMessage.then((response) {
+
           if (response?['status'] == 'success') {
             setState(() {
               auth.setContactMethodId(response?['contactmethodid']);
@@ -39,9 +42,10 @@ class _ResetPasswordState extends State<ResetPassword> {
             });
 
           } else {
+
             Flushbar(
               title: AppLocalizations.of(context)!.requestFailed,
-              message: response?['message'].toString(),
+              message: response?['message'].toString()??AppLocalizations.of(context)!.requestFailed,
               duration: Duration(seconds: 3),
             ).show(context);
           }
@@ -66,7 +70,7 @@ class _ResetPasswordState extends State<ResetPassword> {
       if(value!.isEmpty) return AppLocalizations.of(context)!.pleaseEnterPhoneOrEmail;
 
       //test for phone number pattern
-      String pattern = r'(^(?:[+0])?[0-9]{10,12}$)';
+      String pattern = r'(^(?:[+0])?[0-9]{10,14}$)';
       RegExp regExp = new RegExp(pattern);
       if (regExp.hasMatch(value)) {
         return null;
@@ -86,7 +90,7 @@ class _ResetPasswordState extends State<ResetPassword> {
       validator: validateContact,
       onSaved: (value) => _contact = value,
       decoration: buildInputDecoration(
-          AppLocalizations.of(context)!.email, Icons.email),
+          AppLocalizations.of(context)!.emailOrPhoneNumber, Icons.email),
     );
 
 

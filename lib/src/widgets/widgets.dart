@@ -1,4 +1,5 @@
 
+import 'package:fiteens/src/util/styles.dart';
 import 'package:flutter/material.dart';
 
 export 'popupdialog.dart';
@@ -7,11 +8,11 @@ export 'notifydialog.dart';
 export 'bottomnavigation.dart';
 
 MaterialButton longButtons(String title, Function()? fun,
-    {Color color = const Color(0xFF299fe0), Color textColor = Colors.white}) {
+    {Color? color, Color textColor = Colors.white}) {
   return MaterialButton(
     onPressed: fun,
     textColor: textColor,
-    color: color,
+    color: color ?? buttonColorPrimary,
     child: SizedBox(
       width: double.infinity,
       child: Text(
@@ -22,11 +23,11 @@ MaterialButton longButtons(String title, Function()? fun,
     height: 45,
     minWidth: 600,
     shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(10))),
+        borderRadius: BorderRadius.all(Radius.circular(8))),
   );
 }
 
-label(String title) => Text(title);
+label(String title,{TextStyle? style}) => Text(title,style: style,);
 
 InputDecoration buildInputDecoration(String hintText, IconData? icon,{Widget? suffixIcon,String? labelText}) {
 
@@ -39,3 +40,4 @@ InputDecoration buildInputDecoration(String hintText, IconData? icon,{Widget? su
     border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
   );
 }
+

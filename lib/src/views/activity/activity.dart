@@ -4,22 +4,24 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:fiteens/src/widgets/screenscaffold.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:fiteens/src/views/activity/activityvisitlist.dart';
-
+import 'package:html/parser.dart';
 import 'package:fiteens/src/views/activity/activityparticipantlist.dart';
 import 'package:core/core.dart' as core;
 
 /// Display single activity information
 class ActivityScreen extends StatefulWidget {
   final core.Activity _activity;
+  final core.ActivityVisit? visit;
   final int? navIndex;
   final bool refresh;
-  ActivityScreen(this._activity,{this.refresh=false,this.navIndex});
+  ActivityScreen(this._activity,{this.refresh=false,this.navIndex,this.visit});
 
   @override
   _ActivityScreenState createState() => _ActivityScreenState();
@@ -32,7 +34,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
   Timer? _timer;
   int iteration = 1;
   int buildtime = 1;
-
+  core.ActivityVisit? visit;
   core.ActivityProvider activityProvider = core.ActivityProvider();
   core.ImageProvider imageProvider = core.ImageProvider();
   core.User? user;
@@ -57,8 +59,9 @@ class _ActivityScreenState extends State<ActivityScreen> {
   @override
   void initState() {
     super.initState();
-
+    activityProvider.current = null;
    load();
+    visit = widget.visit;
   }
   load() async{
     log('Loading activity details');
@@ -77,29 +80,39 @@ class _ActivityScreenState extends State<ActivityScreen> {
   Widget build(BuildContext context) {
 
     activityProvider = Provider.of<core.ActivityProvider>(context);
-    activity = activityProvider.current ?? widget._activity;
+    activity = (activityProvider.current?.id == widget._activity.id ? activityProvider.current : widget._activity)!;
     imageProvider = Provider.of<core.ImageProvider>(context);
-
-    return ScreenScaffold(title: activity.name?? AppLocalizations.of(context)!.activity,
+    log('build - activity loaded status for ${activity.name}: ${activity.loaded}, visit: ${visit?.id} - status : ${visit?.visitstatus}');
+    return ScreenScaffold(title: activity.name ?? AppLocalizations.of(context)!.activity,
         navigationIndex: widget.navIndex,
-        child: CustomScrollView(
+        child: activity.loaded ? CustomScrollView(
           slivers: <Widget>[
             _buildAppBar(activity),
             _buildContentSection(activity),
           ],
-        ));
+        ) : CircularProgressIndicator())  ;
 
   }
 
-  List<Widget> buttons(core.Activity activity) {
+  List<Widget> buttons(core.Activity activity,{core.ActivityVisit? visit}) {
    // print('building buttons');
     final user = Provider.of<core.UserProvider>(context, listen: false).user;
     List<Widget> buttons = [];
 
     if(user.token!=null) {
-
-
-      buttons.add(ElevatedButton(
+      log(visit.toString());
+      if(visit!=null && visit.visitstatus == 'visited'){
+        // already done
+        buttons.add(ElevatedButton.icon(
+          icon: Icon(Icons.check),
+            onPressed: (()=> null), label: Text('Already done'), ));
+      }
+      else if(visit!=null && visit!.visitstatus == 'cancelled'){
+        buttons.add(ElevatedButton.icon(
+          icon: Icon(Icons.skip_next),
+          onPressed: (()=> null), label: Text('Skipped'), ));
+      }
+      else buttons.add(ElevatedButton(
         child: _apiClient.isProcessing ?  SizedBox(
             height: 20,
             width: 20,
@@ -108,10 +121,17 @@ class _ActivityScreenState extends State<ActivityScreen> {
           semanticsLabel: AppLocalizations.of(context)!.loading,
         )) : Text(AppLocalizations.of(context)!.btnMarkAsDone),
         onPressed: () {
-          registerForActivity(activity,user);
+          if(visit!=null) {
+            if(visit.startdate!.isAfter(DateTime.now())){
+              showMessage(context, AppLocalizations.of(context)!.eventInFuture, Text(AppLocalizations.of(context)!.eventCannotBeMarkedBeforeDate(DateFormat('d.M.y').format(visit.startdate!) ??'')));
+              return;
+            }
+          }
+          
+          recordActivity(activity,user,visit:visit);
           setState(() {
-            print('signing up for activity {$activity.name}');
-
+            if(kDebugMode)
+            log('marking activity {$activity.name} as done');
           });
 
         },
@@ -142,7 +162,17 @@ class _ActivityScreenState extends State<ActivityScreen> {
                   builder: (context) => ActivityVisitList(activity)));
         },
       ));
+
     }
+   /* for testing
+    buttons.add(
+
+        ElevatedButton(onPressed: ()=> showMessage(context,AppLocalizations.of(context)!.activityRecorded ,
+           Text(activity.getValue('feedback')!=null ? parse(activity.getValue('feedback')).body!.text : AppLocalizations.of(context)!.activityRecorded)
+           ,autoDismiss: false
+        )
+            , child: Text('Test message'))
+    );*/
     return buttons;
   }
 
@@ -161,7 +191,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
               tag: "Activity-Tag-${activity.id}",
               child: activity.coverpictureurl != null
                   ? FadeInImage.assetNetwork(
-                      fit: BoxFit.contain,
+                      fit: BoxFit.cover,
                       width: double.infinity,
                       placeholder: 'images/logo.png',
                       image: activity.coverpictureurl!,
@@ -175,18 +205,20 @@ class _ActivityScreenState extends State<ActivityScreen> {
       ),
     );
   }
-  void registerForActivity(activity,user) async
+  void recordActivity(core.Activity activity,core.User user,{core.ActivityVisit? visit}) async
   {
-
+    if(kDebugMode){
+      log('Recording visit to activity ${activity.name} (visit: ${visit?.id})');
+    }
     if (!_apiClient.isProcessing) {
 
       Map<String,dynamic> result = await _apiClient.registerForActivity(
-          activity.id, user);
+          activity.id, user,visitstatus: 'visited',visit:visit);
       setState(() {
         switch(result['status'])
         {
           case 'success':
-            showMessage(context,AppLocalizations.of(context)!.activityRegistrationSaved ,Text(result['message']));
+            showMessage(context,AppLocalizations.of(context)!.activityRecorded ,Text(activity.getValue('feedback')!=null ? parse(activity.getValue('feedback')).body!.text : AppLocalizations.of(context)!.activityRecorded),autoDismiss: false);
 
             break;
           default:
@@ -195,10 +227,18 @@ class _ActivityScreenState extends State<ActivityScreen> {
               Text(result['message']),
              if (result['errormessage']!=null) Text(result['errormessage'])
             ]);
-            showMessage(context, AppLocalizations.of(context)!.activityRegistrationFailed,message);
+            showMessage(context, AppLocalizations.of(context)!.error,message);
 
         }
+      if(result['activityvisit']!=null){
+        // set / update activityvisit data
+        log("updating visit data from : ${result['activityvisit']}");
+        setState(() {
+          // this - reference is required here
+          this.visit = core.ActivityVisit.fromJson(result['activityvisit']);
+        });
 
+      }
       });
     }
   }
@@ -273,15 +313,14 @@ class _ActivityScreenState extends State<ActivityScreen> {
               SizedBox(
                 height: 8.0,
               ),
-              Text(activity.description!,
-                  style:
-                  const TextStyle(color: Colors.white, fontSize: 12.0)),
+              Html(data:activity.description!,
+                 ),
               SizedBox(
                 height: 8.0,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: buttons(activity),
+                children: buttons(activity,visit: visit),
               )
             ],
           ),
@@ -321,9 +360,9 @@ class _ActivityScreenState extends State<ActivityScreen> {
         style: {"*" : Style(color:Colors.white)}
     );
   }
-  void showMessage(BuildContext context, String title, Widget content) {
+  void showMessage(BuildContext context, String title, Widget content,{bool autoDismiss= true}) {
     showDialog(context: context, builder: (BuildContext builderContext) {
-      _timer = Timer(Duration(seconds: 5), () {
+      if(autoDismiss )_timer = Timer(Duration(seconds: 5), () {
         Navigator.of(context).pop();
       });
 
@@ -333,6 +372,9 @@ class _ActivityScreenState extends State<ActivityScreen> {
         content: SingleChildScrollView(
           child: content,
         ),
+         actions: autoDismiss ? null : [
+        ElevatedButton(onPressed: ()=> Navigator.of(context).pop(), child: Text('Ok'))
+      ],
       );
     }
     ).then((val) {

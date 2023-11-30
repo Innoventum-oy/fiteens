@@ -63,13 +63,14 @@ class _WeekViewState extends State<WeekView> {
 
                   Column(
                     children: [
-                      Text(DateFormat('EEEE').format(calendarDay)),
+
                       Padding(
                           padding:EdgeInsets.all(5),
                           child: Column(
-                              children:
-                              dayActivities
-
+                              children:[
+                              Text(DateFormat('EEEE').format(calendarDay),style: TextStyle(fontSize: 18),),
+                              ...dayActivities
+]
                           )
 
                       )

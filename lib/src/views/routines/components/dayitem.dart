@@ -8,7 +8,7 @@ Widget dayItem(Activity activity){
         //backgroundImage: activity.coverpicture!=null ? Image.network(activity.coverpictureurl??''  ).image :
         //Image.asset('images/logo.png').image,),
       title: Text(activity.name??''),
-        subtitle: Text(activity.description??''),
+        //subtitle: Text(activity.description??''),
     )
   );
 }

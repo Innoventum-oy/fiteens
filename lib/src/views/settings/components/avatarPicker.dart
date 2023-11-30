@@ -71,7 +71,7 @@ class _AvatarPickerState extends State<AvatarPicker> {
         user.data!['avatar'] = image;
         loaded=false;
         if(kDebugMode){
-        log('Saving avatar');
+        log('Saving avatar $image');
         }
         UserProvider provider = Provider.of<UserProvider>(context,listen: false);
         if(provider.loaded) {

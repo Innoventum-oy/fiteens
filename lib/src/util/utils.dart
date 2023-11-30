@@ -103,6 +103,7 @@ Future<void> feedbackAction(BuildContext context, User user) async {
   });
 
   final ApiClient _apiClient = ApiClient();
+  _apiClient.buildContext = context;
   BetterFeedback.of(context).show((UserFeedback feedback) async {
     Map<String, dynamic> params = {
       'method': 'json',

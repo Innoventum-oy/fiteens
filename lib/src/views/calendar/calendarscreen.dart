@@ -15,6 +15,7 @@ import 'components/calendaritem.dart';
 class CalendarScreen extends StatefulWidget {
   final int navIndex;
   final bool refresh;
+
   const CalendarScreen({this.navIndex=1,this.refresh=false,super.key});
 
   @override
@@ -22,12 +23,12 @@ class CalendarScreen extends StatefulWidget {
 }
 
 class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStateMixin  {
-
+  bool screenDataLoaded = false;
   Map<int,Activity> data = {};
-  Map<DateTime, List<Activity>> _events = {};
-  ValueNotifier<List<Activity>> _selectedEvents = ValueNotifier([]);
+  Map<DateTime, List<Map<String,dynamic>>> _events = {};
+  ValueNotifier<List<Map<String,dynamic>>> _selectedEvents = ValueNotifier([]);
 
-  Map<DateTime, List<Activity>> eventsHashMap = <DateTime, List<Activity>>{};
+  Map<DateTime, List<Map<String,dynamic>>> eventsHashMap = <DateTime, List<Map<String,dynamic>>>{};
   CalendarFormat _calendarFormat = CalendarFormat.month;
 
   // CALENDAR SETTINGS
@@ -45,21 +46,27 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
   @override
   void initState(){
     super.initState();
-
+    if(kDebugMode){
+      log('INITING Calendar screen');
+    }
     /// Load events based on activityvisits
+
     load();
 
     _selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay?? DateTime.now()));
   }
   void load() async{
-    log('called calendarscreen load');
+
     DateTime now = DateTime.now();
     ActivityVisitProvider visitProvider = Provider.of<ActivityVisitProvider>(context,listen: false);
     Map<String,dynamic> params = {
       'user.id' : Provider.of<UserProvider>(context, listen: false).user.id.toString(),
       //'activity.id' :'gt:0'
     };
-    await visitProvider.getItems(params,reload:widget.refresh);
+    log('called calendarscreen load, provider status: ${visitProvider.loadingStatus}');
+    bool reload = false;
+    if(!screenDataLoaded || widget.refresh) reload = true;
+    await visitProvider.getItems(params,reload:reload);
     List<ActivityVisit> items = visitProvider.data ?? [];
     log('Item count. ${items.length}');
     for (var item in  items) {
@@ -79,7 +86,9 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
           }
           else if(item.activity?.id==null) log('activity not set for activityvisit');
           else log('${item.activityid}. already in events');
-        _events[date]!.add(data[item.activity?.id]!);
+          Map<String,dynamic> value = {'activity': data[item.activity?.id]!, 'activityVisit' : item};
+          log('adding event $item to date $date');
+        _events[date]!.add(value);
 
       }
       else log("$item startdate is null");
@@ -87,13 +96,16 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
 
     //print('Adding all '+ _events.length.toString() +' events to eventsHashMap');
     eventsHashMap =
-    LinkedHashMap<DateTime, List<Activity>>(equals: isSameDay,
+    LinkedHashMap<DateTime, List<Map<String,dynamic>>>(equals: isSameDay,
       hashCode: getHashCode,
     )
       ..addAll(_events);
     //print("events in hashmap " + eventsHashMap.length.toString());
     _onDaySelected(_focusedDay, _focusedDay);
     _getEventsForDay(_selectedDay ?? now);
+    setState(() {
+      screenDataLoaded = true;
+    });
   }
   @override
   void dispose() {
@@ -101,18 +113,25 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
     super.dispose();
   }
 
-  List<Activity> _getEventsForDay(DateTime day) {
-     if(eventsHashMap[day]!=null)print('events for $day: '+ eventsHashMap[day]!.length.toString());
-    return eventsHashMap[day] ?? [];
+  List<Map<String,dynamic>> _getEventsForDay(DateTime day) {
+    if(kDebugMode) {
+      int eventCount = eventsHashMap[day] == null ? 0 : eventsHashMap[day]!
+          .length;
+      log('events for $day: $eventCount');
+    }
+      return eventsHashMap[day] ?? [];
+
   }
 
   @override
   Widget build(BuildContext context) {
 
     ActivityVisitProvider visitProvider = Provider.of<ActivityVisitProvider>(context);
-    Widget calendarView = defaultContent(Row(children:[CircularProgressIndicator(),
-      Text(visitProvider.loadingStatus.toString())]));
-    if (visitProvider.loadingStatus == DataLoadingStatus.loaded) {
+    Widget calendarView = defaultContent(Center(child:
+      CircularProgressIndicator(),
+
+    ));
+    if (screenDataLoaded) {
 
       calendarView =calendarContent();
     }
@@ -126,7 +145,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
             log('reloading page');
           }
           setState(){
-
+            Provider.of<ActivityVisitProvider>(context).loadingStatus = DataLoadingStatus.loading;
           }
           constants.Router.navigate(context,'calendar',widget.navIndex,refresh: true);
         },
@@ -162,7 +181,7 @@ void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
     kLastDay = DateTime(kNow.year, kNow.month + 3, kNow.day);
     return Column(
       children: [
-        TableCalendar<Activity>(
+        TableCalendar<Map<String,dynamic>>(
           locale: Localizations.localeOf(context).toString(),//Intl.getCurrentLocale(),
           firstDay: kFirstDay ?? kNow,
           lastDay: kLastDay ?? kNow,
@@ -194,14 +213,13 @@ void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
           eventLoader: _getEventsForDay,
         ), const SizedBox(height: 8.0),
         Expanded(
-          child: ValueListenableBuilder<List<Activity>>(
+          child: ValueListenableBuilder<List<Map<String,dynamic>>>(
             valueListenable: _selectedEvents,
             builder: (context, value, _) {
               print(value);
               return ListView.builder(
                   itemCount: value.length,
                   itemBuilder: (BuildContext context, int index) {
-
 
                     return CalendarItem(value[index]);
                   });

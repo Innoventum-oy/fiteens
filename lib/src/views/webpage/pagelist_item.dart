@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:fiteens/src/util/navigator.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../util/styles.dart';
+
 
 class WebPageListItem extends StatelessWidget{
   WebPageListItem(this.webPage);
@@ -35,57 +37,36 @@ class WebPageListItem extends StatelessWidget{
       Card(
         child: InkWell(
           onTap: () => goToWebPage(context, webPage),
-         child:Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-             ListTile(
-              minLeadingWidth: 80,
-              leading: webPage.thumbnailUrl!=null ? Image.network(
-                 webPage.thumbnailUrl!,
-                  fit:BoxFit.fitWidth
+         child:
+         Container(
+           child:Stack(
+               fit: StackFit.expand,
+               //  crossAxisAlignment: CrossAxisAlignment.stretch,
+               children: [webPage.thumbnailUrl!=null ? Image.network(
+                 webPage.thumbnailUrl!, fit: BoxFit.cover,) : Image.asset('images/logo.png', fit: BoxFit.cover,),
 
-): Icon(Icons.book),
-              title: Text((webPage.pagetitle != null ? webPage.pagetitle: AppLocalizations.of(context)!.unnamedWebPage)!),
-              subtitle: Text((webPage.author??'')+"\n\n"
 
-                  ,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines:10),
-               isThreeLine: true,
-            ),
-/*
-        if(WebPage.objectrating!=null)
-         RatingBarIndicator(
-           rating:WebPage.objectrating ?? 0 ,
-           itemSize: 20,
+                 Positioned(
+                   bottom:0,
+                   left:0,
+                   right: 0,
+                   child:Container(
+                       decoration: BoxDecoration(
+                         color: secondaryThemeColor,
+                       ),
+                       child: Padding(
 
-           direction: Axis.horizontal,
-
-           itemCount: 5,
-           // itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
-           itemBuilder: (context, _) => Icon(
-             Icons.star,
-             color: Colors.amber,
+                           padding: EdgeInsets.all(5),
+                           child:
+                           Text( webPage.pagetitle ?? AppLocalizations.of(context)!.unnamedWebPage,
+                               style: TextStyle(fontSize: 18))
+                       )
+                   ),
+                 )
+               ]
            ),
          ),
-
- */
-     /* if(WebPage.readlistdate !=null)
-       Align(
-       alignment: Alignment.centerLeft,
-        child: Padding(
-            padding: EdgeInsets.only(left:20,right:20),
-            child:Text(AppLocalizations.of(context)!.addedToList+' '+DateFormat('dd.MM.yyyy').format(WebPage.readlistdate ?? DateTime.now()),
-            style: TextStyle(fontSize:11))
-            ),
-        ),*/
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: buttons,
-            ),
-          ]
-        )
-      )
+        ),
     )
     );
   }

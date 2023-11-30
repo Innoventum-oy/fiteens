@@ -4,10 +4,11 @@
   "activities": "Activities",
   "activity"  : "Activity",
   "activityCalendar": "Activity calendar",
-  "activityRegistrationSaved": "Registration saved",
-  "activityRegistrationFailed" : "Registering for activity failed",
+  "activityRegistrationSaved": "Activity marked as done",
+  "activityRegistrationFailed" : "Updating activity status failed",
   "activityRecorded" : "Activity recorded",
   "activities" : "Activities",
+  "addingRoutineFailed" : "Adding routine to calendar failed",
   "visitRemoved" : "Visit removed",
   "accountCreated" : "Account created",
   "accountDeletion" : "Account Deletion",
@@ -19,6 +20,7 @@
   "answerSaved" : "Answer saved",
   "appName" : "FiTeens",
   "authenticating" : "Authenticating ... Please wait",
+  "btnAddToCalendar" : "Add to calendar",
   "btnConfirm" : "Confirm",
   "btnContinue" : "Continue",
   "btnDashboard" : "Open Dashboard",
@@ -36,9 +38,10 @@
   "btnValidateContactLater": "Later",
   "buggers" : "Oh buggers",
   "calendar": "Calendar",
+  "calendarUpdated" : "Calendar updated",
   "cameraNotAvailable" : "No camera available",
   "cancel" : "Cancel",
-
+  "challenges" : "Challenges",
   "choose" : "Choose",
   "chooseFile" : "Choose file",
   "clickPictureToChooseAvatar": "Click picture to choose an avatar",
@@ -68,7 +71,6 @@
   "accountDeleted" : "User account deleted",
   "discover" : "Discover",
 
-  "easyBooks" : "Easy books",
   "edit" : "Edit",
   "email": "Email",
   "emailOrPhoneNumber" : "Email or Phone number",
@@ -76,6 +78,15 @@
   "enterGroupCode" : "Enter your Group Code here",
   "enterPassword" : "Enter password",
   "eventLog" : "Event Log",
+  "eventInFuture" : "The activity is planned in the future",
+  "eventCannotBeMarkedBeforeDate" : "You cannot mark this activity as done before {startdate}",
+  "@eventCannotBeMarkedBeforeDate" : {
+    "placeholders" : {
+      "startdate" : {
+        "type" : "String"
+      }
+    }
+  },
   "error" : "Error",
   "errorsInForm" : "Errors in form contents",
 
@@ -200,6 +211,7 @@
   "retrievingCoordinates" : "Retrieving coordinates",
   "returned" : "Returned",
   "routines" : "Routines",
+  "routineAddedToCalendar" : "Routine added to calendar",
   "savingDataFailed" : "Failed to save data",
   "scanCode": "Scan Code",
   "score" : "Score",

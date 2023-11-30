@@ -49,7 +49,7 @@ class _WebPageListState extends State<WebPageList> {
       'limit': limit.toString(),
       'offset': offset.toString(),
       'fields':
-          'title,description,coverpictureurl,level,identifier,authors,authorname,readstatus,hashtags,themes,objectratingcount,objectrating,userrating,pageount',
+          'title,description,coverpictureurl,level,identifier,authors,authorname,readstatus,hashtags,themes,objectratingcount,objectrating,userrating,pagecount',
       'api_key': user.token,
       'method': 'json',
       'sort': 'title',

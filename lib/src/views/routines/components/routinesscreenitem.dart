@@ -1,3 +1,5 @@
+import 'dart:developer';
+import 'package:html/parser.dart';
 import 'package:core/core.dart';
 import 'package:fiteens/src/views/routines/routinescreen.dart';
 import 'package:flutter/foundation.dart';
@@ -14,8 +16,8 @@ class RoutinesScreenItem extends StatelessWidget{
   @override
   Widget build(BuildContext context){
     if(kDebugMode){
-     // log('Displaying RoutinesScreenItem, routine raw data:');
-    //  routine.data?.forEach((key, value) {log("$key:$value");});
+      log('Displaying RoutinesScreenItem, routine raw data:');
+      routine.data?.forEach((key, value) {log("$key:$value");});
     }
     return  Center(
         child:
@@ -28,10 +30,10 @@ class RoutinesScreenItem extends StatelessWidget{
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       ListTile(
-                        leading: (routine.image!=null && routine.image!.urlpath!=null) ? Image.network(routine.image!.urlpath! ,width:50): Icon(Icons.sports_gymnastics),
+                        leading: routine.imageUrl!=null ? Image.network(routine.imageUrl! ,width:50): Icon(Icons.sports_gymnastics),
                         title: Text((routine.name != null ? routine.name: AppLocalizations.of(context)!.unnamedRoutine)!),
-                        subtitle: Html(data:(routine.description??''),
-                          ),
+                        subtitle: Text(parse(routine.description??'').body!.text,maxLines:3,style: TextStyle(overflow: TextOverflow.ellipsis),),
+
                         isThreeLine: true,
                       ),
                       Row(

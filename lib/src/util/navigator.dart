@@ -1,11 +1,12 @@
+
 import 'package:flutter/material.dart';
 import 'package:fiteens/src/views/webpage/webpageview.dart';
 import '../views/activity/activity.dart';
 import 'package:core/core.dart' as core;
 
-goToActivity(BuildContext context, core.Activity item) {
+goToActivity(BuildContext context, core.Activity item,{core.ActivityVisit? visit}) {
 
-  _pushWidgetWithFade(context, ActivityScreen(item));
+  _pushWidgetWithFade(context, ActivityScreen(item,visit:visit));
 }
 goToWebPage(BuildContext context, core.WebPage item, {replace = false}) {
 

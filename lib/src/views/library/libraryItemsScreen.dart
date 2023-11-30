@@ -24,7 +24,7 @@ class LibraryItemsScreen extends StatefulWidget {
 class _LibraryItemsScreenState extends State<LibraryItemsScreen> {
 
   Widget defaultContent = const CircularProgressIndicator();
-
+  bool loaded = false;
   @override
   void initState(){
     super.initState();
@@ -35,7 +35,8 @@ class _LibraryItemsScreenState extends State<LibraryItemsScreen> {
     'activitystatus' : 'active',  // only load active items
       'activityclass' : widget.activityClass.id.toString()
     };
-    Provider.of<ActivityProvider>(context,listen: false).getItems(params,reload: widget.refresh);
+    Provider.of<ActivityProvider>(context,listen: false).getItems(params,reload: widget.refresh || loaded==false ? true : false);
+    loaded = true;
   }
 
   @override
@@ -130,7 +131,7 @@ class _LibraryItemsScreenState extends State<LibraryItemsScreen> {
           }
           constants.Router.navigate(context,'library',widget.navIndex,refresh: true);
         },
-        child: libraryView
+        child: loaded ? libraryView : CircularProgressIndicator()
     );
     }
 

@@ -6,7 +6,6 @@
     "visitRemoved",
     "activityLevel",
     "currentStation",
-    "easyBooks",
     "fieldCannotBeEmpty",
     "healthyFood",
     "healthyLifestyle",

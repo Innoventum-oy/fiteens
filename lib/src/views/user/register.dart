@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:fiteens/src/widgets/widgets.dart';
@@ -36,7 +38,7 @@ class _RegisterState extends State<Register> {
     'password': new TextEditingController(),
     'confirmPassword' : new TextEditingController(),
     'guardianName': new TextEditingController(),
-    'guardianPhone': new TextEditingController()
+    'guardianPhone': new TextEditingController(),
   };
 
   List<Widget> formButtons(auth, userProvider) {
@@ -182,20 +184,20 @@ class _RegisterState extends State<Register> {
       IconData? icon,
       TextEditingController? controller,
       String? Function(String?)? validatorFunction,
-      Function? onSave,
+      Function? onChanged,
       bool isPassword = false
     }){
       Widget? suffix = isPassword ?showTextIconButton(field) : null;
       return Column(
         children:[
-          label(title),
-          SizedBox(height: 5.0),
+          //label(title),
+          //SizedBox(height: 5.0),
           TextFormField(
           obscureText: (isPassword && _showPassword[field]==null || _showPassword[field]==false) ? true : false,
           autofocus: autoFocus,
           controller: controller,
           validator: validatorFunction,
-          onSaved: onSave != null ? onSave() : (value)=> _formData[field] = value,
+          onChanged: onChanged != null ? onChanged() : (value)=> _formData[field] = value,
           decoration: buildInputDecoration(title, icon,suffixIcon: suffix),
 
           ),
@@ -275,9 +277,13 @@ class _RegisterState extends State<Register> {
       field:'confirmPassword',
       title:AppLocalizations.of(context)!.confirmPassword,
       icon: Icons.lock,
+      controller:controllers['confirmpassword'],
       validatorFunction: (value) {
+        _formData.forEach((key, value) {log("$key: $value");});
         if (value != _formData['password']) {
+          log("${_formData['password']} != $value");
           return AppLocalizations.of(context)!.passwordsDontMatch;
+
         }
         if (value!.isEmpty)
           return AppLocalizations.of(context)!.passwordIsRequired;
@@ -405,6 +411,8 @@ class _RegisterState extends State<Register> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
+            Center(child: Icon(Icons.check_circle,size: 80,)),
+            Center(child:Text(AppLocalizations.of(context)!.accountCreated),),
             SizedBox(height: 15.0),
             ElevatedButton(
                 onPressed: () {

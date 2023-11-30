@@ -1,5 +1,7 @@
 import 'package:core/core.dart';
+import 'package:fiteens/src/util/styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import '../../../util/navigator.dart';
 import '../libraryItemsScreen.dart';
 
@@ -25,12 +27,20 @@ class ActivityClassItem extends StatelessWidget {
 
               Positioned(
                 bottom:0,
+                  left:0,
+                  right: 0,
+                  child:Container(
+                    decoration: BoxDecoration(
+                      color: secondaryThemeColor,
+                    ),
                   child: Padding(
+
                       padding: EdgeInsets.all(5),
                       child:
                   Text(activityClass.name?? '??',
-                      style: TextStyle(backgroundColor: Colors.blue))
+                      style: TextStyle(fontSize: 18))
                   )
+              ),
               )
             ]
         ),
