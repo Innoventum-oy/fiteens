@@ -1,40 +1,5 @@
 {
-  "fi": [
-    "activity",
-    "activityRegistrationSaved",
-    "activityRegistrationFailed",
-    "visitRemoved",
-    "activityLevel",
-    "currentStation",
-    "fieldCannotBeEmpty",
-    "healthyFood",
-    "healthyLifestyle",
-    "locationRetrieved",
-    "locations",
-    "noActivitiesFound",
-    "noActiveBenefits",
-    "noResourcesFound",
-    "noFormsFound",
-    "noVisitsToday",
-    "noVisitsFound",
-    "noUsersFound",
-    "openStation",
-    "pageCount",
-    "participants",
-    "physicalActivities",
-    "pleaseProvideValidPhoneOrEmail",
-    "priceToOpen",
-    "rateBook",
-    "readBooksList",
-    "readMore",
-    "readingProgress",
-    "returned",
-    "routines",
-    "saveAnswer",
-    "startAssessment",
-    "today",
-    "transitToStation",
-    "unnamedLibraryItem",
-    "untitled"
+  "es": [
+    "alreadyDone"
   ]
 }

@@ -126,7 +126,6 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
   @override
   Widget build(BuildContext context) {
 
-    ActivityVisitProvider visitProvider = Provider.of<ActivityVisitProvider>(context);
     Widget calendarView = defaultContent(Center(child:
       CircularProgressIndicator(),
 
@@ -144,9 +143,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
           if(kDebugMode) {
             log('reloading page');
           }
-          setState(){
-            Provider.of<ActivityVisitProvider>(context).loadingStatus = DataLoadingStatus.loading;
-          }
+          Provider.of<ActivityVisitProvider>(context).loadingStatus = DataLoadingStatus.loading;
           constants.Router.navigate(context,'calendar',widget.navIndex,refresh: true);
         },
         child: calendarView);
@@ -183,6 +180,11 @@ void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
       children: [
         TableCalendar<Map<String,dynamic>>(
           locale: Localizations.localeOf(context).toString(),//Intl.getCurrentLocale(),
+          availableCalendarFormats: {
+            CalendarFormat.month: AppLocalizations.of(context)!.month,
+            CalendarFormat.week: AppLocalizations.of(context)!.week,
+            CalendarFormat.twoWeeks: AppLocalizations.of(context)!.twoWeeks,
+          },
           firstDay: kFirstDay ?? kNow,
           lastDay: kLastDay ?? kNow,
           focusedDay: _focusedDay,

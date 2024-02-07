@@ -1,7 +1,6 @@
 import 'package:core/core.dart';
 import 'package:fiteens/src/util/styles.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
 import '../../../util/navigator.dart';
 import '../libraryItemsScreen.dart';
 

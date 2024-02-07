@@ -105,37 +105,68 @@ class _ActivityScreenState extends State<ActivityScreen> {
         // already done
         buttons.add(ElevatedButton.icon(
           icon: Icon(Icons.check),
-            onPressed: (()=> null), label: Text('Already done'), ));
+            onPressed: (()=> null), label: Text(AppLocalizations.of(context)!.alreadyDone), ));
       }
-      else if(visit!=null && visit!.visitstatus == 'cancelled'){
+      else if(visit!=null && visit.visitstatus == 'cancelled'){
         buttons.add(ElevatedButton.icon(
           icon: Icon(Icons.skip_next),
           onPressed: (()=> null), label: Text('Skipped'), ));
       }
-      else buttons.add(ElevatedButton(
-        child: _apiClient.isProcessing ?  SizedBox(
-            height: 20,
-            width: 20,
-            child: CircularProgressIndicator(
-          value: null,
-          semanticsLabel: AppLocalizations.of(context)!.loading,
-        )) : Text(AppLocalizations.of(context)!.btnMarkAsDone),
-        onPressed: () {
-          if(visit!=null) {
-            if(visit.startdate!.isAfter(DateTime.now())){
-              showMessage(context, AppLocalizations.of(context)!.eventInFuture, Text(AppLocalizations.of(context)!.eventCannotBeMarkedBeforeDate(DateFormat('d.M.y').format(visit.startdate!) ??'')));
-              return;
+      else {
+        // add visit - button
+        buttons.add(ElevatedButton(
+          child: _apiClient.isProcessing ? SizedBox(
+              height: 20,
+              width: 20,
+              child: CircularProgressIndicator(
+                value: null,
+                semanticsLabel: AppLocalizations.of(context)!.loading,
+              )) : Text(AppLocalizations.of(context)!.btnMarkAsDone),
+          onPressed: () {
+            if (visit != null) {
+              if (visit.startdate!.isAfter(DateTime.now())) {
+                showMessage(
+                    context, AppLocalizations.of(context)!.eventInFuture, Text(
+                    AppLocalizations.of(context)!.eventCannotBeMarkedBeforeDate(
+                        DateFormat('d.M.y').format(visit.startdate!))));
+                return;
+              }
             }
-          }
-          
-          recordActivity(activity,user,visit:visit);
-          setState(() {
-            if(kDebugMode)
-            log('marking activity {$activity.name} as done');
-          });
 
-        },
-      ));
+            recordActivity(activity, user, visit: visit);
+            setState(() {
+              if (kDebugMode)
+                log('marking activity {$activity.name} as done');
+            });
+          },
+        ));
+        // add skip - button
+        buttons.add(ElevatedButton(
+          child: _apiClient.isProcessing ? SizedBox(
+              height: 20,
+              width: 20,
+              child: CircularProgressIndicator(
+                value: null,
+                semanticsLabel: AppLocalizations.of(context)!.loading,
+              )) : Text(AppLocalizations.of(context)!.btnSkip),
+          onPressed: () {
+            if (visit != null) {
+              if (visit.startdate!.isAfter(DateTime.now())) {
+                showMessage(
+                    context, AppLocalizations.of(context)!.eventInFuture, Text(
+                    AppLocalizations.of(context)!.eventCannotBeSkippedBeforeDate(
+                        DateFormat('d.M.y').format(visit.startdate!))));
+                return;
+              }
+            }
+            recordActivity(activity, user, visit: visit, visitstatus: 'cancelled');
+            setState(() {
+              if (kDebugMode)
+                log('skipping activity {$activity.name}');
+            });
+          },
+        ));
+      }
 
 
     }
@@ -205,15 +236,19 @@ class _ActivityScreenState extends State<ActivityScreen> {
       ),
     );
   }
-  void recordActivity(core.Activity activity,core.User user,{core.ActivityVisit? visit}) async
+  void recordActivity(core.Activity activity,core.User user,{core.ActivityVisit? visit, String visitstatus = 'visited'}) async
   {
     if(kDebugMode){
-      log('Recording visit to activity ${activity.name} (visit: ${visit?.id})');
+      log('Recording visit to activity ${activity.name} (visit: ${visit?.id}, status: $visitstatus)');
     }
     if (!_apiClient.isProcessing) {
 
       Map<String,dynamic> result = await _apiClient.registerForActivity(
-          activity.id, user,visitstatus: 'visited',visit:visit);
+          activity.id,
+          user,
+          visitstatus: visitstatus,
+          visit:visit
+      );
       setState(() {
         switch(result['status'])
         {
@@ -286,13 +321,6 @@ class _ActivityScreenState extends State<ActivityScreen> {
                     ]))));
   }
   Widget _buildContentSection(core.Activity activity) {
-    int calculateDifference(DateTime date) {
-      DateTime now = DateTime.now();
-      return DateTime(date.year, date.month, date.day)
-          .difference(DateTime(now.year, now.month, now.day))
-          .inDays;
-    }
-
 
     List<Widget> slivers = [
       Container(
@@ -342,7 +370,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                 textAlign: TextAlign.center),
           ),
         )
-            : activity.data?['reasoning']!=null && activity.data?['reasoning'].length >0 ? _parseHtml(activity.data?['reasoning']?? ''):Container(),
+            : activity.data!=null && activity.data?['reasoning']!=null && activity.data?['reasoning'].length >0 ? _parseHtml(activity.data?['reasoning']?? ''):Container(),
       ),
     ));
     return SliverList(

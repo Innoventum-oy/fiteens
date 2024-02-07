@@ -16,11 +16,12 @@ List<Widget> badgeDisplays(badges, activityCount,context) {
     return data;
   }
     for (var badge in badges) {
+
       Key badgeKey = Key('badge-' + badge.id.toString());
       data.add(badgeDisplay(badge, activityCount, badgeKey,context!));
       if (!firstVisibleBadgeSet) {
-        double percentage = badge.getValue('requiredactivitycount') != null
-            ? activityCount / badge.getValue('requiredactivitycount')
+        double percentage = badge.getValue('requiredactivities') != null
+            ? activityCount / int.parse(badge.getValue('requiredactivities'))
             : 1;
         if (percentage < 1) {
           //ensure this badge is visible

@@ -56,11 +56,10 @@ class _LibraryScreenState extends State<LibraryScreen> {
   @override
   Widget build(BuildContext context) {
 
-    Widget libraryView;
-    // Libraryview consists of a tabbar with 2 tabs: Challenges and Library
+    // Libraryview consists of a tabbar with N tabs: One tab for challenges and one tab for each pagecategory of WebPages
     // Challenges are Activities
-    // Library is WebPages  
     // Provider provides us with the data
+   // if(webPageProvider.)
     //Create TabBar
     TabBar tabBar = TabBar(
       tabs: [
@@ -173,9 +172,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
           if(kDebugMode) {
             log('reloading page');
           }
-          setState(){
 
-          }
           constants.Router.navigate(context,'library',widget.navIndex,refresh: true);
         },
 

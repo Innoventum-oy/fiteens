@@ -15,13 +15,16 @@ import 'package:fiteens/src/views/user/passwordform.dart';
 import 'package:fiteens/src/util/utils.dart';
 import 'package:fiteens/src/views/user/validatecontact.dart';
 import 'package:core/core.dart' as core;
+//import 'package:hive_flutter/adapters.dart';
 import 'package:intl/intl.dart';
+//import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   /*
+  WidgetsFlutterBinding.ensureInitialized();
   final appDocumentDirectory = await getApplicationDocumentsDirectory();
   final targetEnvironment = await Settings().getServerName();
   await Hive.initFlutter("${appDocumentDirectory.path}/$targetEnvironment");
@@ -55,8 +58,6 @@ class Fiteens extends StatelessWidget {
     if (kDebugMode) {
       log('build called for application (main.dart)');
     }
-
-
 
         return  MaterialApp(
           title: 'Fiteens',

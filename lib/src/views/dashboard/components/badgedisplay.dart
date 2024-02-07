@@ -1,13 +1,19 @@
 
 /* Single badge progress indicator */
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import '../../../util/utils.dart';
 import '../../badge.dart';
 
 Widget badgeDisplay(badge, activityCount, key,context) {
-  double percentage = badge.getValue('requiredActivityCount') != null
-      ? activityCount / badge.getValue('requiredActivityCount')
+  if(kDebugMode){
+    // log activity count and required activities
+    print('activity count: '+activityCount.toString());
+    print('required activities: '+badge.getValue('requiredactivities').toString());
+  }
+  double percentage = badge.getValue('requiredactivities') != null
+      ? activityCount / int.parse(badge.getValue('requiredactivities'))
       : 1;
   if (percentage > 1) percentage = 1;
   //print('badge color: '+badge.color);

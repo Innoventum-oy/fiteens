@@ -23,7 +23,10 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m0(startdate) =>
       "You cannot mark this activity as done before ${startdate}";
 
-  static String m1(item) => "${Intl.select(item, {
+  static String m1(startdate) =>
+      "You cannot skip this activity before ${startdate}";
+
+  static String m2(item) => "${Intl.select(item, {
             'home': 'Home',
             'calendar': 'Calendar',
             'routines': 'Routines',
@@ -60,6 +63,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "address": MessageLookupByLibrary.simpleMessage("Address"),
         "ageOver13":
             MessageLookupByLibrary.simpleMessage("Are you 13+ years old?"),
+        "alreadyDone": MessageLookupByLibrary.simpleMessage("Already done"),
+        "answerDate": MessageLookupByLibrary.simpleMessage("Answer date"),
         "answerSaved": MessageLookupByLibrary.simpleMessage("Answer saved"),
         "appName": MessageLookupByLibrary.simpleMessage("FiTeens"),
         "authenticating": MessageLookupByLibrary.simpleMessage(
@@ -77,6 +82,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "btnSetNewPassword":
             MessageLookupByLibrary.simpleMessage("Set Password"),
         "btnShow": MessageLookupByLibrary.simpleMessage("Show"),
+        "btnSkip": MessageLookupByLibrary.simpleMessage("Skip"),
         "btnTasks": MessageLookupByLibrary.simpleMessage("Tasks"),
         "btnUseEmail": MessageLookupByLibrary.simpleMessage("Use Email"),
         "btnUsePhone": MessageLookupByLibrary.simpleMessage("Use Phone number"),
@@ -84,19 +90,15 @@ class MessageLookup extends MessageLookupByLibrary {
             "Validate contact information now"),
         "btnValidateContactLater":
             MessageLookupByLibrary.simpleMessage("Later"),
-        "buggers": MessageLookupByLibrary.simpleMessage("Oh buggers"),
         "calendar": MessageLookupByLibrary.simpleMessage("Calendar"),
         "calendarUpdated":
             MessageLookupByLibrary.simpleMessage("Calendar updated"),
-        "cameraNotAvailable":
-            MessageLookupByLibrary.simpleMessage("No camera available"),
         "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "cannotSaveEmptyForm":
             MessageLookupByLibrary.simpleMessage("Cannot save empty form"),
         "challenges": MessageLookupByLibrary.simpleMessage("Challenges"),
         "choose": MessageLookupByLibrary.simpleMessage("Choose"),
         "chooseFile": MessageLookupByLibrary.simpleMessage("Choose file"),
-        "city": MessageLookupByLibrary.simpleMessage("City"),
         "clickPictureToChooseAvatar": MessageLookupByLibrary.simpleMessage(
             "Click picture to choose an avatar"),
         "codeAccepted": MessageLookupByLibrary.simpleMessage("Code accepted"),
@@ -121,8 +123,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "couldNotOpenLink":
             MessageLookupByLibrary.simpleMessage("Could not open link"),
         "createAccount": MessageLookupByLibrary.simpleMessage("Create account"),
-        "currentStation":
-            MessageLookupByLibrary.simpleMessage("Current station"),
         "dateRange": MessageLookupByLibrary.simpleMessage("Date range"),
         "deleteAccount": MessageLookupByLibrary.simpleMessage("Delete account"),
         "deleteYourAccount":
@@ -148,6 +148,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "errorsInForm":
             MessageLookupByLibrary.simpleMessage("Errors in form contents"),
         "eventCannotBeMarkedBeforeDate": m0,
+        "eventCannotBeSkippedBeforeDate": m1,
         "eventInFuture": MessageLookupByLibrary.simpleMessage(
             "The activity is planned in the future"),
         "eventLog": MessageLookupByLibrary.simpleMessage("Event Log"),
@@ -164,7 +165,6 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Forgot password?"),
         "formIsEmpty": MessageLookupByLibrary.simpleMessage("Form is empty"),
         "forms": MessageLookupByLibrary.simpleMessage("Forms"),
-        "frontCamera": MessageLookupByLibrary.simpleMessage("Front Camera"),
         "getCode": MessageLookupByLibrary.simpleMessage("Get code"),
         "great": MessageLookupByLibrary.simpleMessage("Great!"),
         "groupCode": MessageLookupByLibrary.simpleMessage("Group code"),
@@ -184,26 +184,22 @@ class MessageLookup extends MessageLookupByLibrary {
         "lastName": MessageLookupByLibrary.simpleMessage("Last name"),
         "library": MessageLookupByLibrary.simpleMessage("Library"),
         "libraryIsEmpty":
-            MessageLookupByLibrary.simpleMessage("Library is currently empty"),
+            MessageLookupByLibrary.simpleMessage("Library is empty"),
         "loading": MessageLookupByLibrary.simpleMessage("Loading"),
-        "locationRetrieved":
-            MessageLookupByLibrary.simpleMessage("Location retrieved"),
         "locations": MessageLookupByLibrary.simpleMessage("Locations"),
         "login": MessageLookupByLibrary.simpleMessage("Login"),
         "loginFailed": MessageLookupByLibrary.simpleMessage("Login failed"),
         "loginTitle": MessageLookupByLibrary.simpleMessage("Login"),
         "logout": MessageLookupByLibrary.simpleMessage("Logout"),
+        "month": MessageLookupByLibrary.simpleMessage("Month"),
         "moreInformation":
             MessageLookupByLibrary.simpleMessage("More information"),
         "myActivities": MessageLookupByLibrary.simpleMessage("My activities"),
-        "myCard": MessageLookupByLibrary.simpleMessage("My Card"),
         "myPoints": MessageLookupByLibrary.simpleMessage("My points"),
         "myScore": MessageLookupByLibrary.simpleMessage("My Score"),
-        "navitem": m1,
+        "navitem": m2,
         "next": MessageLookupByLibrary.simpleMessage("Next"),
         "no": MessageLookupByLibrary.simpleMessage("no"),
-        "noActiveBenefits":
-            MessageLookupByLibrary.simpleMessage("No active benefits"),
         "noActivitiesFound": MessageLookupByLibrary.simpleMessage(
             "Could not find any activities"),
         "noContactMethodsFound":
@@ -219,13 +215,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "noUsersFound": MessageLookupByLibrary.simpleMessage("No users found"),
         "noVisitsFound":
             MessageLookupByLibrary.simpleMessage("No visits found"),
-        "noVisitsToday":
-            MessageLookupByLibrary.simpleMessage("No visits today"),
         "notVerified": MessageLookupByLibrary.simpleMessage("Not verified"),
         "notification": MessageLookupByLibrary.simpleMessage("Notification"),
         "ok": MessageLookupByLibrary.simpleMessage("Ok"),
         "oops": MessageLookupByLibrary.simpleMessage("Oops!"),
-        "openStation": MessageLookupByLibrary.simpleMessage("Open station"),
         "otherItems": MessageLookupByLibrary.simpleMessage("Other"),
         "pageContent": MessageLookupByLibrary.simpleMessage("Page content"),
         "pageCount": MessageLookupByLibrary.simpleMessage("Page count:"),
@@ -244,8 +237,6 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Physical activities"),
         "pleaseCompleteFormProperly": MessageLookupByLibrary.simpleMessage(
             "Please complete the form properly"),
-        "pleaseEnableCamera": MessageLookupByLibrary.simpleMessage(
-            "Please enable camera for scanning QR codes"),
         "pleaseEnterConfirmationKey": MessageLookupByLibrary.simpleMessage(
             "Please enter confirmation key"),
         "pleaseEnterPassword":
@@ -254,8 +245,6 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Please enter phone number"),
         "pleaseEnterPhoneOrEmail": MessageLookupByLibrary.simpleMessage(
             "Please enter phone number or email address"),
-        "pleaseProvideRegistrationCode": MessageLookupByLibrary.simpleMessage(
-            "Please provide the registration code given by your school or library"),
         "pleaseProvideValidEmail": MessageLookupByLibrary.simpleMessage(
             "Please provide a valid email address"),
         "pleaseProvideValidPhoneNumber": MessageLookupByLibrary.simpleMessage(
@@ -268,22 +257,11 @@ class MessageLookup extends MessageLookupByLibrary {
             "Registering account, please wait"),
         "pleaseWaitSendingCode":
             MessageLookupByLibrary.simpleMessage("Please wait, sending code"),
-        "postcode": MessageLookupByLibrary.simpleMessage("Postcode"),
         "previous": MessageLookupByLibrary.simpleMessage("Previous"),
-        "priceToOpen": MessageLookupByLibrary.simpleMessage("Price"),
         "privacyPolicy": MessageLookupByLibrary.simpleMessage("Privacy policy"),
         "processing": MessageLookupByLibrary.simpleMessage("Processing"),
-        "qrScanner": MessageLookupByLibrary.simpleMessage("QR Scanner"),
-        "rateBook": MessageLookupByLibrary.simpleMessage("Rate book"),
         "ratingSaved": MessageLookupByLibrary.simpleMessage("Rating saved"),
-        "readBooksList": MessageLookupByLibrary.simpleMessage("Read books"),
-        "readList": MessageLookupByLibrary.simpleMessage("Book list"),
-        "readListIsEmpty":
-            MessageLookupByLibrary.simpleMessage("Book list is empty!"),
         "readMore": MessageLookupByLibrary.simpleMessage("Read more"),
-        "readingProgress": MessageLookupByLibrary.simpleMessage("Your status"),
-        "readyToScan": MessageLookupByLibrary.simpleMessage("Scanner ready"),
-        "rearCamera": MessageLookupByLibrary.simpleMessage("Rear Camera"),
         "refresh": MessageLookupByLibrary.simpleMessage("Refresh"),
         "registrationFailed":
             MessageLookupByLibrary.simpleMessage("Registration failed"),
@@ -295,7 +273,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "resume": MessageLookupByLibrary.simpleMessage("Resume"),
         "retrievingCoordinates":
             MessageLookupByLibrary.simpleMessage("Retrieving coordinates"),
-        "returned": MessageLookupByLibrary.simpleMessage("Returned"),
         "routineAddedToCalendar":
             MessageLookupByLibrary.simpleMessage("Routine added to calendar"),
         "routines": MessageLookupByLibrary.simpleMessage("Routines"),
@@ -317,8 +294,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "thankyouForFeedback":
             MessageLookupByLibrary.simpleMessage("Thank you for your input!"),
         "today": MessageLookupByLibrary.simpleMessage("Today"),
-        "transitToStation":
-            MessageLookupByLibrary.simpleMessage("Transit to station"),
+        "twoWeeks": MessageLookupByLibrary.simpleMessage("Two weeks"),
         "unknownUser": MessageLookupByLibrary.simpleMessage("unknown user"),
         "unnamed": MessageLookupByLibrary.simpleMessage("Unnamed"),
         "unnamedActivity":
@@ -330,6 +306,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "unnamedWebPage": MessageLookupByLibrary.simpleMessage("Untitled page"),
         "untitled": MessageLookupByLibrary.simpleMessage("Untitled"),
         "useCode": MessageLookupByLibrary.simpleMessage("Use code"),
+        "userInformation":
+            MessageLookupByLibrary.simpleMessage("User information"),
         "userNotFound": MessageLookupByLibrary.simpleMessage("User not found"),
         "validateContactTitle": MessageLookupByLibrary.simpleMessage(
             "Validate contact information"),
@@ -338,6 +316,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "verified": MessageLookupByLibrary.simpleMessage("Verified"),
         "verify": MessageLookupByLibrary.simpleMessage("verify"),
         "visitRemoved": MessageLookupByLibrary.simpleMessage("Visit removed"),
+        "week": MessageLookupByLibrary.simpleMessage("Week"),
         "welcomeInfo":
             MessageLookupByLibrary.simpleMessage("Show welcome info"),
         "writeAnswerHere":

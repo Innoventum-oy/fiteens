@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fiteens/src/util/utils.dart';
@@ -6,6 +9,9 @@ import 'package:provider/provider.dart';
 import 'package:fiteens/src/util/styles.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:core/core.dart' as core;
+
+import '../../widgets/videoplayer.dart';
+
 
 class WebPageView extends StatefulWidget {
   final core.WebPage _webPage;
@@ -22,15 +28,13 @@ class _WebPageViewState extends State<WebPageView> {
   //final ApiClient _apiClient = ApiClient();
   Map<String, dynamic>? map;
 
-  //List<Keyword> hashtags = [];
-  //List<Keyword> themes = [];
   int iteration = 1;
   int buildtime = 1;
   core.WebPage webPage = new core.WebPage();
   LoadingState _loadingState = LoadingState.waiting;
   //bool _visible = false;
   core.User? user;
-
+  String? baseUrl;
   //dynamic _webPageDetails;
   // final core.ApiClient _apiClient = core.ApiClient();
 
@@ -51,14 +55,11 @@ class _WebPageViewState extends State<WebPageView> {
   void initState() {
     super.initState();
     this.webPage = widget._webPage;
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      //User user = Provider.of<UserProvider>(context, listen: false).user;
 
-      // _loadDetails(user);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
 
       _loadWebPage(this.user);
-      //loadThemes();
-      //loadHashtags();
+
     });
 
     // Timer(Duration(milliseconds: 100), () => setState(() => _visible = true));
@@ -73,14 +74,21 @@ class _WebPageViewState extends State<WebPageView> {
     try {
       dynamic details =
           await widget.provider.getDetails(widget._webPage.id!);
-
+        // if page has video, get base url
+      if(details['data']['videourl']!=null){
+        baseUrl = await core.ApiClient().baseUrl;
+      }
       setState(() {
         if (details != null) {
+          if(kDebugMode){
+            log('webpageview: loaded details for id ${widget._webPage.id} with data $details');
+          }
           this.webPage = core.WebPage.fromJson(details);
           _loadingState = LoadingState.done;
         } else {
           _loadingState = LoadingState.error;
         }
+
       });
     } catch (e, stack) {
       print('loadDetails returned error $e\n Stack trace:\n $stack');
@@ -90,13 +98,15 @@ class _WebPageViewState extends State<WebPageView> {
     }
   }
 
+
+
   @override
   Widget build(BuildContext context) {
-    // print('rebuilding webPage view');
+     print('rebuilding webPage view');
     this.user = Provider.of<core.UserProvider>(context).user;
 
     return Scaffold(
-        backgroundColor: primary,
+        backgroundColor:appBackground,
         body: CustomScrollView(
           slivers: <Widget>[
             _buildAppBar(),
@@ -114,6 +124,22 @@ class _WebPageViewState extends State<WebPageView> {
   }
 
   Widget _buildAppBar() {
+    core.WebPage page = this.webPage;
+
+
+    Widget heroWidget = Hero(
+      tag: "WebPage-Tag-${widget._webPage.id}",
+      child: widget._webPage.thumbnailUrl != null
+          ? FadeInImage.assetNetwork(
+        fit: BoxFit.contain,
+        width: double.infinity,
+        placeholder: 'images/webPage-placeholder.png',
+        image: widget._webPage.thumbnailUrl!,
+      )
+          : Image(
+          image: AssetImage('images/webPage-placeholder.png')),
+    );
+
     return SliverAppBar(
       expandedHeight: 240.0,
       pinned: true,
@@ -121,6 +147,11 @@ class _WebPageViewState extends State<WebPageView> {
         background: Stack(
           fit: StackFit.expand,
           children: <Widget>[
+            page.data?['videourl'] !=null ? (baseUrl!=null ?
+            VideoPlayerElement(
+              url: Uri.https(baseUrl!,page.data?['videourl']).toString(),
+            )
+                : CircularProgressIndicator()) :
             GestureDetector(
               onTap: () {
                 if (widget._webPage.thumbnailUrl != null)
@@ -128,18 +159,7 @@ class _WebPageViewState extends State<WebPageView> {
                     return DetailScreen(widget._webPage.thumbnailUrl!);
                   }));
               },
-              child: Hero(
-                tag: "WebPage-Tag-${widget._webPage.id}",
-                child: widget._webPage.thumbnailUrl != null
-                    ? FadeInImage.assetNetwork(
-                        fit: BoxFit.contain,
-                        width: double.infinity,
-                        placeholder: 'images/webPage-placeholder.png',
-                        image: widget._webPage.thumbnailUrl!,
-                      )
-                    : Image(
-                        image: AssetImage('images/webPage-placeholder.png')),
-              ),
+              child: heroWidget
             ),
             // BottomGradient(),
             //_buildMetaSection(webPage)

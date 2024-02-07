@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:core/core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -50,9 +53,6 @@ class _DashBoardState extends State<DashBoard> {
       final Map<String, dynamic> badgeParams = {
         //'fields' : 'title,description,coverpictureurl,level,identifier',
         'requiredactivities': "gt:0",
-
-        /// Todo: support parameter in back-end
-
         'sort': 'requiredactivities',
       };
       Provider.of<core.BadgeProvider>(context, listen: false)
@@ -75,8 +75,10 @@ class _DashBoardState extends State<DashBoard> {
     this.user = Provider.of<core.UserProvider>(context).user;
     this.badges = (Provider.of<core.BadgeProvider>(context).list ?? []);
     this.page = Provider.of<core.WebPageProvider>(context).current ?? null;
-    print(
-        'building dasboard state($buildIteration), ${this.badges.length} badges');
+    if(kDebugMode) {
+      log('building dasboard state($buildIteration), ${this.badges
+          .length} badges,available score: ${this.user.getValue('availablescore')} activity count ${this.user.getValue('activitycount')}');
+    }
 
     /// open login if user token is not found
     if (this.user.token == null) {
@@ -130,13 +132,13 @@ class _DashBoardState extends State<DashBoard> {
             ],
           ),
           body: ListView(children: <Widget>[
-            userTile(user, context),
+            userTile(this.user, context),
             SizedBox(height: 10),
             Padding(
                 padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                 child: Card(
                     elevation: 3.0,
-                    child: achievements(user, badges, context))),
+                    child: achievements(this.user, badges, context))),
             ...navItems.map((navItem) => (navItem.displayInDashboard
                 ? dashboardTile(navItem)
                 : Container())),

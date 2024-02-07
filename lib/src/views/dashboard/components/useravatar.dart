@@ -7,7 +7,7 @@ Widget userAvatar(core.User user,context,{Function? onTap,String? currentAvatar}
   ImageProvider image;
   String? avatar = currentAvatar ?? user.data?['avatar'];
   if(avatar!=null)
-    image = Image.asset(avatar,
+    image = Image.asset(avatar.replaceAll('"', ''),
         width:20,
         height:20,
         fit:BoxFit.cover
@@ -15,7 +15,9 @@ Widget userAvatar(core.User user,context,{Function? onTap,String? currentAvatar}
   else if (user.image != null && user.image!.isNotEmpty)
     image = Image.network(
       width:30,
-      user.image!,
+
+
+      user.image!.replaceAll('"', ''),
       fit: BoxFit.cover
   ).image;
   else image = Image.asset('images/profile.png',

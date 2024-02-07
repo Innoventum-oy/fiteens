@@ -28,6 +28,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
     super.initState();
     log('Initing routinesview state, refresh: ${widget.refresh}');
     Map<String, dynamic> params = {
+      'accesslevel': 'read'
     };
     RoutineProvider routineProvider = Provider.of<RoutineProvider>(
         context, listen: false);
@@ -81,9 +82,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
           if(kDebugMode) {
             log('reloading page');
           }
-          setState(){
 
-          }
           constants.Router.navigate(context,'routines',widget.navIndex,refresh: true);
         },
         child: routineView);

@@ -1,18 +1,14 @@
 import 'dart:developer';
 
 import 'package:another_flushbar/flushbar.dart';
-import 'package:fiteens/src/util/styles.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
 import 'package:fiteens/src/widgets/widgets.dart';
 import 'package:fiteens/src/views/webpage/webpagetextcontent.dart';
 import 'package:flutter_settings_ui/flutter_settings_ui.dart';
 import 'package:provider/provider.dart';
-import 'package:fiteens/src/util/utils.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:package_info/package_info.dart';
-
 import 'package:core/core.dart' as core;
 
 class Login extends StatefulWidget {

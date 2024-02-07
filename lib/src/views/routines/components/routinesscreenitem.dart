@@ -5,7 +5,6 @@ import 'package:fiteens/src/views/routines/routinescreen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:fiteens/src/util/navigator.dart';
 class RoutinesScreenItem extends StatelessWidget{
 
@@ -24,6 +23,7 @@ class RoutinesScreenItem extends StatelessWidget{
         Card(
             child: InkWell(
                 onTap: () => {
+
                   goToWidget(context,RoutineScreen(routine))
                 },
                 child:Column(
@@ -31,7 +31,9 @@ class RoutinesScreenItem extends StatelessWidget{
                     children: <Widget>[
                       ListTile(
                         leading: routine.imageUrl!=null ? Image.network(routine.imageUrl! ,width:50): Icon(Icons.sports_gymnastics),
-                        title: Text((routine.name != null ? routine.name: AppLocalizations.of(context)!.unnamedRoutine)!),
+                        title: Text((routine.name != null ? routine.name: AppLocalizations.of(context)!.unnamedRoutine)!,
+
+                        ),
                         subtitle: Text(parse(routine.description??'').body!.text,maxLines:3,style: TextStyle(overflow: TextOverflow.ellipsis),),
 
                         isThreeLine: true,

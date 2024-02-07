@@ -126,9 +126,7 @@ class _LibraryItemsScreenState extends State<LibraryItemsScreen> {
           if(kDebugMode) {
             log('reloading page');
           }
-          setState(){
 
-          }
           constants.Router.navigate(context,'library',widget.navIndex,refresh: true);
         },
         child: loaded ? libraryView : CircularProgressIndicator()

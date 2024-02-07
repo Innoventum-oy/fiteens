@@ -60,6 +60,46 @@ class S {
     );
   }
 
+  /// `Account created`
+  String get accountCreated {
+    return Intl.message(
+      'Account created',
+      name: 'accountCreated',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `User account deleted`
+  String get accountDeleted {
+    return Intl.message(
+      'User account deleted',
+      name: 'accountDeleted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Account Deletion`
+  String get accountDeletion {
+    return Intl.message(
+      'Account Deletion',
+      name: 'accountDeletion',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Achievements`
+  String get achievements {
+    return Intl.message(
+      'Achievements',
+      name: 'achievements',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Activities`
   String get activities {
     return Intl.message(
@@ -90,21 +130,11 @@ class S {
     );
   }
 
-  /// `Activity marked as done`
-  String get activityRegistrationSaved {
+  /// `Activity level`
+  String get activityLevel {
     return Intl.message(
-      'Activity marked as done',
-      name: 'activityRegistrationSaved',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Updating activity status failed`
-  String get activityRegistrationFailed {
-    return Intl.message(
-      'Updating activity status failed',
-      name: 'activityRegistrationFailed',
+      'Activity level',
+      name: 'activityLevel',
       desc: '',
       args: [],
     );
@@ -120,61 +150,21 @@ class S {
     );
   }
 
-  /// `Adding routine to calendar failed`
-  String get addingRoutineFailed {
+  /// `Updating activity status failed`
+  String get activityRegistrationFailed {
     return Intl.message(
-      'Adding routine to calendar failed',
-      name: 'addingRoutineFailed',
+      'Updating activity status failed',
+      name: 'activityRegistrationFailed',
       desc: '',
       args: [],
     );
   }
 
-  /// `Visit removed`
-  String get visitRemoved {
+  /// `Activity marked as done`
+  String get activityRegistrationSaved {
     return Intl.message(
-      'Visit removed',
-      name: 'visitRemoved',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Account created`
-  String get accountCreated {
-    return Intl.message(
-      'Account created',
-      name: 'accountCreated',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Account Deletion`
-  String get accountDeletion {
-    return Intl.message(
-      'Account Deletion',
-      name: 'accountDeletion',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Achievements`
-  String get achievements {
-    return Intl.message(
-      'Achievements',
-      name: 'achievements',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Activity level`
-  String get activityLevel {
-    return Intl.message(
-      'Activity level',
-      name: 'activityLevel',
+      'Activity marked as done',
+      name: 'activityRegistrationSaved',
       desc: '',
       args: [],
     );
@@ -185,6 +175,16 @@ class S {
     return Intl.message(
       'Added to list',
       name: 'addedToList',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Adding routine to calendar failed`
+  String get addingRoutineFailed {
+    return Intl.message(
+      'Adding routine to calendar failed',
+      name: 'addingRoutineFailed',
       desc: '',
       args: [],
     );
@@ -205,6 +205,26 @@ class S {
     return Intl.message(
       'Are you 13+ years old?',
       name: 'ageOver13',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Already done`
+  String get alreadyDone {
+    return Intl.message(
+      'Already done',
+      name: 'alreadyDone',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Answer date`
+  String get answerDate {
+    return Intl.message(
+      'Answer date',
+      name: 'answerDate',
       desc: '',
       args: [],
     );
@@ -300,21 +320,21 @@ class S {
     );
   }
 
-  /// `Show`
-  String get btnShow {
-    return Intl.message(
-      'Show',
-      name: 'btnShow',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Return`
   String get btnReturn {
     return Intl.message(
       'Return',
       name: 'btnReturn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Return book`
+  String get btnReturnBook {
+    return Intl.message(
+      'Return book',
+      name: 'btnReturnBook',
       desc: '',
       args: [],
     );
@@ -340,11 +360,21 @@ class S {
     );
   }
 
-  /// `Return book`
-  String get btnReturnBook {
+  /// `Show`
+  String get btnShow {
     return Intl.message(
-      'Return book',
-      name: 'btnReturnBook',
+      'Show',
+      name: 'btnShow',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Skip`
+  String get btnSkip {
+    return Intl.message(
+      'Skip',
+      name: 'btnSkip',
       desc: '',
       args: [],
     );
@@ -400,16 +430,6 @@ class S {
     );
   }
 
-  /// `Oh buggers`
-  String get buggers {
-    return Intl.message(
-      'Oh buggers',
-      name: 'buggers',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Calendar`
   String get calendar {
     return Intl.message(
@@ -430,21 +450,21 @@ class S {
     );
   }
 
-  /// `No camera available`
-  String get cameraNotAvailable {
-    return Intl.message(
-      'No camera available',
-      name: 'cameraNotAvailable',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Cancel`
   String get cancel {
     return Intl.message(
       'Cancel',
       name: 'cancel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cannot save empty form`
+  String get cannotSaveEmptyForm {
+    return Intl.message(
+      'Cannot save empty form',
+      name: 'cannotSaveEmptyForm',
       desc: '',
       args: [],
     );
@@ -490,21 +510,11 @@ class S {
     );
   }
 
-  /// `City`
-  String get city {
+  /// `Code accepted`
+  String get codeAccepted {
     return Intl.message(
-      'City',
-      name: 'city',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Collected badges`
-  String get collectedBadges {
-    return Intl.message(
-      'Collected badges',
-      name: 'collectedBadges',
+      'Code accepted',
+      name: 'codeAccepted',
       desc: '',
       args: [],
     );
@@ -520,11 +530,11 @@ class S {
     );
   }
 
-  /// `Code accepted`
-  String get codeAccepted {
+  /// `Collected badges`
+  String get collectedBadges {
     return Intl.message(
-      'Code accepted',
-      name: 'codeAccepted',
+      'Collected badges',
+      name: 'collectedBadges',
       desc: '',
       args: [],
     );
@@ -560,26 +570,6 @@ class S {
     );
   }
 
-  /// `Contact methods`
-  String get contactMethods {
-    return Intl.message(
-      'Contact methods',
-      name: 'contactMethods',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Contact method`
-  String get contactMethod {
-    return Intl.message(
-      'Contact method',
-      name: 'contactMethod',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Contact information`
   String get contactInformation {
     return Intl.message(
@@ -595,6 +585,26 @@ class S {
     return Intl.message(
       'Contact validated',
       name: 'contactInformationValidated',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Contact method`
+  String get contactMethod {
+    return Intl.message(
+      'Contact method',
+      name: 'contactMethod',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Contact methods`
+  String get contactMethods {
+    return Intl.message(
+      'Contact methods',
+      name: 'contactMethods',
       desc: '',
       args: [],
     );
@@ -630,41 +640,11 @@ class S {
     );
   }
 
-  /// `Current station`
-  String get currentStation {
-    return Intl.message(
-      'Current station',
-      name: 'currentStation',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Date range`
   String get dateRange {
     return Intl.message(
       'Date range',
       name: 'dateRange',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `The user account is removed immediately. This action cannot be undone.`
-  String get deletingAccountCannotUndone {
-    return Intl.message(
-      'The user account is removed immediately. This action cannot be undone.',
-      name: 'deletingAccountCannotUndone',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Delete your account`
-  String get deleteYourAccount {
-    return Intl.message(
-      'Delete your account',
-      name: 'deleteYourAccount',
       desc: '',
       args: [],
     );
@@ -680,6 +660,26 @@ class S {
     );
   }
 
+  /// `Delete your account`
+  String get deleteYourAccount {
+    return Intl.message(
+      'Delete your account',
+      name: 'deleteYourAccount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The user account is removed immediately. This action cannot be undone.`
+  String get deletingAccountCannotUndone {
+    return Intl.message(
+      'The user account is removed immediately. This action cannot be undone.',
+      name: 'deletingAccountCannotUndone',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Failed to delete account`
   String get deletingAccountFailed {
     return Intl.message(
@@ -690,11 +690,11 @@ class S {
     );
   }
 
-  /// `Download Open Badge`
-  String get downloadOpenBadge {
+  /// `Discover`
+  String get discover {
     return Intl.message(
-      'Download Open Badge',
-      name: 'downloadOpenBadge',
+      'Discover',
+      name: 'discover',
       desc: '',
       args: [],
     );
@@ -710,21 +710,11 @@ class S {
     );
   }
 
-  /// `User account deleted`
-  String get accountDeleted {
+  /// `Download Open Badge`
+  String get downloadOpenBadge {
     return Intl.message(
-      'User account deleted',
-      name: 'accountDeleted',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Discover`
-  String get discover {
-    return Intl.message(
-      'Discover',
-      name: 'discover',
+      'Download Open Badge',
+      name: 'downloadOpenBadge',
       desc: '',
       args: [],
     );
@@ -760,21 +750,21 @@ class S {
     );
   }
 
-  /// `Enter new code`
-  String get enterNewCode {
-    return Intl.message(
-      'Enter new code',
-      name: 'enterNewCode',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Enter your Group Code here`
   String get enterGroupCode {
     return Intl.message(
       'Enter your Group Code here',
       name: 'enterGroupCode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter new code`
+  String get enterNewCode {
+    return Intl.message(
+      'Enter new code',
+      name: 'enterNewCode',
       desc: '',
       args: [],
     );
@@ -787,36 +777,6 @@ class S {
       name: 'enterPassword',
       desc: '',
       args: [],
-    );
-  }
-
-  /// `Event Log`
-  String get eventLog {
-    return Intl.message(
-      'Event Log',
-      name: 'eventLog',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `The activity is planned in the future`
-  String get eventInFuture {
-    return Intl.message(
-      'The activity is planned in the future',
-      name: 'eventInFuture',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `You cannot mark this activity as done before {startdate}`
-  String eventCannotBeMarkedBeforeDate(String startdate) {
-    return Intl.message(
-      'You cannot mark this activity as done before $startdate',
-      name: 'eventCannotBeMarkedBeforeDate',
-      desc: '',
-      args: [startdate],
     );
   }
 
@@ -835,6 +795,46 @@ class S {
     return Intl.message(
       'Errors in form contents',
       name: 'errorsInForm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You cannot mark this activity as done before {startdate}`
+  String eventCannotBeMarkedBeforeDate(String startdate) {
+    return Intl.message(
+      'You cannot mark this activity as done before $startdate',
+      name: 'eventCannotBeMarkedBeforeDate',
+      desc: '',
+      args: [startdate],
+    );
+  }
+
+  /// `You cannot skip this activity before {startdate}`
+  String eventCannotBeSkippedBeforeDate(String startdate) {
+    return Intl.message(
+      'You cannot skip this activity before $startdate',
+      name: 'eventCannotBeSkippedBeforeDate',
+      desc: '',
+      args: [startdate],
+    );
+  }
+
+  /// `The activity is planned in the future`
+  String get eventInFuture {
+    return Intl.message(
+      'The activity is planned in the future',
+      name: 'eventInFuture',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Event Log`
+  String get eventLog {
+    return Intl.message(
+      'Event Log',
+      name: 'eventLog',
       desc: '',
       args: [],
     );
@@ -880,31 +880,11 @@ class S {
     );
   }
 
-  /// `Thank you for your input!`
-  String get thankyouForFeedback {
-    return Intl.message(
-      'Thank you for your input!',
-      name: 'thankyouForFeedback',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `First name`
   String get firstName {
     return Intl.message(
       'First name',
       name: 'firstName',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Flash On`
-  String get flashOn {
-    return Intl.message(
-      'Flash On',
-      name: 'flashOn',
       desc: '',
       args: [],
     );
@@ -920,21 +900,11 @@ class S {
     );
   }
 
-  /// `Form is empty`
-  String get formIsEmpty {
+  /// `Flash On`
+  String get flashOn {
     return Intl.message(
-      'Form is empty',
-      name: 'formIsEmpty',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Cannot save empty form`
-  String get cannotSaveEmptyForm {
-    return Intl.message(
-      'Cannot save empty form',
-      name: 'cannotSaveEmptyForm',
+      'Flash On',
+      name: 'flashOn',
       desc: '',
       args: [],
     );
@@ -950,21 +920,21 @@ class S {
     );
   }
 
-  /// `Forms`
-  String get forms {
+  /// `Form is empty`
+  String get formIsEmpty {
     return Intl.message(
-      'Forms',
-      name: 'forms',
+      'Form is empty',
+      name: 'formIsEmpty',
       desc: '',
       args: [],
     );
   }
 
-  /// `Front Camera`
-  String get frontCamera {
+  /// `Forms`
+  String get forms {
     return Intl.message(
-      'Front Camera',
-      name: 'frontCamera',
+      'Forms',
+      name: 'forms',
       desc: '',
       args: [],
     );
@@ -1010,21 +980,21 @@ class S {
     );
   }
 
-  /// `Guardian phone`
-  String get guardianPhone {
-    return Intl.message(
-      'Guardian phone',
-      name: 'guardianPhone',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Guardian name`
   String get guardianName {
     return Intl.message(
       'Guardian name',
       name: 'guardianName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Guardian phone`
+  String get guardianPhone {
+    return Intl.message(
+      'Guardian phone',
+      name: 'guardianPhone',
       desc: '',
       args: [],
     );
@@ -1050,21 +1020,21 @@ class S {
     );
   }
 
-  /// `Failed to join group with given code`
-  String get joiningGroupFailed {
-    return Intl.message(
-      'Failed to join group with given code',
-      name: 'joiningGroupFailed',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `You have joined a new group`
   String get joinedToGroup {
     return Intl.message(
       'You have joined a new group',
       name: 'joinedToGroup',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to join group with given code`
+  String get joiningGroupFailed {
+    return Intl.message(
+      'Failed to join group with given code',
+      name: 'joiningGroupFailed',
       desc: '',
       args: [],
     );
@@ -1100,10 +1070,10 @@ class S {
     );
   }
 
-  /// `Library is currently empty`
+  /// `Library is empty`
   String get libraryIsEmpty {
     return Intl.message(
-      'Library is currently empty',
+      'Library is empty',
       name: 'libraryIsEmpty',
       desc: '',
       args: [],
@@ -1115,16 +1085,6 @@ class S {
     return Intl.message(
       'Loading',
       name: 'loading',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Location retrieved`
-  String get locationRetrieved {
-    return Intl.message(
-      'Location retrieved',
-      name: 'locationRetrieved',
       desc: '',
       args: [],
     );
@@ -1180,6 +1140,16 @@ class S {
     );
   }
 
+  /// `Month`
+  String get month {
+    return Intl.message(
+      'Month',
+      name: 'month',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `More information`
   String get moreInformation {
     return Intl.message(
@@ -1195,16 +1165,6 @@ class S {
     return Intl.message(
       'My activities',
       name: 'myActivities',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `My Card`
-  String get myCard {
-    return Intl.message(
-      'My Card',
-      name: 'myCard',
       desc: '',
       args: [],
     );
@@ -1279,16 +1239,6 @@ class S {
     );
   }
 
-  /// `No active benefits`
-  String get noActiveBenefits {
-    return Intl.message(
-      'No active benefits',
-      name: 'noActiveBenefits',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `No contact methods found`
   String get noContactMethodsFound {
     return Intl.message(
@@ -1304,6 +1254,16 @@ class S {
     return Intl.message(
       'No description',
       name: 'noDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No forms found`
+  String get noFormsFound {
+    return Intl.message(
+      'No forms found',
+      name: 'noFormsFound',
       desc: '',
       args: [],
     );
@@ -1329,46 +1289,6 @@ class S {
     );
   }
 
-  /// `No forms found`
-  String get noFormsFound {
-    return Intl.message(
-      'No forms found',
-      name: 'noFormsFound',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `No visits today`
-  String get noVisitsToday {
-    return Intl.message(
-      'No visits today',
-      name: 'noVisitsToday',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `No visits found`
-  String get noVisitsFound {
-    return Intl.message(
-      'No visits found',
-      name: 'noVisitsFound',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `No users found`
-  String get noUsersFound {
-    return Intl.message(
-      'No users found',
-      name: 'noUsersFound',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `No tasks`
   String get noTasks {
     return Intl.message(
@@ -1384,6 +1304,26 @@ class S {
     return Intl.message(
       'No thank you',
       name: 'noThankYou',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No users found`
+  String get noUsersFound {
+    return Intl.message(
+      'No users found',
+      name: 'noUsersFound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No visits found`
+  String get noVisitsFound {
+    return Intl.message(
+      'No visits found',
+      name: 'noVisitsFound',
       desc: '',
       args: [],
     );
@@ -1429,16 +1369,6 @@ class S {
     );
   }
 
-  /// `Open station`
-  String get openStation {
-    return Intl.message(
-      'Open station',
-      name: 'openStation',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Other`
   String get otherItems {
     return Intl.message(
@@ -1469,6 +1399,16 @@ class S {
     );
   }
 
+  /// `Participants`
+  String get participants {
+    return Intl.message(
+      'Participants',
+      name: 'participants',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Password`
   String get password {
     return Intl.message(
@@ -1489,16 +1429,6 @@ class S {
     );
   }
 
-  /// `Password and confirmation do not match`
-  String get passwordsDontMatch {
-    return Intl.message(
-      'Password and confirmation do not match',
-      name: 'passwordsDontMatch',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Password is required`
   String get passwordIsRequired {
     return Intl.message(
@@ -1509,11 +1439,11 @@ class S {
     );
   }
 
-  /// `Participants`
-  String get participants {
+  /// `Password and confirmation do not match`
+  String get passwordsDontMatch {
     return Intl.message(
-      'Participants',
-      name: 'participants',
+      'Password and confirmation do not match',
+      name: 'passwordsDontMatch',
       desc: '',
       args: [],
     );
@@ -1569,26 +1499,6 @@ class S {
     );
   }
 
-  /// `Please enable camera for scanning QR codes`
-  String get pleaseEnableCamera {
-    return Intl.message(
-      'Please enable camera for scanning QR codes',
-      name: 'pleaseEnableCamera',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Please enter password`
-  String get pleaseEnterPassword {
-    return Intl.message(
-      'Please enter password',
-      name: 'pleaseEnterPassword',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Please enter confirmation key`
   String get pleaseEnterConfirmationKey {
     return Intl.message(
@@ -1599,21 +1509,11 @@ class S {
     );
   }
 
-  /// `Registering account, please wait`
-  String get pleaseWaitRegistering {
+  /// `Please enter password`
+  String get pleaseEnterPassword {
     return Intl.message(
-      'Registering account, please wait',
-      name: 'pleaseWaitRegistering',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Please provide a valid email address`
-  String get pleaseProvideValidEmail {
-    return Intl.message(
-      'Please provide a valid email address',
-      name: 'pleaseProvideValidEmail',
+      'Please enter password',
+      name: 'pleaseEnterPassword',
       desc: '',
       args: [],
     );
@@ -1639,11 +1539,11 @@ class S {
     );
   }
 
-  /// `Please provide the registration code given by your school or library`
-  String get pleaseProvideRegistrationCode {
+  /// `Please provide a valid email address`
+  String get pleaseProvideValidEmail {
     return Intl.message(
-      'Please provide the registration code given by your school or library',
-      name: 'pleaseProvideRegistrationCode',
+      'Please provide a valid email address',
+      name: 'pleaseProvideValidEmail',
       desc: '',
       args: [],
     );
@@ -1679,6 +1579,16 @@ class S {
     );
   }
 
+  /// `Registering account, please wait`
+  String get pleaseWaitRegistering {
+    return Intl.message(
+      'Registering account, please wait',
+      name: 'pleaseWaitRegistering',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Please wait, sending code`
   String get pleaseWaitSendingCode {
     return Intl.message(
@@ -1689,31 +1599,11 @@ class S {
     );
   }
 
-  /// `Postcode`
-  String get postcode {
-    return Intl.message(
-      'Postcode',
-      name: 'postcode',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Previous`
   String get previous {
     return Intl.message(
       'Previous',
       name: 'previous',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Price`
-  String get priceToOpen {
-    return Intl.message(
-      'Price',
-      name: 'priceToOpen',
       desc: '',
       args: [],
     );
@@ -1739,66 +1629,6 @@ class S {
     );
   }
 
-  /// `QR Scanner`
-  String get qrScanner {
-    return Intl.message(
-      'QR Scanner',
-      name: 'qrScanner',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Routines`
-  String get routines_title {
-    return Intl.message(
-      'Routines',
-      name: 'routines_title',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Rate book`
-  String get rateBook {
-    return Intl.message(
-      'Rate book',
-      name: 'rateBook',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Read books`
-  String get readBooksList {
-    return Intl.message(
-      'Read books',
-      name: 'readBooksList',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Book list`
-  String get readList {
-    return Intl.message(
-      'Book list',
-      name: 'readList',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Book list is empty!`
-  String get readListIsEmpty {
-    return Intl.message(
-      'Book list is empty!',
-      name: 'readListIsEmpty',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Rating saved`
   String get ratingSaved {
     return Intl.message(
@@ -1814,36 +1644,6 @@ class S {
     return Intl.message(
       'Read more',
       name: 'readMore',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Your status`
-  String get readingProgress {
-    return Intl.message(
-      'Your status',
-      name: 'readingProgress',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Scanner ready`
-  String get readyToScan {
-    return Intl.message(
-      'Scanner ready',
-      name: 'readyToScan',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Rear Camera`
-  String get rearCamera {
-    return Intl.message(
-      'Rear Camera',
-      name: 'rearCamera',
       desc: '',
       args: [],
     );
@@ -1899,21 +1699,21 @@ class S {
     );
   }
 
-  /// `Resume`
-  String get resume {
-    return Intl.message(
-      'Resume',
-      name: 'resume',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Resources`
   String get resources {
     return Intl.message(
       'Resources',
       name: 'resources',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Resume`
+  String get resume {
+    return Intl.message(
+      'Resume',
+      name: 'resume',
       desc: '',
       args: [],
     );
@@ -1929,11 +1729,11 @@ class S {
     );
   }
 
-  /// `Returned`
-  String get returned {
+  /// `Routine added to calendar`
+  String get routineAddedToCalendar {
     return Intl.message(
-      'Returned',
-      name: 'returned',
+      'Routine added to calendar',
+      name: 'routineAddedToCalendar',
       desc: '',
       args: [],
     );
@@ -1949,11 +1749,31 @@ class S {
     );
   }
 
-  /// `Routine added to calendar`
-  String get routineAddedToCalendar {
+  /// `Routines`
+  String get routines_title {
     return Intl.message(
-      'Routine added to calendar',
-      name: 'routineAddedToCalendar',
+      'Routines',
+      name: 'routines_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save answer`
+  String get saveAnswer {
+    return Intl.message(
+      'Save answer',
+      name: 'saveAnswer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save data`
+  String get saveData {
+    return Intl.message(
+      'Save data',
+      name: 'saveData',
       desc: '',
       args: [],
     );
@@ -1984,26 +1804,6 @@ class S {
     return Intl.message(
       'Score',
       name: 'score',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Save data`
-  String get saveData {
-    return Intl.message(
-      'Save data',
-      name: 'saveData',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Save answer`
-  String get saveAnswer {
-    return Intl.message(
-      'Save answer',
-      name: 'saveAnswer',
       desc: '',
       args: [],
     );
@@ -2069,6 +1869,16 @@ class S {
     );
   }
 
+  /// `Thank you for your input!`
+  String get thankyouForFeedback {
+    return Intl.message(
+      'Thank you for your input!',
+      name: 'thankyouForFeedback',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Today`
   String get today {
     return Intl.message(
@@ -2079,61 +1889,11 @@ class S {
     );
   }
 
-  /// `Transit to station`
-  String get transitToStation {
+  /// `Two weeks`
+  String get twoWeeks {
     return Intl.message(
-      'Transit to station',
-      name: 'transitToStation',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Unnamed activity`
-  String get unnamedActivity {
-    return Intl.message(
-      'Unnamed activity',
-      name: 'unnamedActivity',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Unnamed`
-  String get unnamed {
-    return Intl.message(
-      'Unnamed',
-      name: 'unnamed',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Unnamed item`
-  String get unnamedLibraryItem {
-    return Intl.message(
-      'Unnamed item',
-      name: 'unnamedLibraryItem',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Untitled page`
-  String get unnamedWebPage {
-    return Intl.message(
-      'Untitled page',
-      name: 'unnamedWebPage',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Untitled routine`
-  String get unnamedRoutine {
-    return Intl.message(
-      'Untitled routine',
-      name: 'unnamedRoutine',
+      'Two weeks',
+      name: 'twoWeeks',
       desc: '',
       args: [],
     );
@@ -2149,21 +1909,51 @@ class S {
     );
   }
 
-  /// `Use code`
-  String get useCode {
+  /// `Unnamed`
+  String get unnamed {
     return Intl.message(
-      'Use code',
-      name: 'useCode',
+      'Unnamed',
+      name: 'unnamed',
       desc: '',
       args: [],
     );
   }
 
-  /// `User not found`
-  String get userNotFound {
+  /// `Unnamed activity`
+  String get unnamedActivity {
     return Intl.message(
-      'User not found',
-      name: 'userNotFound',
+      'Unnamed activity',
+      name: 'unnamedActivity',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unnamed item`
+  String get unnamedLibraryItem {
+    return Intl.message(
+      'Unnamed item',
+      name: 'unnamedLibraryItem',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Untitled routine`
+  String get unnamedRoutine {
+    return Intl.message(
+      'Untitled routine',
+      name: 'unnamedRoutine',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Untitled page`
+  String get unnamedWebPage {
+    return Intl.message(
+      'Untitled page',
+      name: 'unnamedWebPage',
       desc: '',
       args: [],
     );
@@ -2179,11 +1969,31 @@ class S {
     );
   }
 
-  /// `This field is required`
-  String get valueIsRequired {
+  /// `Use code`
+  String get useCode {
     return Intl.message(
-      'This field is required',
-      name: 'valueIsRequired',
+      'Use code',
+      name: 'useCode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `User information`
+  String get userInformation {
+    return Intl.message(
+      'User information',
+      name: 'userInformation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `User not found`
+  String get userNotFound {
+    return Intl.message(
+      'User not found',
+      name: 'userNotFound',
       desc: '',
       args: [],
     );
@@ -2194,6 +2004,16 @@ class S {
     return Intl.message(
       'Validate contact information',
       name: 'validateContactTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This field is required`
+  String get valueIsRequired {
+    return Intl.message(
+      'This field is required',
+      name: 'valueIsRequired',
       desc: '',
       args: [],
     );
@@ -2214,6 +2034,26 @@ class S {
     return Intl.message(
       'verify',
       name: 'verify',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Visit removed`
+  String get visitRemoved {
+    return Intl.message(
+      'Visit removed',
+      name: 'visitRemoved',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Week`
+  String get week {
+    return Intl.message(
+      'Week',
+      name: 'week',
       desc: '',
       args: [],
     );
@@ -2286,7 +2126,12 @@ class AppLocalizationDelegate extends LocalizationsDelegate<S> {
   List<Locale> get supportedLocales {
     return const <Locale>[
       Locale.fromSubtags(languageCode: 'en'),
+      Locale.fromSubtags(languageCode: 'es'),
+      Locale.fromSubtags(languageCode: 'et'),
       Locale.fromSubtags(languageCode: 'fi'),
+      Locale.fromSubtags(languageCode: 'nl'),
+      Locale.fromSubtags(languageCode: 'pl'),
+      Locale.fromSubtags(languageCode: 'pt'),
     ];
   }
 

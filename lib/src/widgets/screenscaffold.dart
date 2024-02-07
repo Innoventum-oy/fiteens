@@ -34,7 +34,7 @@ class _ScreenScaffoldState extends State<ScreenScaffold>{
     ImageProvider image;
     String? avatar = user.data?['avatar'];
     if(avatar!=null)
-      image = Image.asset(avatar,
+      image = Image.asset(avatar.replaceAll('"', ''),
           width:20,
           height:20,
           fit:BoxFit.cover
@@ -42,7 +42,7 @@ class _ScreenScaffoldState extends State<ScreenScaffold>{
     else if (user.image != null && user.image!.isNotEmpty)
       image = Image.network(
           width:30,
-          user.image!,
+          user.image!.replaceAll('"', ''),
           fit: BoxFit.cover
       ).image;
     else image = Image.asset('images/profile.png',

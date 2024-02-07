@@ -124,7 +124,7 @@ class _MyCardState extends State<MyCard> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.myCard),
+        title: Text(AppLocalizations.of(context)!.userInformation),
         elevation: 0.1,
       ),
       body: ListView(children: <Widget>[

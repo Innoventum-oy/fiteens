@@ -71,7 +71,7 @@ class _WellbeingScreenState extends State<WellbeingScreen> {
     apiClient.loadFormData(params).then((responseData) {
       setState(() {
         featuresLoaded = true;
-        //log("RESPONSE:: ${responseData?['data']}");
+        log("RESPONSE:: ${responseData?['data']}");
         features = responseData?['data'] ?? [];
       });
       return features;
@@ -150,7 +150,7 @@ class _WellbeingScreenState extends State<WellbeingScreen> {
       userAnswersets.forEach((answerset) {
         List<int> row = [];
 
-        /// Group data by elementgroups
+        /// Group data by elementgroups (features)
         features.forEach((feature) {
           int featureScore = 0;
 
@@ -172,6 +172,8 @@ class _WellbeingScreenState extends State<WellbeingScreen> {
               featureScore += double.parse(selectedOption['score']).round();
             }
           });
+          /// Calculate the score as percent of max score
+          featureScore = (featureScore / (feature['maxscore'] ?? 16) * 100).round();
           row.add(featureScore);
         });
         Color c = colors[i++];
@@ -218,9 +220,7 @@ class _WellbeingScreenState extends State<WellbeingScreen> {
           if (kDebugMode) {
             log('reloading page');
           }
-          setState() {
 
-          }
           constants.Router.navigate(
               context, 'mywellbeing', widget.navIndex, refresh: true);
         },
@@ -252,7 +252,9 @@ class _WellbeingScreenState extends State<WellbeingScreen> {
           children: [
             CircularProgressIndicator(color: Colors.white10,),
             SizedBox(width: 10,),
-            Text('Loading data')
+            Text(AppLocalizations.of(context)!.loading, style: TextStyle(
+                color: Colors.white10
+            ),)
           ],
         ))
     );
@@ -260,7 +262,7 @@ class _WellbeingScreenState extends State<WellbeingScreen> {
 
   Widget wellbeingView(data,
       {required List<Color> colors, required List<String> features}) {
-    const ticks = [4, 8, 12, 16];
+    const ticks = [25,50, 75, 100];
 
     return
       RadarChart(
@@ -280,7 +282,7 @@ class _WellbeingScreenState extends State<WellbeingScreen> {
   Widget headerSheet(headers) {
     List<Widget> row = [
       SizedBox(width: 60,child:Icon(Icons.visibility),),
-    ConstrainedBox(constraints: BoxConstraints.tight(Size(100,20)),child: Text('Answer date'))];
+    ConstrainedBox(constraints: BoxConstraints.tight(Size(100,20)),child: Text(AppLocalizations.of(context)!.answerDate))];
     for (String header in headers) {
       row.add(Container(
           height: 150,

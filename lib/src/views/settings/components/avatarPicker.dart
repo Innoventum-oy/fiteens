@@ -7,11 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 class AvatarPicker extends StatefulWidget {
- final Function? onTap;
- final String? currentImage;
- AvatarPicker({this.onTap,this.currentImage});
+  final Function? onTap;
+  final String? currentImage;
+  AvatarPicker({this.onTap,this.currentImage});
 
- @override
+  @override
   _AvatarPickerState createState() => _AvatarPickerState();
 }
 
@@ -44,13 +44,13 @@ class _AvatarPickerState extends State<AvatarPicker> {
   }
   @override
   Widget build(BuildContext context) {
-
-    log('avatarPicker has ${avatarImages?.length} images');
-
-  String currentAvatar = widget.currentImage ?? user.data?['avatar'] ?? '';
-   return ScreenScaffold(title: 'Pick your Avatar', child:  (avatarImages==null || avatarImages?.length == 0) ?
-   (loaded ? Center(child:Text('Could not load avatar images')) :   CircularProgressIndicator()) :
-        GridView.builder(
+    if(kDebugMode) {
+      log('avatarPicker has ${avatarImages?.length} images');
+    }
+    String currentAvatar = widget.currentImage ?? user.data?['avatar'] ?? '';
+    return ScreenScaffold(title: 'Pick your Avatar', child:  (avatarImages==null || avatarImages?.length == 0) ?
+    (loaded ? Center(child:Text('Could not load avatar images')) :   CircularProgressIndicator()) :
+    GridView.builder(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisSpacing: 5,
         mainAxisSpacing: 5,
@@ -68,21 +68,21 @@ class _AvatarPickerState extends State<AvatarPicker> {
     return new GestureDetector(
       onTap: () {
         if(widget.onTap==null){
-        user.data!['avatar'] = image;
-        loaded=false;
-        if(kDebugMode){
-        log('Saving avatar $image');
-        }
-        UserProvider provider = Provider.of<UserProvider>(context,listen: false);
-        if(provider.loaded) {
-        provider.saveObject(user.id, user.data, fields: ['avatar']);
-        provider.setUser(user);
-        UserPreferences.saveUser(user);
-        }
+          user.data!['avatar'] = image;
+          loaded=false;
+          if(kDebugMode){
+            log('Saving avatar $image');
+          }
+          UserProvider provider = Provider.of<UserProvider>(context,listen: false);
+          if(provider.loaded) {
+            provider.saveObject(user.id, user.data, fields: ['avatar']);
+            provider.setUser(user);
+            UserPreferences.saveUser(user);
+          }
 
-        setState(() {
-        loaded=true;
-        });
+          setState(() {
+            loaded=true;
+          });
         }
         else {
           widget.onTap!(image);
@@ -90,22 +90,22 @@ class _AvatarPickerState extends State<AvatarPicker> {
       },
       child: Container(
         decoration: active? BoxDecoration(
-            border: Border.all(color: Colors.blueAccent,width: 3),
+          border: Border.all(color: Colors.blueAccent,width: 3),
 
         ):null,
         child:Column(
 
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-      Expanded(
-      // Add an image to each card.
-      child: Image.asset(image,
-        fit: BoxFit.cover,
-      ),
-    ),
-       //   Text('$image')
-    ]
-    ),
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                // Add an image to each card.
+                child: Image.asset(image,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              //   Text('$image')
+            ]
+        ),
       ),
 
     );

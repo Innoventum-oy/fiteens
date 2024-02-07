@@ -43,8 +43,7 @@ return Row(children: <Widget>[
 
                             child:
                                 Row(
-
-                                  //contains badge status indicators (3+)
+                                  //contains badge status indicator(s)
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: badgeDisplays(badges,user.getValue('activitycount') ?? 0,context)
                                 ),

@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
 
+import '../../../util/utils.dart';
+
 class WeekView extends StatefulWidget{
   final List<RoutineItem>? items;
   final int startDay;
@@ -50,7 +52,7 @@ class _WeekViewState extends State<WeekView> {
     List<Widget>dayActivities = [];
     if(items!=null && items.length>0) {
       items.forEach((element) { dayActivities.add(
-        dayItem(element.activity??Activity())
+        dayItem(element.activity??Activity(), context)
       );
       });
     }
@@ -67,10 +69,10 @@ class _WeekViewState extends State<WeekView> {
                       Padding(
                           padding:EdgeInsets.all(5),
                           child: Column(
-                              children:[
-                              Text(DateFormat('EEEE').format(calendarDay),style: TextStyle(fontSize: 18),),
-                              ...dayActivities
-]
+                            children:[
+                              Text(capitalize(DateFormat('EEEE',Localizations.localeOf(context).toString()).format(calendarDay,)),style: TextStyle(fontSize: 18),),
+                              ...dayActivities,
+                              ]
                           )
 
                       )

@@ -23,7 +23,9 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m0(startdate) =>
       "Voit merkitä tapahtuman suoritetuksi aikaisintaan ${startdate}";
 
-  static String m1(item) => "${Intl.select(item, {
+  static String m1(startdate) => "Tapahtumaa ei voi ohittaa ennen päivämäärää";
+
+  static String m2(item) => "${Intl.select(item, {
             'calendar': 'Kalenteri',
             'routines': 'Harjoitusohjelma',
             'mywellbeing': 'Oma hyvinvointi',
@@ -42,16 +44,25 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Tilin poistaminen"),
         "achievements": MessageLookupByLibrary.simpleMessage("Saavutukset"),
         "activities": MessageLookupByLibrary.simpleMessage("Tapahtumat"),
+        "activity": MessageLookupByLibrary.simpleMessage("Aktiviteetti"),
         "activityCalendar":
             MessageLookupByLibrary.simpleMessage("Tapahtumakalenteri"),
+        "activityLevel":
+            MessageLookupByLibrary.simpleMessage("Aktiivisuustaso"),
         "activityRecorded":
             MessageLookupByLibrary.simpleMessage("Kirjaus tallennettu"),
+        "activityRegistrationFailed": MessageLookupByLibrary.simpleMessage(
+            "Aktiviteetin rekisteröinti epäonnistui"),
+        "activityRegistrationSaved": MessageLookupByLibrary.simpleMessage(
+            "Aktiviteetin rekisteröinti onnistui"),
         "addedToList": MessageLookupByLibrary.simpleMessage("Lisätty"),
         "addingRoutineFailed": MessageLookupByLibrary.simpleMessage(
             "Ohjelman lisääminen kalenteriin epäonnistui"),
         "address": MessageLookupByLibrary.simpleMessage("Osoite"),
         "ageOver13":
             MessageLookupByLibrary.simpleMessage("Oletko yli 13-vuotias?"),
+        "alreadyDone": MessageLookupByLibrary.simpleMessage("Tehty"),
+        "answerDate": MessageLookupByLibrary.simpleMessage("Vastauspäivä"),
         "answerSaved":
             MessageLookupByLibrary.simpleMessage("Vastaus tallennettu"),
         "appName": MessageLookupByLibrary.simpleMessage("Fiteens"),
@@ -72,6 +83,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "btnSetNewPassword":
             MessageLookupByLibrary.simpleMessage("Aseta salasana"),
         "btnShow": MessageLookupByLibrary.simpleMessage("Näytä"),
+        "btnSkip": MessageLookupByLibrary.simpleMessage("Ohita"),
         "btnTasks": MessageLookupByLibrary.simpleMessage("Tehtävät"),
         "btnUseEmail":
             MessageLookupByLibrary.simpleMessage("Käytä sähköpostiosoitetta"),
@@ -81,19 +93,15 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Vahvista yhteystieto nyt"),
         "btnValidateContactLater":
             MessageLookupByLibrary.simpleMessage("Myöhemmin"),
-        "buggers": MessageLookupByLibrary.simpleMessage("Voi harmi"),
         "calendar": MessageLookupByLibrary.simpleMessage("Kalenteri"),
         "calendarUpdated":
             MessageLookupByLibrary.simpleMessage("Kalenteri päivitetty"),
-        "cameraNotAvailable":
-            MessageLookupByLibrary.simpleMessage("Kamera ei ole käytettävissä"),
         "cancel": MessageLookupByLibrary.simpleMessage("Peruuta"),
         "cannotSaveEmptyForm": MessageLookupByLibrary.simpleMessage(
             "Täytä lomake ennen lähettämistä"),
         "challenges": MessageLookupByLibrary.simpleMessage("Haasteet"),
         "choose": MessageLookupByLibrary.simpleMessage("Valitse"),
         "chooseFile": MessageLookupByLibrary.simpleMessage("Valitse tiedosto"),
-        "city": MessageLookupByLibrary.simpleMessage("Kaupunki"),
         "clickPictureToChooseAvatar": MessageLookupByLibrary.simpleMessage(
             "Voit valita itsellesi avatar - kuvan"),
         "codeAccepted":
@@ -144,6 +152,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "errorsInForm": MessageLookupByLibrary.simpleMessage(
             "Lomakkeen sisällössä on virheitä"),
         "eventCannotBeMarkedBeforeDate": m0,
+        "eventCannotBeSkippedBeforeDate": m1,
         "eventInFuture": MessageLookupByLibrary.simpleMessage(
             "Tapahtuma on tulevaisuudessa"),
         "eventLog": MessageLookupByLibrary.simpleMessage("Tapahtumaloki"),
@@ -152,6 +161,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "feedback": MessageLookupByLibrary.simpleMessage("Palaute"),
         "feedbackSent":
             MessageLookupByLibrary.simpleMessage("Palaute lähetetty"),
+        "fieldCannotBeEmpty":
+            MessageLookupByLibrary.simpleMessage("Kenttä ei voi olla tyhjä"),
         "firstName": MessageLookupByLibrary.simpleMessage("Etunimi"),
         "flashOff": MessageLookupByLibrary.simpleMessage("Valo pois"),
         "flashOn": MessageLookupByLibrary.simpleMessage("Valo päälle"),
@@ -159,7 +170,6 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Unohditko salasanan?"),
         "formIsEmpty": MessageLookupByLibrary.simpleMessage("Lomake on tyhjä"),
         "forms": MessageLookupByLibrary.simpleMessage("Lomakkeet"),
-        "frontCamera": MessageLookupByLibrary.simpleMessage("Etukamera"),
         "getCode": MessageLookupByLibrary.simpleMessage("Pyydä koodi"),
         "great": MessageLookupByLibrary.simpleMessage("Hienoa!"),
         "groupCode": MessageLookupByLibrary.simpleMessage("Ryhmäkoodi"),
@@ -168,6 +178,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "guardianName": MessageLookupByLibrary.simpleMessage("Huoltajan nimi"),
         "guardianPhone":
             MessageLookupByLibrary.simpleMessage("Huoltajan puhelinnumero"),
+        "healthyFood":
+            MessageLookupByLibrary.simpleMessage("Terveellinen ruokavalio"),
+        "healthyLifestyle":
+            MessageLookupByLibrary.simpleMessage("Terveellinen elämäntapa"),
         "joinedToGroup": MessageLookupByLibrary.simpleMessage(
             "Liittyminen uuteen ryhmään onnistui"),
         "joiningGroupFailed": MessageLookupByLibrary.simpleMessage(
@@ -175,37 +189,47 @@ class MessageLookup extends MessageLookupByLibrary {
         "joiningToUserGroup":
             MessageLookupByLibrary.simpleMessage("Uuteen ryhmään liittyminen"),
         "lastName": MessageLookupByLibrary.simpleMessage("Sukunimi"),
-        "library": MessageLookupByLibrary.simpleMessage("Resurssit / kirjasto"),
+        "library": MessageLookupByLibrary.simpleMessage("Resurssikirjasto"),
         "libraryIsEmpty":
-            MessageLookupByLibrary.simpleMessage("Sisältöä ei voitu ladata"),
+            MessageLookupByLibrary.simpleMessage("Resurssikirjasto on tyhjä"),
         "loading": MessageLookupByLibrary.simpleMessage("ladataan"),
+        "locations": MessageLookupByLibrary.simpleMessage("Sijainnit"),
         "login": MessageLookupByLibrary.simpleMessage("Kirjautuminen"),
         "loginFailed":
             MessageLookupByLibrary.simpleMessage("kirjautuminen epäonnistui"),
         "loginTitle": MessageLookupByLibrary.simpleMessage("Kirjaudu sisään"),
         "logout": MessageLookupByLibrary.simpleMessage("kirjaudu ulos"),
+        "month": MessageLookupByLibrary.simpleMessage("Kuukausi"),
         "moreInformation": MessageLookupByLibrary.simpleMessage("lisätiedot"),
         "myActivities":
             MessageLookupByLibrary.simpleMessage("Omat harrastukset"),
-        "myCard": MessageLookupByLibrary.simpleMessage("Oma kortti"),
         "myPoints": MessageLookupByLibrary.simpleMessage("Pisteesi"),
         "myScore": MessageLookupByLibrary.simpleMessage("Omat pisteet"),
-        "navitem": m1,
+        "navitem": m2,
         "next": MessageLookupByLibrary.simpleMessage("Seuraava"),
         "no": MessageLookupByLibrary.simpleMessage("ei"),
+        "noActivitiesFound":
+            MessageLookupByLibrary.simpleMessage("Ei aktiviteetteja"),
         "noContactMethodsFound":
             MessageLookupByLibrary.simpleMessage("Yhteystietoja ei löytynyt"),
         "noDescription": MessageLookupByLibrary.simpleMessage("Ei kuvausta"),
+        "noFormsFound": MessageLookupByLibrary.simpleMessage("Ei lomakkeita"),
+        "noResourcesFound":
+            MessageLookupByLibrary.simpleMessage("Ei resursseja"),
         "noRoutinesFound":
             MessageLookupByLibrary.simpleMessage("Ei harjoitusohjelmia"),
         "noTasks": MessageLookupByLibrary.simpleMessage("Ei tehtäviä"),
         "noThankYou": MessageLookupByLibrary.simpleMessage("Ei kiitos"),
+        "noUsersFound": MessageLookupByLibrary.simpleMessage("Ei käyttäjiä"),
+        "noVisitsFound": MessageLookupByLibrary.simpleMessage("Ei vierailuja"),
         "notVerified": MessageLookupByLibrary.simpleMessage("Ei vahvistettu"),
         "notification": MessageLookupByLibrary.simpleMessage("Huomio"),
         "ok": MessageLookupByLibrary.simpleMessage("Ok"),
         "oops": MessageLookupByLibrary.simpleMessage("Hups!"),
         "otherItems": MessageLookupByLibrary.simpleMessage("Muut"),
         "pageContent": MessageLookupByLibrary.simpleMessage("Sivusisältö"),
+        "pageCount": MessageLookupByLibrary.simpleMessage("Sivumäärä"),
+        "participants": MessageLookupByLibrary.simpleMessage("Osallistujat"),
         "password": MessageLookupByLibrary.simpleMessage("Salasana"),
         "passwordChanged":
             MessageLookupByLibrary.simpleMessage("Salasana vaihdettu"),
@@ -217,10 +241,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "phone": MessageLookupByLibrary.simpleMessage("Puhelin"),
         "phoneOrEmail": MessageLookupByLibrary.simpleMessage(
             "Puhelin tai sähköpostiosoite"),
+        "physicalActivities": MessageLookupByLibrary.simpleMessage("Liikunta"),
         "pleaseCompleteFormProperly": MessageLookupByLibrary.simpleMessage(
             "Täytäthän kaikki vaadittavat kohdat"),
-        "pleaseEnableCamera": MessageLookupByLibrary.simpleMessage(
-            "Salli kameran käyttö jotta voit skannata QR-koodeja"),
         "pleaseEnterConfirmationKey":
             MessageLookupByLibrary.simpleMessage("Anna vahvistuskoodi"),
         "pleaseEnterPassword":
@@ -229,32 +252,25 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Anna puhelinnumero"),
         "pleaseEnterPhoneOrEmail": MessageLookupByLibrary.simpleMessage(
             "Anna puhelinnumero tai sähköpostiosoite"),
-        "pleaseProvideRegistrationCode": MessageLookupByLibrary.simpleMessage(
-            "Anna oppilaitokselta tai kirjastolta saamasi rekisteröitymiskoodi"),
         "pleaseProvideValidEmail": MessageLookupByLibrary.simpleMessage(
             "Anna kelvollinen sähköpostiosoite"),
         "pleaseProvideValidPhoneNumber":
             MessageLookupByLibrary.simpleMessage("Tarkista puhelinnumero"),
+        "pleaseProvideValidPhoneOrEmail": MessageLookupByLibrary.simpleMessage(
+            "Anna kelvollinen puhelinnumero tai sähköpostiosoite"),
         "pleaseProvideYourName":
             MessageLookupByLibrary.simpleMessage("Anna nimesi"),
         "pleaseWaitRegistering": MessageLookupByLibrary.simpleMessage(
             "Käyttäjätiliä rekisteröidään"),
         "pleaseWaitSendingCode":
             MessageLookupByLibrary.simpleMessage("Käsitellään koodia"),
-        "postcode": MessageLookupByLibrary.simpleMessage("Postinumero"),
         "previous": MessageLookupByLibrary.simpleMessage("Edellinen"),
         "privacyPolicy":
             MessageLookupByLibrary.simpleMessage("Tietosuojakäytäntö"),
         "processing": MessageLookupByLibrary.simpleMessage("Käsitellään"),
-        "qrScanner": MessageLookupByLibrary.simpleMessage("QR-skanneri"),
         "ratingSaved":
             MessageLookupByLibrary.simpleMessage("Arvio tallennettu"),
-        "readList": MessageLookupByLibrary.simpleMessage("Lukulista"),
-        "readListIsEmpty":
-            MessageLookupByLibrary.simpleMessage("Lukulista on tyhjä!"),
-        "readyToScan":
-            MessageLookupByLibrary.simpleMessage("Valmis skannaamaan"),
-        "rearCamera": MessageLookupByLibrary.simpleMessage("Takakamera"),
+        "readMore": MessageLookupByLibrary.simpleMessage("Lue lisää"),
         "refresh": MessageLookupByLibrary.simpleMessage("Lataa uudelleen"),
         "registrationFailed":
             MessageLookupByLibrary.simpleMessage("Tilin luonti epäonnistui"),
@@ -270,7 +286,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Haetaan sijaintia"),
         "routineAddedToCalendar": MessageLookupByLibrary.simpleMessage(
             "Harjoitus lisätty kalenteriin"),
+        "routines": MessageLookupByLibrary.simpleMessage("Harjoitusohjelmat"),
         "routines_title": MessageLookupByLibrary.simpleMessage("Harjoitukset"),
+        "saveAnswer": MessageLookupByLibrary.simpleMessage("Tallenna vastaus"),
         "saveData": MessageLookupByLibrary.simpleMessage("Tallenna tiedot"),
         "savingDataFailed":
             MessageLookupByLibrary.simpleMessage("Tallennus epäonnistui"),
@@ -281,18 +299,27 @@ class MessageLookup extends MessageLookupByLibrary {
         "sendAnswer": MessageLookupByLibrary.simpleMessage("Lähetä vastaus"),
         "settings": MessageLookupByLibrary.simpleMessage("Asetukset"),
         "signUp": MessageLookupByLibrary.simpleMessage("Uusi tili"),
+        "startAssessment":
+            MessageLookupByLibrary.simpleMessage("Aloita arviointi"),
         "tasks": MessageLookupByLibrary.simpleMessage("Tehtävät"),
         "thankyouForFeedback":
             MessageLookupByLibrary.simpleMessage("Kiitos palautteestasi!"),
+        "today": MessageLookupByLibrary.simpleMessage("Tänään"),
+        "twoWeeks": MessageLookupByLibrary.simpleMessage("Kaksi viikkoa"),
         "unknownUser":
             MessageLookupByLibrary.simpleMessage("tuntematon käyttäjä"),
         "unnamed": MessageLookupByLibrary.simpleMessage("Nimetön"),
         "unnamedActivity":
             MessageLookupByLibrary.simpleMessage("Nimetön tapahtuma"),
+        "unnamedLibraryItem":
+            MessageLookupByLibrary.simpleMessage("Nimetön resurssi"),
         "unnamedRoutine":
             MessageLookupByLibrary.simpleMessage("Nimetön harjoitusohjelma"),
         "unnamedWebPage": MessageLookupByLibrary.simpleMessage("Nimetön sivu"),
+        "untitled": MessageLookupByLibrary.simpleMessage("Nimetön"),
         "useCode": MessageLookupByLibrary.simpleMessage("Lähetä koodi"),
+        "userInformation":
+            MessageLookupByLibrary.simpleMessage("Käyttäjätiedot"),
         "userNotFound":
             MessageLookupByLibrary.simpleMessage("Käyttäjätiliä ei löytynyt"),
         "validateContactTitle":
@@ -301,6 +328,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Tämä tieto on pakollinen"),
         "verified": MessageLookupByLibrary.simpleMessage("Vahvistettu"),
         "verify": MessageLookupByLibrary.simpleMessage("Vahvista"),
+        "visitRemoved":
+            MessageLookupByLibrary.simpleMessage("Vierailu poistettu"),
+        "week": MessageLookupByLibrary.simpleMessage("Viikko"),
         "welcomeInfo":
             MessageLookupByLibrary.simpleMessage("Näytä aloitusinfo"),
         "writeAnswerHere": MessageLookupByLibrary.simpleMessage(
