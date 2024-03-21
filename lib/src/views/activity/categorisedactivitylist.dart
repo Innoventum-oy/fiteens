@@ -11,14 +11,14 @@ import 'package:core/core.dart' as core;
 class CategorisedActivityList extends StatefulWidget {
   final String viewType;
 
-  CategorisedActivityList( {this.viewType = 'all'});
+  const CategorisedActivityList( {super.key, this.viewType = 'all'});
 
   @override
-  _CategorisedActivityListState createState() =>
-      _CategorisedActivityListState();
+  CategorisedActivityListState createState() =>
+      CategorisedActivityListState();
 }
 
-class _CategorisedActivityListState extends State<CategorisedActivityList> {
+class CategorisedActivityListState extends State<CategorisedActivityList> {
   Map<String, dynamic>? map;
   List<core.ActivityClass> data = [];
   core.User? user;
@@ -53,26 +53,23 @@ class _CategorisedActivityListState extends State<CategorisedActivityList> {
       'sort': 'name',
     };
     if(kDebugMode) {
-      print("categorised activitylist viewtype: " + widget.viewType);
+      print("categorised activitylist viewtype: ${widget.viewType}");
     }
     core.ActivityClassProvider activityClassProvider = core.ActivityClassProvider();
 
 
-    print('Loading page $_pageNumber');
     try {
       var activityCategories = await activityClassProvider.loadItems(params);
       setState(() {
         _loadingState = LoadingState.done;
         data.addAll(activityCategories);
-        print(data.length.toString() + ' activitycategories currently loaded!');
         if(activityCategories.length >= limit) {
           _isLoading = false;
           _pageNumber++;
         }
       });
-    } catch (e, stack) {
+    } catch (e) {
       _isLoading = false;
-      print('loadItems returned error $e\n Stack trace:\n $stack');
       errormessage = e.toString();
       if (_loadingState == LoadingState.loading) {
         setState(() => _loadingState = LoadingState.error);
@@ -91,6 +88,7 @@ class _CategorisedActivityListState extends State<CategorisedActivityList> {
     super.initState();
   }
 
+  @override
   @protected
   @mustCallSuper
   void dispose() {
@@ -106,25 +104,23 @@ class _CategorisedActivityListState extends State<CategorisedActivityList> {
 
     bool isTester = false;
     if(user.data!=null) {
-      print(user.data.toString());
       if (user.data!['istester'] != null) {
         if (user.data!['istester'] == 'true') isTester = true;
       }
     }
 
-    return new Scaffold(
+    return Scaffold(
       backgroundColor: primary,
-      appBar: new AppBar(
-          title: new Text(AppLocalizations.of(context)!.activities),
+      appBar: AppBar(
+          title: Text(AppLocalizations.of(context)!.activities),
           actions: [
             if(isTester) IconButton(
-                icon: Icon(Icons.bug_report),
+                icon: const Icon(Icons.bug_report),
                 onPressed:(){feedbackAction(context,user); }
             ),
       IconButton(
-      icon: Icon(Icons.refresh),
+      icon: const Icon(Icons.refresh),
         onPressed: () {
-          print('Refreshing view');
           setState(() {
             data = [];
             _pageNumber = 0;
@@ -145,15 +141,14 @@ class _CategorisedActivityListState extends State<CategorisedActivityList> {
     switch (_loadingState) {
       case LoadingState.done:
       //data loaded
-      print('data loaded, returning customscrollview for '+data.length.toString()+' categories');
         return data.isEmpty ? Container(
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
             child:
             ListTile(
-              leading: Icon(Icons.error,color:Colors.white),
+              leading: const Icon(Icons.error,color:Colors.white),
               title: Text(
                   AppLocalizations.of(context)!.noActivitiesFound,
-                  style:TextStyle(color:Colors.white)),
+                  style:const TextStyle(color:Colors.white)),
             ),
             ) :
         CustomScrollView(
@@ -164,8 +159,11 @@ class _CategorisedActivityListState extends State<CategorisedActivityList> {
 
                 _loadNextPage(user);
               }
-             if(data.isNotEmpty) return activityClassView(data[index]);
-             else return Container();
+             if(data.isNotEmpty) {
+               return activityClassView(data[index]);
+             } else {
+               return Container();
+             }
             },
             childCount: data.length))]
             );
@@ -174,7 +172,7 @@ class _CategorisedActivityListState extends State<CategorisedActivityList> {
         return Align(
           alignment: Alignment.center,
           child: ListTile(
-            leading: Icon(Icons.error),
+            leading: const Icon(Icons.error),
             title: Text(
                 'Sorry, there was an error loading the activity classes : $errormessage'),
           ),
@@ -187,10 +185,10 @@ class _CategorisedActivityListState extends State<CategorisedActivityList> {
           alignment: Alignment.center,
           child: Center(
             child: ListTile(
-              leading: CircularProgressIndicator(),
+              leading: const CircularProgressIndicator(),
               title: Text(AppLocalizations.of(context)!.loading,
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.white)
+                  style: const TextStyle(color: Colors.white)
               ),
             ),
           ),
@@ -201,10 +199,9 @@ class _CategorisedActivityListState extends State<CategorisedActivityList> {
   }
 
   Widget activityClassView(activityClass) {
-    print('creating activity list for class '+activityClass.name);
     return
       Container(
-        decoration: BoxDecoration(color: const Color(0xff222128)),
+        decoration: const BoxDecoration(color: Color(0xff222128)),
         child: Padding(
           padding:
           const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -219,7 +216,7 @@ class _CategorisedActivityListState extends State<CategorisedActivityList> {
                 ),
                 Container(
                   height: 400.0,
-                  decoration: BoxDecoration(color: primaryDark),
+                  decoration: const BoxDecoration(color: primaryDark),
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child:

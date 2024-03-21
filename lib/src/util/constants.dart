@@ -3,13 +3,17 @@ import 'dart:developer';
 import 'package:fiteens/src/views/activity/activity.dart';
 import 'package:fiteens/src/views/calendar/calendarscreen.dart';
 import 'package:fiteens/src/views/dashboard/dashboard.dart';
-import 'package:fiteens/src/views/library/libraryScreen.dart';
+import 'package:fiteens/src/views/library/library_screen.dart';
 import 'package:fiteens/src/views/mywellbeing/wellbeingscreen.dart';
 import 'package:fiteens/src/views/routines/routinesscreen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+
 import '../widgets/notifydialog.dart';
+
+String fundingDisclaimer = 'The project 2021-1-ES01-KA220-SCH-000027761-FITeens Promoting physical activity and healthy habits in sedentary teenagers is co-funded by the Erasmus+ programme of the European Union. The content of this app is the sole responsibility of the FITeens Project Consortium and neither the European Commission nor the Spanish Service for the Internationalisation of Education (SEPIE) is responsible for any use that may be made of the information contained therein.';
 
 class AppUrl {
   static const Map<String,String> servers = {
@@ -45,11 +49,11 @@ class NavigationItem {
 
 // navItems is used for Dashboard tiles and bottomNavigation
 List<NavigationItem> navItems = [
-  NavigationItem(navigationIndex: 0, label: 'home', icon: Icon(Icons.home), route: '/dashboard',view: 'dashboard',displayInDashboard:false),
-  NavigationItem(navigationIndex: 1, label: 'calendar', icon: Icon(Icons.calendar_month_rounded), route: '/calendar', view: 'calendar',),
-  NavigationItem(navigationIndex: 2, label: 'routines', icon: Icon(Icons.sports_gymnastics), route: '/routines', view: 'routines',),
-  NavigationItem(navigationIndex: 3, label: 'mywellbeing', icon: Icon(Icons.monitor_heart_outlined), route: '/mywellbeing', view: 'mywellbeing'),
-  NavigationItem(navigationIndex: 4,label: 'library', icon: Icon(Icons.my_library_books_outlined),route: '/library', view: 'library')
+  NavigationItem(navigationIndex: 0, label: 'home', icon: const Icon(Icons.home), route: '/dashboard',view: 'dashboard',displayInDashboard:false),
+  NavigationItem(navigationIndex: 1, label: 'calendar', icon: const Icon(Icons.calendar_month_rounded), route: '/calendar', view: 'calendar',),
+  NavigationItem(navigationIndex: 2, label: 'routines', icon: const Icon(Icons.sports_gymnastics), route: '/routines', view: 'routines',),
+  NavigationItem(navigationIndex: 3, label: 'mywellbeing', icon: const Icon(Icons.monitor_heart_outlined), route: '/mywellbeing', view: 'mywellbeing'),
+  NavigationItem(navigationIndex: 4,label: 'library', icon: const Icon(Icons.my_library_books_outlined),route: '/library', view: 'library')
 ];
 
 /// This router class takes care of navigating to different page routes defined by NavigationItems
@@ -59,7 +63,7 @@ class Router {
         log("Navigating to route $view");
       }
       bool routeFound = false;
-      Widget targetWidget = Container(child: Text('Error: view not found'));
+      Widget targetWidget = const Text('Error: view not found');
       switch(view) {
         case 'activity' :
             targetWidget = ActivityScreen(data,navIndex:navIndex,refresh:refresh);

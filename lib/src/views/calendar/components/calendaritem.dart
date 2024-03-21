@@ -13,11 +13,11 @@ import '../../../util/navigator.dart';
 
 class CalendarItem extends StatefulWidget {
 
-  final ApiClient _apiClient = ApiClient();
+  //final ApiClient _apiClient = ApiClient();
   final Map<String,dynamic> activityData;
 
 
-  CalendarItem(this.activityData);
+  const CalendarItem(this.activityData, {super.key});
 
   int calculateDifference(DateTime date) {
     DateTime now = DateTime.now();
@@ -38,12 +38,13 @@ class CalendarItem extends StatefulWidget {
     @override
     Widget build(BuildContext context){
       User user = Provider.of<UserProvider>(context).user;
+      ActivityProvider activityProvider = Provider.of<ActivityProvider>(context);
       Activity activityItem = widget.activityData['activity'];
       ActivityVisit? activityVisit = widget.activityData['activityVisit'];
       if(kDebugMode){
         log("Building calendaritem for activity ${activityItem.name} visit ${activityVisit?.id}");
       }
-      String dateinfo = activityItem.nexteventdate==null ? '':(widget.calculateDifference(activityItem.nexteventdate!)!=0 ? DateFormat('kk:mm dd.MM.yyyy').format(activityItem.nexteventdate!) : 'Today '+DateFormat('kk:mm ').format(activityItem.nexteventdate!));
+      String dateinfo = activityItem.nexteventdate==null ? '':(widget.calculateDifference(activityItem.nexteventdate!)!=0 ? DateFormat('kk:mm dd.MM.yyyy').format(activityItem.nexteventdate!) : 'Today ${DateFormat('kk:mm ').format(activityItem.nexteventdate!)}');
       List<Widget> buttons=[];
       buttons.add(ElevatedButton(
         child: Text(AppLocalizations.of(context)!.readMore),
@@ -59,10 +60,10 @@ class CalendarItem extends StatefulWidget {
           && ( activityItem.registrationenddate==null || activityItem.registrationenddate!.isAfter(DateTime.now()))
           && user.token!=null) {
         buttons.add(ElevatedButton(
-          child: Text(AppLocalizations.of(context)!.signUp),
+          child: activityProvider.loadingStatus == DataLoadingStatus.loading ? const CircularProgressIndicator() : Text(AppLocalizations.of(context)!.signUp),
           onPressed: () {
-            print('signing up for activity {$activityItem.name}');
-            widget._apiClient.registerForActivity(activityItem.id, user,visit:activityVisit);
+            activityProvider.loadingStatus == DataLoadingStatus.loading ? null : activityProvider.registerForActivity(activityItem.id, user,visit:activityVisit);
+
           },
         ));
         buttons.add(const SizedBox(width: 8));
@@ -71,9 +72,9 @@ class CalendarItem extends StatefulWidget {
 
       String subtitle= dateinfo ;
       if(activityItem.registration){
-        subtitle+=' ['+(activityItem.registeredvisitorcount!=null ? activityItem.registeredvisitorcount.toString() : '0')+(activityItem.maxvisitors!=null ? '/'+activityItem.maxvisitors.toString() :'') +']';
+        subtitle+=' [${activityItem.registeredvisitorcount!=null ? activityItem.registeredvisitorcount.toString() : '0'}${activityItem.maxvisitors!=null ? '/${activityItem.maxvisitors}' :''}]';
       }
-      if(activityItem.description!=null)subtitle+= '\n'+activityItem.description!;
+      if(activityItem.description!=null)subtitle+= '\n${activityItem.description!}';
       return Center(
           child:
           Card(
@@ -83,9 +84,9 @@ class CalendarItem extends StatefulWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         ListTile(
-                          leading: Icon(Icons.event),
-                          title: Text((activityItem.name != null ? activityItem.name: AppLocalizations.of(context)!.unnamedActivity)!),
-                          subtitle: Text(parse(subtitle).body!.text,maxLines: 3,style: TextStyle(overflow: TextOverflow.ellipsis),
+                          leading: const Icon(Icons.event),
+                          title: Text((activityItem.name ?? AppLocalizations.of(context)!.unnamedActivity)),
+                          subtitle: Text(parse(subtitle).body!.text,maxLines: 3,style: const TextStyle(overflow: TextOverflow.ellipsis),
                              ),
                           isThreeLine: true,
                         ),
@@ -102,7 +103,7 @@ class CalendarItem extends StatefulWidget {
 
     void showMessage(BuildContext context, String title, Widget content) {
       showDialog(context: context, builder: (BuildContext builderContext) {
-        _timer = Timer(Duration(seconds: 5), () {
+        _timer = Timer(const Duration(seconds: 5), () {
           Navigator.of(context).pop();
         });
 

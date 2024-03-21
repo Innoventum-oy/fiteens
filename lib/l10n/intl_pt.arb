@@ -136,6 +136,7 @@
   "noContactMethodsFound": "Nenhum método de contato encontrado",
   "noDescription": "Sem descrição",
   "noFormsFound": "Nenhum formulário encontrado",
+  "noEventsFound": "Nenhum evento encontrado",
   "noResourcesFound": "Nenhum recurso disponível no momento",
   "noRoutinesFound": "Nenhuma rotina encontrada",
   "noTasks": "Nenhuma tarefa",
@@ -174,6 +175,7 @@
   "processing": "Processando",
   "ratingSaved": "Avaliação salva",
   "readMore": "Leia mais",
+  "references": "Referências",
   "refresh": "Atualizar",
   "registrationFailed": "Falha no registro",
   "requestFailed": "Falha na solicitação",
@@ -220,5 +222,6 @@
   "yes": "Sim",
   "youHaveThisBadge": "Você possui esta conquista",
   "yourAnswerHasBeenSaved": "Sua resposta foi salva",
-  "yourPassword": "Sua senha"
+  "yourPassword": "Sua senha",
+  "yourLogDates": "Datas de registro"
 }

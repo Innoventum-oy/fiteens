@@ -7,7 +7,7 @@ import '../../util/styles.dart';
 
 
 class WebPageListItem extends StatelessWidget{
-  WebPageListItem(this.webPage);
+  const WebPageListItem(this.webPage, {super.key});
   //ApiClient _apiClient = ApiClient();
   final core.WebPage webPage;
 
@@ -38,33 +38,31 @@ class WebPageListItem extends StatelessWidget{
         child: InkWell(
           onTap: () => goToWebPage(context, webPage),
          child:
-         Container(
-           child:Stack(
-               fit: StackFit.expand,
-               //  crossAxisAlignment: CrossAxisAlignment.stretch,
-               children: [webPage.thumbnailUrl!=null ? Image.network(
-                 webPage.thumbnailUrl!, fit: BoxFit.cover,) : Image.asset('images/logo.png', fit: BoxFit.cover,),
+         Stack(
+             fit: StackFit.expand,
+             //  crossAxisAlignment: CrossAxisAlignment.stretch,
+             children: [webPage.thumbnailUrl!=null ? Image.network(
+               webPage.thumbnailUrl!, fit: BoxFit.cover,) : Image.asset('images/logo.png', fit: BoxFit.cover,),
 
 
-                 Positioned(
-                   bottom:0,
-                   left:0,
-                   right: 0,
-                   child:Container(
-                       decoration: BoxDecoration(
-                         color: secondaryThemeColor,
-                       ),
-                       child: Padding(
+               Positioned(
+                 bottom:0,
+                 left:0,
+                 right: 0,
+                 child:Container(
+                     decoration: const BoxDecoration(
+                       color: secondaryThemeColor,
+                     ),
+                     child: Padding(
 
-                           padding: EdgeInsets.all(5),
-                           child:
-                           Text( webPage.pagetitle ?? AppLocalizations.of(context)!.unnamedWebPage,
-                               style: TextStyle(fontSize: 18))
-                       )
-                   ),
-                 )
-               ]
-           ),
+                         padding: const EdgeInsets.all(5),
+                         child:
+                         Text( webPage.pagetitle ?? AppLocalizations.of(context)!.unnamedWebPage,
+                             style: const TextStyle(fontSize: 18))
+                     )
+                 ),
+               )
+             ]
          ),
         ),
     )

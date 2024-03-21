@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fiteens/src/util/utils.dart';
@@ -10,13 +10,13 @@ import 'package:core/core.dart' as core;
 class ActivityListSliver extends StatefulWidget {
   final core.ActivityClass activityClass;
 
-  ActivityListSliver(this.activityClass);
+  const ActivityListSliver(this.activityClass, {super.key});
 
   @override
-  _ActivityListSliverState createState() => _ActivityListSliverState();
+  ActivityListSliverState createState() => ActivityListSliverState();
 }
 
-class _ActivityListSliverState extends State<ActivityListSliver> {
+class ActivityListSliverState extends State<ActivityListSliver> {
   Map<String, dynamic>? map;
   List<core.Activity> data = [];
   core.User? user;
@@ -63,10 +63,7 @@ class _ActivityListSliverState extends State<ActivityListSliver> {
       if(user.token !=null) 'api_key': user.token,
       'sort': 'name',
     };
-    if(kDebugMode) {
-      print('Loading activities (activitylistsliver) page $_pageNumber for ' +
-          activityclass.name);
-    }
+
     try {
       final core.ActivityProvider activityProvider = Provider.of<core.ActivityProvider>(context,listen:false);
       var nextActivities = await activityProvider.getItems(params,reload: refresh);
@@ -74,21 +71,18 @@ class _ActivityListSliverState extends State<ActivityListSliver> {
         _loadingState = LoadingState.done;
         if (nextActivities.isNotEmpty) {
           data.addAll(nextActivities);
-          if(kDebugMode) {
-            print(data.length.toString() + ' activities currently loaded for ' +
-                activityclass.name);
-          }
+
           if (nextActivities.length >= limit) {
 
             _isLoading = false;
             _pageNumber++;
           }
         }
-        else print('no activities currently loaded');
+        else {
+        }
       });
-    } catch (e, stack) {
+    } catch (e) {
       _isLoading = false;
-      print('loadItems returned error $e\n Stack trace:\n $stack');
       errorMessage = e.toString();
       if (_loadingState == LoadingState.loading) {
         setState(() => _loadingState = LoadingState.error);
@@ -117,24 +111,24 @@ class _ActivityListSliverState extends State<ActivityListSliver> {
   Widget _getContentSection(user) {
     switch (_loadingState) {
       case LoadingState.done:
-        if(data.length==0) return Container(
-          padding: EdgeInsets.all(20),
+        if(data.isEmpty) {
+          return Container(
+          padding: const EdgeInsets.all(20),
           child:
           ListTile(
-            leading: Icon(Icons.error,color:Colors.white),
+            leading: const Icon(Icons.error,color:Colors.white),
             title: Text(
                 AppLocalizations.of(context)!.noActivitiesFound,
-                style:TextStyle(color:Colors.white)),
+                style:const TextStyle(color:Colors.white)),
           ),
         );
+        }
         return ListView.builder(
-            padding: EdgeInsets.symmetric(vertical: 16.0),
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
             scrollDirection: Axis.horizontal,
             itemCount: data.length,
             itemBuilder: (BuildContext context, int index) {
-              print('building item '+index.toString());
               if (!_isLoading && index > (data.length * 0.7)) {
-            print('loading page '+index.toString());
                 _loadNextPage(user, widget.activityClass);
               }
 
@@ -146,7 +140,7 @@ class _ActivityListSliverState extends State<ActivityListSliver> {
         return Align(
           alignment: Alignment.center,
           child: ListTile(
-            leading: Icon(Icons.error),
+            leading: const Icon(Icons.error),
             title: Text(
                 'Sorry, there was an error loading the data: $errorMessage'),
           ),
@@ -158,15 +152,15 @@ class _ActivityListSliverState extends State<ActivityListSliver> {
           alignment: Alignment.center,
           child: Center(
             child: ListTile(
-              leading: CircularProgressIndicator(),
+              leading: const CircularProgressIndicator(),
               title: Text(AppLocalizations.of(context)!.loading,
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.white)),
+                  style: const TextStyle(color: Colors.white)),
             ),
           ),
         );
       default:
-        return Container(child:Text('No activities found in this category'));
+        return const Text('No activities found in this category');
     }
   }
 
@@ -192,7 +186,7 @@ class _ActivityListSliverState extends State<ActivityListSliver> {
             : AppLocalizations.of(context)!.today + DateFormat('kk:mm ').format(activity.startdate!));
 
     return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 4.0),
+        padding: const EdgeInsets.symmetric(horizontal: 4.0),
         child: InkWell(
             onTap: () => goToActivity(context, activity),
             child: Column(
@@ -210,14 +204,12 @@ class _ActivityListSliverState extends State<ActivityListSliver> {
                                 width: 150,
                                 height: 230,
                                 fit: BoxFit.cover)
-                            : Icon(Icons.group_rounded, size: 150),
+                            : const Icon(Icons.group_rounded, size: 150),
                   ),
                   Text(
-                      (activity.name != null
-                          ? activity.name
-                          : AppLocalizations.of(context)!.unnamedActivity)!,
-                      style: TextStyle(color: Colors.white)),
-                  Text(dateinfo, style: TextStyle(color: Colors.white)),
+                      (activity.name ?? AppLocalizations.of(context)!.unnamedActivity)!,
+                      style: const TextStyle(color: Colors.white)),
+                  Text(dateinfo, style: const TextStyle(color: Colors.white)),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: buttons,

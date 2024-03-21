@@ -13,7 +13,7 @@ class ActivityItem extends StatelessWidget{
   final Activity activity;
   final int? navIndex;
 
-  ActivityItem(this.activity,{this.navIndex});
+  const ActivityItem(this.activity,{super.key, this.navIndex});
   
   @override
   Widget build(BuildContext context){
@@ -25,19 +25,19 @@ class ActivityItem extends StatelessWidget{
         Card(
             child: InkWell(
                 onTap: () => {
-                  goToWidget(context,ActivityScreen(activity,navIndex: this.navIndex,))
+                  goToWidget(context,ActivityScreen(activity,navIndex: navIndex,))
                 },
                 child:Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       ListTile(
-                        leading: activity.coverpictureurl!=null ? Image.network(activity.coverpictureurl!,width:50): Icon(Icons.sports_gymnastics),
+                        leading: activity.coverpictureurl!=null ? Image.network(activity.coverpictureurl!,width:50): const Icon(Icons.sports_gymnastics, size: 50),
                         title: Text(activity.name != null ? activity.name! : " ${AppLocalizations.of(context)!.unnamedActivity} #${activity.id}"),
-                        subtitle: activity.description!=null ? Text(parse(activity.description).body!.text,maxLines: 3, style: TextStyle(overflow: TextOverflow.ellipsis),): null,
+                        subtitle: activity.description!=null ? Text(parse(activity.description).body!.text,maxLines: 3, style: const TextStyle(overflow: TextOverflow.ellipsis),): null,
 
                         isThreeLine: activity.description!=null,
                       ),
-                      Row(
+                      const Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                        // children: buttons,
                       ),

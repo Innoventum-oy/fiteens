@@ -10,11 +10,11 @@ import 'package:core/core.dart' as core;
 
 class ActivityListItem extends StatefulWidget {
 
-  final core.ApiClient _apiClient = core.ApiClient();
+  //final core.ApiClient _apiClient = core.ApiClient();
   final core.Activity activityItem;
  
 
-  ActivityListItem(this.activityItem);
+  const ActivityListItem(this.activityItem, {super.key});
   @override
   State<StatefulWidget> createState() => _ActivityListItemState();
 }
@@ -28,7 +28,8 @@ class _ActivityListItemState extends State<ActivityListItem>{
   @override
   Widget build(BuildContext context){
     core.User user = Provider.of<core.UserProvider>(context).user;
-    String dateinfo = widget.activityItem.nexteventdate==null ? '':(calculateDifference(widget.activityItem.nexteventdate!)!=0 ? DateFormat('kk:mm dd.MM.yyyy').format(widget.activityItem.nexteventdate!) : 'Today '+DateFormat('kk:mm ').format(widget.activityItem.nexteventdate!));
+    core.ActivityProvider activityProvider = Provider.of<core.ActivityProvider>(context);
+    String dateinfo = widget.activityItem.nexteventdate==null ? '':(calculateDifference(widget.activityItem.nexteventdate!)!=0 ? DateFormat('kk:mm dd.MM.yyyy').format(widget.activityItem.nexteventdate!) : 'Today ${DateFormat('kk:mm ').format(widget.activityItem.nexteventdate!)}');
     List<Widget> buttons=[];
     buttons.add(ElevatedButton(
       child: Text(AppLocalizations.of(context)!.readMore),
@@ -44,10 +45,10 @@ class _ActivityListItemState extends State<ActivityListItem>{
         && ( widget.activityItem.registrationenddate==null || widget.activityItem.registrationenddate!.isAfter(DateTime.now()))
         && user.token!=null) {
       buttons.add(ElevatedButton(
-        child: Text(AppLocalizations.of(context)!.signUp),
+        child: activityProvider.loadingStatus == core.DataLoadingStatus.loading ? const CircularProgressIndicator() : Text( AppLocalizations.of(context)!.signUp),
         onPressed: () {
-          print('signing up for activity {$widget.activityItem.name}');
-          widget._apiClient.registerForActivity(widget.activityItem.id, user);
+          activityProvider.loadingStatus == core.DataLoadingStatus.loading ? null : activityProvider.registerForActivity(widget.activityItem.id, user);
+
         },
       ));
       buttons.add(const SizedBox(width: 8));
@@ -56,9 +57,9 @@ class _ActivityListItemState extends State<ActivityListItem>{
 
     String subtitle= dateinfo ;
     if(widget.activityItem.registration){
-      subtitle+=' ['+(widget.activityItem.registeredvisitorcount!=null ? widget.activityItem.registeredvisitorcount.toString() : '0')+(widget.activityItem.maxvisitors!=null ? '/'+widget.activityItem.maxvisitors.toString() :'') +']';
+      subtitle+=' [${widget.activityItem.registeredvisitorcount!=null ? widget.activityItem.registeredvisitorcount.toString() : '0'}${widget.activityItem.maxvisitors!=null ? '/${widget.activityItem.maxvisitors}' :''}]';
     }
-    if(widget.activityItem.description!=null)subtitle+= '\n'+widget.activityItem.description!;
+    if(widget.activityItem.description!=null)subtitle+= '\n${widget.activityItem.description!}';
     return Center(
       child:
       Card(
@@ -68,8 +69,8 @@ class _ActivityListItemState extends State<ActivityListItem>{
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
              ListTile(
-              leading: Icon(Icons.event),
-              title: Text((widget.activityItem.name != null ? widget.activityItem.name: AppLocalizations.of(context)!.unnamedActivity)!),
+              leading: const Icon(Icons.event),
+              title: Text((widget.activityItem.name ?? AppLocalizations.of(context)!.unnamedActivity)),
               subtitle: Text(subtitle,
                overflow: TextOverflow.ellipsis,
                 maxLines:5),
@@ -87,7 +88,7 @@ class _ActivityListItemState extends State<ActivityListItem>{
   }
   void showMessage(BuildContext context, String title, Widget content) {
     showDialog(context: context, builder: (BuildContext builderContext) {
-      _timer = Timer(Duration(seconds: 5), () {
+      _timer = Timer(const Duration(seconds: 5), () {
         Navigator.of(context).pop();
       });
 

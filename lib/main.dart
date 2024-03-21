@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:core/core.dart';
 import 'package:fiteens/src/util/styles.dart';
 import 'package:fiteens/src/views/calendar/calendarscreen.dart';
+import 'package:fiteens/src/views/user/card.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart'; // important
@@ -31,7 +32,7 @@ void main() async {
 */
 
   runApp(
-      MultiProvider(
+    MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => core.AuthProvider()),
           ChangeNotifierProvider(create: (_) => core.BadgeProvider()),
@@ -44,13 +45,15 @@ void main() async {
           ChangeNotifierProvider(create: (_) => core.RoutineProvider()),
           ChangeNotifierProvider(create: (_) => core.RoutineItemProvider()),
         ],
-        child:Fiteens()
-      ),
+        child:const Fiteens()
+    ),
   );
 }
 
 
 class Fiteens extends StatelessWidget {
+  const Fiteens({super.key});
+
   // This widget is the root of Fiteens  application.
 
   @override
@@ -59,30 +62,33 @@ class Fiteens extends StatelessWidget {
       log('build called for application (main.dart)');
     }
 
-        return  MaterialApp(
-          title: 'Fiteens',
-          debugShowCheckedModeBanner: false,
-          navigatorKey: NavigationService.navigatorKey,
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
+    return  MaterialApp(
+        title: 'Fiteens',
+        debugShowCheckedModeBanner: false,
+        navigatorKey: NavigationService.navigatorKey,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
 
-          theme: appTheme,
-          home: AppLocalizationState(),
-          routes: {
-            // '/gameboard' : (context) => Gameboard(),
-            '/resources': (context) => VerticalPageList(),
-            '/dashboard': (context) => DashBoard(),
-            '/login': (context) => Login(),
-            '/calendar' :(context) =>CalendarScreen(),
-            '/register': (context) => Register(),
-            '/reset-password': (context) => ResetPassword(),
-            '/validatecontact': (context) => ValidateContact(),
-            '/achievements': (context) => AchievementsView(),
-          }
+        theme: appTheme,
+        home: const AppLocalizationState(),
+        routes: {
+          // '/gameboard' : (context) => Gameboard(),
+          '/resources': (context) => VerticalPageList(),
+          '/dashboard': (context) => const DashBoard(),
+          '/login': (context) => const Login(),
+          '/calendar' :(context) =>const CalendarScreen(),
+          '/register': (context) => const Register(),
+          '/reset-password': (context) => const ResetPassword(),
+          '/validatecontact': (context) => const ValidateContact(),
+          '/achievements': (context) => AchievementsView(),
+          '/user' : (context) => const MyCard()
+        }
     );
   }
 }
 class AppLocalizationState extends StatefulWidget{
+  const AppLocalizationState({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _AppLocalizationState();
@@ -123,35 +129,35 @@ class _AppLocalizationState extends State<AppLocalizationState> {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
             case ConnectionState.waiting:
-              return CircularProgressIndicator();
+              return const Center(child: SizedBox(width:100,height:100,child: CircularProgressIndicator()));
             default:
-              if (snapshot.hasError)
+              if (snapshot.hasError) {
                 return Container(
                     color: Colors.red,
                     child: Padding(
                         padding:
-                        EdgeInsets.only(top: 50, left: 20, right: 20),
+                        const EdgeInsets.only(top: 50, left: 20, right: 20),
                         child: Text(
                             'Error occurred: ${snapshot.error} :: ${snapshot.stackTrace}\n Sorry! x(',
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 14,
                                 color: Colors.white,
                                 decoration: TextDecoration.none))));
-              else if (snapshot.hasData) //(userdata.token == null)
-                  {
-                // print("User from snapshot:" + snapshot.toString());
+              } else if (snapshot.hasData)
+              {
+
                 core.User userdata = snapshot.data as core.User;
                 if (userdata.token != null) {
                   Provider.of<core.UserProvider>(context, listen: false)
                       .setUserSilent(userdata);
 
-                  return DashBoard();
+                  return const DashBoard();
                 }
-                return Login();
-              } else
+                return const Login();
+              } else {
                 core.UserPreferences.removeUser();
-              // print("Snapshot: "+ snapshot.data);
-              return Login(); //Welcome(user: snapshot.data as User);
+              }
+              return const Login(); //Welcome(user: snapshot.data as User);
           }
         });
   }

@@ -17,7 +17,7 @@ Widget dayItem(Activity activity,BuildContext context){
         //backgroundImage: activity.coverpicture!=null ? Image.network(activity.coverpictureurl??''  ).image :
         //Image.asset('images/logo.png').image,),
       title: Text(activity.name??'',
-          style: TextStyle(fontSize: 12)
+          style: const TextStyle(fontSize: 12)
       ),
         //subtitle: Text(activity.description??''),
     )

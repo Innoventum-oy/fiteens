@@ -1259,6 +1259,16 @@ class S {
     );
   }
 
+  /// `No events found`
+  String get noEventsFound {
+    return Intl.message(
+      'No events found',
+      name: 'noEventsFound',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `No forms found`
   String get noFormsFound {
     return Intl.message(
@@ -1654,6 +1664,16 @@ class S {
     return Intl.message(
       'Refresh',
       name: 'refresh',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `References`
+  String get references {
+    return Intl.message(
+      'References',
+      name: 'references',
       desc: '',
       args: [],
     );
@@ -2114,6 +2134,16 @@ class S {
     return Intl.message(
       'Your password',
       name: 'yourPassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your log dates`
+  String get yourLogDates {
+    return Intl.message(
+      'Your log dates',
+      name: 'yourLogDates',
       desc: '',
       args: [],
     );

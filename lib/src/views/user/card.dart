@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fiteens/src/util/utils.dart';
+
 import 'package:fiteens/src/widgets/widgets.dart';
 import 'package:fiteens/src/views/user/deleteaccountform.dart';
 import 'package:fiteens/src/views/user/validatecontact.dart';
-import 'package:fiteens/src/views/webpage/webpagetextcontent.dart';
+
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -19,13 +18,13 @@ import 'joingroupform.dart';
 class MyCard extends StatefulWidget {
   final core.User? user;
 
-  MyCard({this.user});
+  const MyCard({super.key, this.user});
 
   @override
-  _MyCardState createState() => _MyCardState();
+  MyCardState createState() => MyCardState();
 }
 
-class _MyCardState extends State<MyCard> {
+class MyCardState extends State<MyCard> {
   List<Widget> contactItems = [];
   Map<core.Keyword,int> themes = {};
   @override
@@ -37,48 +36,11 @@ class _MyCardState extends State<MyCard> {
      // loadThemes();
     });
   }
-/*
-  Future<void> loadThemes() async{
-    print('calling loadThemes');
-    User user = Provider.of<UserProvider>(context, listen: false).user;
-    if(user.themesofbooksread==null){
-      print('no themes of read books found for user');
-      return;
-    }
-    if(user.themesofbooksread!.isNotEmpty && user.themesofbooksread!=null) {
-      List<dynamic> themes = user.themesofbooksread ?? [];
-     // print(user.themesofbooksread.toString());
-      final objectmodel.KeywordProvider keywordProvider =
-      objectmodel.KeywordProvider();
 
-        for (var theme in themes) {
-          try {
-            print('loading details for theme ' + theme['id'].toString());
-            dynamic details = await keywordProvider.getDetails(
-                int.parse(theme['id']), user);
-            setState(() {
-              print('THEME details: '+details.toString());
-              Keyword themedata = Keyword.fromJson(details);
-              print('adding theme ' + themedata.keyword! +
-                  ' to the themes collection!');
-              this.themes[themedata]=int.parse(theme['count']);
-            });
-          } catch (e) {
-            print(   e.toString());
-          }
-        }
-    }
-  }
-*/
   @override
   Widget build(BuildContext context) {
     core.User user = Provider.of<core.UserProvider>(context).user;
-    /*if (user.token == null) {
-      Navigator.pushNamed(context, '/login');
-      return Container();
-    }*/
-//print('user themes in build: '+user.themesofbooksread.toString());
-//print('user data in build: '+user.data.toString());
+
     List<core.ContactMethod> myContacts = Provider.of<core.UserProvider>(context).contacts;
 
     if(myContacts.isNotEmpty)
@@ -86,7 +48,7 @@ class _MyCardState extends State<MyCard> {
         contactItems.clear();
         for(var i in myContacts)
           {
-            print(i.toString());
+
             contactItems.add(
                 Row(
 
@@ -108,7 +70,7 @@ class _MyCardState extends State<MyCard> {
                         },
                         child:Text(
                           AppLocalizations.of(context)!.verify ,
-                          style: TextStyle(
+                          style: const TextStyle(
                            // fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
@@ -131,7 +93,7 @@ class _MyCardState extends State<MyCard> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 50),
+          const SizedBox(height: 50),
           Center(child: _loggedInView(context, user)),
           /*SizedBox(height: 50),
           Center(
@@ -139,9 +101,9 @@ class _MyCardState extends State<MyCard> {
                   ? Image.network(user.qrcode!, height: 200)
                   : Container()),*/
 
-          showThemes(user),
-          SizedBox(height: 15),
-          DeleteAccountAction(),
+          const SizedBox(height: 15),
+          const DeleteAccountAction(),
+          /*
           SizedBox(height: 15),
         Container(
 
@@ -170,7 +132,11 @@ class _MyCardState extends State<MyCard> {
               ),
 
             ),
-          SizedBox(height: 15),
+             */
+           
+          const SizedBox(height: 15),
+
+
           Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children:[
@@ -219,66 +185,20 @@ class _MyCardState extends State<MyCard> {
     nameparts.add(user.lastname ?? 'Doe');
 
     String username = nameparts.join(' ');
-    print(this.contactItems.length.toString()+' contacts for user');
+
     return Column(
       children: <Widget>[
         /*_drawAvatar(user.image != null && user.image!.isNotEmpty
             ? NetworkImage(user.image)
             : Image.asset('images/profile.png').image),*/
         _drawLabel(context, username),
-        ...this.contactItems,
+        ...contactItems,
 
-        JoinGroupForm()
+        const JoinGroupForm()
       ],
     );
   }
-  Widget showThemes(user)
-  {
-    print('number of themes: '+this.themes.length.toString());
-    if(this.themes.isEmpty) return Container();
-    else{
 
-      List<Widget> tags = [];
-      this.themes.forEach((hashtag, count) {
-        if (hashtag.unicodeicon != null)
-          tags.add(Padding(
-            padding:EdgeInsets.only(top:5,bottom:5),
-            child:Row(children:[
-              Container(
-                width:30,
-                child:FaIcon(
-                    IconData(hashtag.unicodeicon!,
-                        fontFamily: 'FontAwesomeSolid',
-                        fontPackage: 'font_awesome_flutter'),
-                    size: 20.0),
-              ),
-              SizedBox(width:5),
-              Text(' x '+count.toString()),
-              SizedBox(width:5),
-              RichText(
-                text:TextSpan(
-                  text: (hashtag.keyword ?? '') + ' ',
-                  style: new TextStyle(
-                    color: hashtag.colour != null && hashtag.colour!.isNotEmpty
-                        ? HexColor.fromHex(hashtag.colour ?? '#ffffff')
-                        : Theme
-                        .of(context)
-                        .colorScheme
-                        .primary,
-                  ),
-                ),
-              )
-            ]
-            ),
-          ),
-          );
-      });
-      return Container(
-          child:Column(
-              children: tags)
-      );
-    }
-  }
   Padding _drawLabel(BuildContext context, String label) {
     return Padding(
       padding: const EdgeInsets.all(16.0),

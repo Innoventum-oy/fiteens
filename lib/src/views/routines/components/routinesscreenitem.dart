@@ -10,7 +10,7 @@ class RoutinesScreenItem extends StatelessWidget{
 
   final Routine routine;
 
-  RoutinesScreenItem(this.routine);
+  const RoutinesScreenItem(this.routine, {super.key});
 
   @override
   Widget build(BuildContext context){
@@ -30,15 +30,15 @@ class RoutinesScreenItem extends StatelessWidget{
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       ListTile(
-                        leading: routine.imageUrl!=null ? Image.network(routine.imageUrl! ,width:50): Icon(Icons.sports_gymnastics),
-                        title: Text((routine.name != null ? routine.name: AppLocalizations.of(context)!.unnamedRoutine)!,
+                        leading: routine.imageUrl!=null ? Image.network(routine.imageUrl! ,width:50): const Icon(Icons.sports_gymnastics),
+                        title: Text((routine.name ?? AppLocalizations.of(context)!.unnamedRoutine),
 
                         ),
-                        subtitle: Text(parse(routine.description??'').body!.text,maxLines:3,style: TextStyle(overflow: TextOverflow.ellipsis),),
+                        subtitle: Text(parse(routine.description??'').body!.text,maxLines:3,style: const TextStyle(overflow: TextOverflow.ellipsis),),
 
                         isThreeLine: true,
                       ),
-                      Row(
+                      const Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         // children: buttons,
                       ),

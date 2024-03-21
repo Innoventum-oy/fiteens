@@ -205,6 +205,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "noContactMethodsFound":
             MessageLookupByLibrary.simpleMessage("No contact methods found"),
         "noDescription": MessageLookupByLibrary.simpleMessage("No description"),
+        "noEventsFound":
+            MessageLookupByLibrary.simpleMessage("No events found"),
         "noFormsFound": MessageLookupByLibrary.simpleMessage("No forms found"),
         "noResourcesFound": MessageLookupByLibrary.simpleMessage(
             "No resources currently available"),
@@ -262,6 +264,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "processing": MessageLookupByLibrary.simpleMessage("Processing"),
         "ratingSaved": MessageLookupByLibrary.simpleMessage("Rating saved"),
         "readMore": MessageLookupByLibrary.simpleMessage("Read more"),
+        "references": MessageLookupByLibrary.simpleMessage("References"),
         "refresh": MessageLookupByLibrary.simpleMessage("Refresh"),
         "registrationFailed":
             MessageLookupByLibrary.simpleMessage("Registration failed"),
@@ -326,6 +329,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("You have this achievement"),
         "yourAnswerHasBeenSaved":
             MessageLookupByLibrary.simpleMessage("Your answer has been saved"),
+        "yourLogDates": MessageLookupByLibrary.simpleMessage("Your log dates"),
         "yourPassword": MessageLookupByLibrary.simpleMessage("Your password")
       };
 }

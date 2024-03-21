@@ -1,7 +1,7 @@
 import 'package:feedback/feedback.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'dart:typed_data';
@@ -67,7 +67,7 @@ String formatReadtime(int runtime) {
   int hours = runtime ~/ 60;
   int minutes = runtime % 60;
 
-  return '$hours\h $minutes\m';
+  return '${hours}h ${minutes}m';
 }
 
 MaterialColor createMaterialColor(hexcode) {
@@ -77,9 +77,9 @@ MaterialColor createMaterialColor(hexcode) {
   for (int i = 1; i < 10; i++) {
     strengths.add(0.1 * i);
   }
-  strengths.forEach((strength) {
+  for (var strength in strengths) {
     swatch[(strength * 1000).round()] = sourceColor;
-  });
+  }
   return MaterialColor(sourceColor.value, swatch);
 }
 
@@ -96,58 +96,59 @@ Future<void> feedbackAction(BuildContext context, User user) async {
   String appName = '';
 
   String version = '';
-
+  String feedbackText = AppLocalizations.of(context)!.feedback;
   await PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
     appName = packageInfo.appName;
     version = packageInfo.version;
   });
 
-  final ApiClient _apiClient = ApiClient();
-  _apiClient.buildContext = context;
-  BetterFeedback.of(context).show((UserFeedback feedback) async {
-    Map<String, dynamic> params = {
-      'method': 'json',
-      'modulename': 'feedback',
-      'moduletype': 'pages',
-      'action': 'saveobject',
-      'api_key': user.token
-    };
-    final screenshotFile = await writeImageToStorage(feedback.screenshot);
-    Map<String, dynamic> data = {
-      'objecttype': 'feedback',
-      'objectid': 'create',
-      'data_email': user.email,
-      'data_phone': user.phone,
-      'data_sender': user.lastname! + ' ' + user.firstname!,
-      'data_subject': appName +
-          ' ' +
-          version +
-          ' ' +
-          AppLocalizations.of(context)!.feedback,
-      'data_content': feedback.text,
-      'file_file': screenshotFile
-    };
-    _apiClient.sendFeedback(params, data)!.then((var response) async {
-      switch (response['status']) {
-        case 'success':
-          String title = AppLocalizations.of(context)!.feedbackSent;
-          String content = AppLocalizations.of(context)!.thankyouForFeedback;
-          showDialog<String>(
-              context: context,
-              builder: (BuildContext context) => AlertDialog(
-                    title: Text(title),
-                    content: Text(content),
-                    actions: <Widget>[
-                      ElevatedButton(
-                        child: Text('Ok'),
-                        onPressed: () => Navigator.pop(context, 'Ok'),
-                      )
-                    ],
-                  ));
-      }
-      if (response['error'] != null)
-        handleNotifications([response['error']], context);
+  final ApiClient apiClient = ApiClient();
+  apiClient.buildContext = context;
+  if(context.mounted) {
+    BetterFeedback.of(context).show((UserFeedback feedback) async {
+      Map<String, dynamic> params = {
+        'method': 'json',
+        'modulename': 'feedback',
+        'moduletype': 'pages',
+        'action': 'saveobject',
+        'api_key': user.token
+      };
+
+      final screenshotFile = await writeImageToStorage(feedback.screenshot);
+      Map<String, dynamic> data = {
+        'objecttype': 'feedback',
+        'objectid': 'create',
+        'data_email': user.email,
+        'data_phone': user.phone,
+        'data_sender': '${user.lastname!} ${user.firstname!}',
+        'data_subject': '$appName $version $feedbackText',
+        'data_content': feedback.text,
+        'file_file': screenshotFile
+      };
+      apiClient.sendFeedback(params, data)!.then((var response) async {
+        switch (response['status']) {
+          case 'success':
+            String title = AppLocalizations.of(context)!.feedbackSent;
+            String content = AppLocalizations.of(context)!.thankyouForFeedback;
+            showDialog<String>(
+                context: context,
+                builder: (BuildContext context) =>
+                    AlertDialog(
+                      title: Text(title),
+                      content: Text(content),
+                      actions: <Widget>[
+                        ElevatedButton(
+                          child: const Text('Ok'),
+                          onPressed: () => Navigator.pop(context, 'Ok'),
+                        )
+                      ],
+                    ));
+        }
+        if (response['error'] != null) {
+          handleNotifications([response['error']], context);
+        }
+      });
     });
-  });
+  }
 }
 String capitalize(String s) => s[0].toUpperCase() + s.substring(1);

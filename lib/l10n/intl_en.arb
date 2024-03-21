@@ -142,6 +142,7 @@
   "noActivitiesFound": "Could not find any activities",
   "noContactMethodsFound": "No contact methods found",
   "noDescription": "No description",
+  "noEventsFound": "No events found",
   "noFormsFound": "No forms found",
   "noResourcesFound": "No resources currently available",
   "noRoutinesFound": "No routines found",
@@ -182,6 +183,7 @@
   "ratingSaved": "Rating saved",
   "readMore": "Read more",
   "refresh": "Refresh",
+  "references": "References",
   "registrationFailed": "Registration failed",
   "requestFailed": "Request failed",
   "requestNewCode": "Get new code",
@@ -227,5 +229,6 @@
   "yes": "Yes",
   "youHaveThisBadge": "You have this achievement",
   "yourAnswerHasBeenSaved": "Your answer has been saved",
-  "yourPassword": "Your password"
+  "yourPassword": "Your password",
+  "yourLogDates": "Your log dates"
 }

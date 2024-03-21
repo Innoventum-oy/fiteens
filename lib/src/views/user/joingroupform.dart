@@ -6,47 +6,49 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:core/core.dart' as core;
 
 enum CodeStatus {
-  Idle,
-  Authenticating,
-  Accepted
+  idle,
+  authenticating,
+  accepted
 
 }
 class JoinGroupForm extends StatefulWidget {
+  const JoinGroupForm({super.key});
+
   @override
-  _JoinGroupFormState createState() => _JoinGroupFormState();
+  JoinGroupFormState createState() => JoinGroupFormState();
 }
 
-class _JoinGroupFormState extends State<JoinGroupForm> {
-  final formKey = new GlobalKey<FormState>();
+class JoinGroupFormState extends State<JoinGroupForm> {
+  final formKey = GlobalKey<FormState>();
   //final core.ApiClient _apiClient = core.ApiClient();
   String?  _registrationCode;
-  CodeStatus formStatus = CodeStatus.Idle;
+  CodeStatus formStatus = CodeStatus.idle;
   core.User? user;
 
   Map<String,TextEditingController> controllers = {
 
-    'code' : new TextEditingController()
+    'code' : TextEditingController()
   };
 
   List<Widget> formButtons()
   {
-    var joinGroup = () {
+    joinGroup() {
       final form = formKey.currentState;
       if (form!.validate()) {
         form.save();
-        Provider.of<core.UserProvider>(context).joinGroup(
+        Provider.of<core.UserProvider>(context,listen:false).joinGroup(
              _registrationCode.toString(),
-            this.user ?? new core.User()
+            user ?? core.User()
         ).then((responsedata) {
           var response = responsedata['data'] ?? responsedata;
-          if(response!=null) if( response['status']!=null) {
+          if(response!=null && response['status']!=null) {
 
             switch(response['status']) {
               case 'error':
                 Flushbar(
                   title: AppLocalizations.of(context)!.joiningGroupFailed,
                   message: response['message'] !=null ? response['message'].toString() : response['error'].toString(),
-                  duration: Duration(seconds: 10),
+                  duration: const Duration(seconds: 10),
                 ).show(context);
 
                 break;
@@ -54,19 +56,19 @@ class _JoinGroupFormState extends State<JoinGroupForm> {
               case 'success':
              // spell out something
               setState(() {
-                formStatus = CodeStatus.Accepted;
+                formStatus = CodeStatus.accepted;
               });
                 Flushbar(
                   title: AppLocalizations.of(context)!.joinedToGroup,
                   message: response['message'] !=null ? response['message'].toString() : response.toString(),
-                  duration: Duration(seconds: 10),
+                  duration: const Duration(seconds: 10),
                 ).show(context);
             }
           } else {
             Flushbar(
               title: AppLocalizations.of(context)!.joiningGroupFailed,
               message: response['error'] !=null ? response['error'].toString() : response.toString(),
-              duration: Duration(seconds: 10),
+              duration: const Duration(seconds: 10),
             ).show(context);
           }
         });
@@ -74,11 +76,11 @@ class _JoinGroupFormState extends State<JoinGroupForm> {
         Flushbar(
           title: AppLocalizations.of(context)!.errorsInForm,
           message: AppLocalizations.of(context)!.pleaseCompleteFormProperly,
-          duration: Duration(seconds: 10),
+          duration: const Duration(seconds: 10),
         ).show(context);
       }
 
-    };
+    }
 
 /*
     String? validateCode(String? value) {
@@ -103,19 +105,19 @@ class _JoinGroupFormState extends State<JoinGroupForm> {
     var loading = Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        CircularProgressIndicator(),
+        const CircularProgressIndicator(),
         Text(AppLocalizations.of(context)!.pleaseWaitSendingCode)
       ],
     );
 
     List <Widget> formfields = [];
 
-    formfields.add(SizedBox(height: 10.0));
+    formfields.add(const SizedBox(height: 10.0));
     formfields.add(label(AppLocalizations.of(context)!.enterGroupCode));
-    formfields.add(SizedBox(height: 5.0));
+    formfields.add(const SizedBox(height: 5.0));
     formfields.add(codeField);
-    formfields.add( SizedBox(height: 10.0));
-    formfields.add( this.formStatus == CodeStatus.Authenticating
+    formfields.add( const SizedBox(height: 10.0));
+    formfields.add( formStatus == CodeStatus.authenticating
         ? loading
         : longButtons(AppLocalizations.of(context)!.useCode, joinGroup));
 
@@ -128,16 +130,16 @@ class _JoinGroupFormState extends State<JoinGroupForm> {
     var loading = Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        CircularProgressIndicator(),
+        const CircularProgressIndicator(),
         Text(AppLocalizations.of(context)!.loading)
       ],
     );
 
     switch(status){
 
-      case CodeStatus.Idle:
+      case CodeStatus.idle:
         return Container(
-          padding: EdgeInsets.symmetric(vertical:10,horizontal: 30),
+          padding: const EdgeInsets.symmetric(vertical:10,horizontal: 30),
           child: Form(
             key: formKey,
             child: Column(
@@ -157,33 +159,33 @@ class _JoinGroupFormState extends State<JoinGroupForm> {
         );
 
 
-      case CodeStatus.Authenticating:
+      case CodeStatus.authenticating:
       // display spinner
         return loading;
 
 
-      case CodeStatus.Accepted:
+      case CodeStatus.accepted:
       //print('Status.Registered switch handler');
 
         return  Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Padding(
-              padding:EdgeInsets.all(10),
+              padding:const EdgeInsets.all(10),
               child:Row(
                   children:[
-                    Icon(Icons.check),
+                    const Icon(Icons.check),
                     Text(AppLocalizations.of(context)!.codeAccepted,
-                        style:TextStyle(fontSize:20)),
+                        style:const TextStyle(fontSize:20)),
                   ]),),
-            SizedBox(height: 15.0),
+            const SizedBox(height: 15.0),
             ElevatedButton(
                 onPressed: () {
                   setState(() {
-                    this.formStatus = CodeStatus.Idle;
+                    formStatus = CodeStatus.idle;
                   });
                 },
-                child: Text(AppLocalizations.of(context)!.enterNewCode,style: TextStyle(fontWeight: FontWeight.w300))),
+                child: Text(AppLocalizations.of(context)!.enterNewCode,style: const TextStyle(fontWeight: FontWeight.w300))),
 
 
           ],
@@ -197,8 +199,8 @@ class _JoinGroupFormState extends State<JoinGroupForm> {
   @override
   Widget build(BuildContext context) {
 
-    this.user = Provider.of<core.UserProvider>(context).user;
-    return joinGroupFormBody(this.formStatus);
+    user = Provider.of<core.UserProvider>(context).user;
+    return joinGroupFormBody(formStatus);
 
 
   }

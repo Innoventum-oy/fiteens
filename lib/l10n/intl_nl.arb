@@ -135,6 +135,7 @@
   "noActivitiesFound": "Geen activiteiten gevonden",
   "noContactMethodsFound": "Geen contactmethoden gevonden",
   "noDescription": "Geen beschrijving",
+  "noEventsFound": "Geen evenementen gevonden",
   "noFormsFound": "Geen formulieren gevonden",
   "noResourcesFound": "Geen middelen beschikbaar",
   "noRoutinesFound": "Geen routines gevonden",
@@ -185,6 +186,7 @@
   "routineAddedToCalendar": "Routine toegevoegd aan kalender",
   "routines": "Routines",
   "routines_title": "Routines",
+  "references": "Referenties",
   "saveAnswer": "Antwoord opslaan",
   "saveData": "Gegevens opslaan",
   "savingDataFailed": "Het opslaan van gegevens is mislukt",
@@ -220,5 +222,6 @@
   "yes": "Ja",
   "youHaveThisBadge": "Je hebt deze prestatie",
   "yourAnswerHasBeenSaved": "Je antwoord is opgeslagen",
-  "yourPassword": "Je wachtwoord"
+  "yourPassword": "Je wachtwoord",
+  "yourLogDates": "Je logboekdata"
 }

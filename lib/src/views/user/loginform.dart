@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:another_flushbar/flushbar.dart';
+import 'package:fiteens/src/util/constants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fiteens/src/widgets/widgets.dart';
@@ -8,19 +9,19 @@ import 'package:fiteens/src/views/webpage/webpagetextcontent.dart';
 import 'package:flutter_settings_ui/flutter_settings_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:core/core.dart' as core;
 
 class Login extends StatefulWidget {
   final dynamic user;
 
-  Login({this.user});
+  const Login({super.key, this.user});
   @override
-  _LoginState createState() => _LoginState();
+  LoginState createState() => LoginState();
 }
 
-class _LoginState extends State<Login> {
-  final formKey = new GlobalKey<FormState>();
+class LoginState extends State<Login> {
+  final formKey = GlobalKey<FormState>();
   bool isLoading = false;
   String? _contact, _password;
   String serverName = '';
@@ -36,7 +37,7 @@ class _LoginState extends State<Login> {
   late final Map? servers;
 
 
-  _LoginState() {
+  LoginState() {
     PackageInfo.fromPlatform().then((PackageInfo packageInfo) => setState(() {
       appName = packageInfo.appName;
       packageName = packageInfo.packageName;
@@ -114,22 +115,22 @@ class _LoginState extends State<Login> {
     String? validateContact(String? value)
     {
 
-      String? _msg;
+      String? msg;
       if(value!.isEmpty) return AppLocalizations.of(context)!.pleaseEnterPhoneOrEmail;
 
       //test for phone number pattern
       String pattern = r'(^(?:[+0])?[0-9]{10,12}$)';
-      RegExp regExp = new RegExp(pattern);
+      RegExp regExp = RegExp(pattern);
       if (regExp.hasMatch(value)) {
         return null;
       }
       //test for email pattern
-      RegExp regex = new RegExp(
+      RegExp regex = RegExp(
           r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
       if (!regex.hasMatch(value)) {
-        _msg = AppLocalizations.of(context)!.pleaseProvideValidPhoneOrEmail;
+        msg = AppLocalizations.of(context)!.pleaseProvideValidPhoneOrEmail;
       }
-      return _msg;
+      return msg;
     }
 
     final contactField = TextFormField(
@@ -144,7 +145,7 @@ class _LoginState extends State<Login> {
       autofocus: false,
       obscureText: !_showPassword,
       initialValue: _password,
-      style: TextStyle(color: Colors.white),
+      style: const TextStyle(color: Colors.white),
       validator: (value) => value!.isEmpty ? AppLocalizations.of(context)!.pleaseEnterPassword : null,
       onSaved: (value) => _password = value,
       decoration: buildInputDecoration(
@@ -156,7 +157,7 @@ class _LoginState extends State<Login> {
     var loading = Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        CircularProgressIndicator(),
+        const CircularProgressIndicator(),
         Text(AppLocalizations.of(context)!.authenticating)
       ],
     );
@@ -169,19 +170,19 @@ class _LoginState extends State<Login> {
     child:ElevatedButton(
 
           child: Text(AppLocalizations.of(context)!.forgotPassword,
-              style: TextStyle(fontWeight: FontWeight.w300)),
+              style: const TextStyle(fontWeight: FontWeight.w300)),
           onPressed: () {
             Navigator.pushNamed(context, '/reset-password');
           },
         ),
         ),
-        SizedBox(width:10),
+        const SizedBox(width:10),
         Expanded(
           flex:2,
           child:
         ElevatedButton(
 
-          child: Text(AppLocalizations.of(context)!.createAccount, style: TextStyle(fontWeight: FontWeight.w300)),
+          child: Text(AppLocalizations.of(context)!.createAccount, style: const TextStyle(fontWeight: FontWeight.w300)),
           onPressed: () {
             auth.setRegisteredStatus(core.Status.notRegistered);
             Navigator.pushNamed(context, '/register');
@@ -197,7 +198,7 @@ class _LoginState extends State<Login> {
         TextButton(
 
           child: Text(AppLocalizations.of(context)!.cancel,
-              style: TextStyle(fontWeight: FontWeight.w300)),
+              style: const TextStyle(fontWeight: FontWeight.w300)),
           onPressed: () async {
 
             //auth.logout(user);
@@ -208,7 +209,7 @@ class _LoginState extends State<Login> {
     );
 
 
-    var doLogin = () {
+    doLogin() {
       final form = formKey.currentState;
 
       if (form!.validate()) {
@@ -231,24 +232,22 @@ class _LoginState extends State<Login> {
             // Navigator.pushReplacementNamed(context, '/dashboard');
           } else {
             // userProvider.clearUser();
-            if(mounted) Flushbar(
+            if(mounted) {
+              Flushbar(
               title: AppLocalizations.of(context)!.loginFailed,
               message: response['message'].toString(),
-              duration: Duration(seconds: 3),
+              duration: const Duration(seconds: 3),
             ).show(context);
+            }
           }
           setState(() {
             isLoading = false;
-            if(kDebugMode){
-              log('isLoading set to false');
-            }
+
           });
         });
-      } else {
-        print("form is invalid");
       }
 
-    };
+    }
 
 
     return SafeArea(
@@ -261,7 +260,7 @@ class _LoginState extends State<Login> {
           Container(
            //color: appBackground,
             //color:HexColor.fromHex('#205c7b'),
-          padding: EdgeInsets.all(40.0),
+          padding: const EdgeInsets.all(40.0),
           child: ListView(
               children: <Widget>[
                  Center(
@@ -273,21 +272,21 @@ class _LoginState extends State<Login> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 15.0),
+                const SizedBox(height: 15.0),
                 label(AppLocalizations.of(context)!.emailOrPhoneNumber),
-                SizedBox(height: 5.0),
+                const SizedBox(height: 5.0),
                 contactField,
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
                 label(AppLocalizations.of(context)!.yourPassword),
-                SizedBox(height: 5.0),
+                const SizedBox(height: 5.0),
                 passwordField,
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
                 isLoading
                     ? loading
                     : longButtons(AppLocalizations.of(context)!.btnLogin, doLogin),
-                SizedBox(height: 15.0),
+                const SizedBox(height: 15.0),
                 forgotLabel,
-                SizedBox(height: 15.0),
+                const SizedBox(height: 15.0),
                 auth.loggedInStatus == core.Status.authenticating
                     ? cancelButton : Container(),
                 Row(children:[
@@ -296,6 +295,23 @@ class _LoginState extends State<Login> {
                   },),getVersionInfo(),
                 ]),
                 policyLink(),
+                // Erasmus logo and Sepie logo
+                Column(
+                  children: [
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                      children: [
+                        Image.asset('images/erasmus-cofunded-logo-white.png',width: 100,),
+
+                        Image.asset('images/SEPIE_erasmus_plus.gif',width: 100,),
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(height:10),
+                Center(child: Text(fundingDisclaimer,style: const TextStyle(fontSize: 11),))
               ],
 
             ),
@@ -310,11 +326,11 @@ class _LoginState extends State<Login> {
   }
   Widget trailingWidget(String currentname) {
     return (serverName == currentname)
-        ? Icon(Icons.check, color: Colors.blue)
-        : Icon(null);
+        ? const Icon(Icons.check, color: Colors.blue)
+        : const Icon(null);
   }
   Widget getVersionInfo() {
-    return Text(appName + ' v.' + version + '(' + buildNumber + ')',
+    return Text('$appName v.$version($buildNumber)',
       // style: TextStyle(color: Color(0xFFffe8d7))
         );
   }
@@ -328,7 +344,7 @@ class _LoginState extends State<Login> {
             );
           });
         },
-        child: Text(AppLocalizations.of(context)!.privacyPolicy,style: TextStyle(
+        child: Text(AppLocalizations.of(context)!.privacyPolicy,style: const TextStyle(
             fontWeight: FontWeight.w300,
            //color: Color(0xFFffe8d7)
         ))
@@ -337,10 +353,10 @@ class _LoginState extends State<Login> {
   void serverSelectDialog(BuildContext context){
     showDialog(
       context: context,
-      builder: (_) => new AlertDialog(
-          title: new Text(
+      builder: (_) => AlertDialog(
+          title:  const Text(
               'Server'),
-          content: Container(
+          content: SizedBox(
             width: double.maxFinite,
             child: ConstrainedBox(
               constraints: BoxConstraints(
@@ -355,15 +371,18 @@ class _LoginState extends State<Login> {
                   minWidth:
                   MediaQuery.of(context).size.width *
                       0.9),
-              child: SettingsSection(
+              child: SettingsList(sections:[SettingsSection(
+                  title: const Text('Choose server'),
                   tiles: environmentOptions(context)),
+            ]
+            ),
             ),
           ),
-          insetPadding: EdgeInsets.symmetric(horizontal: 20),
+          insetPadding: const EdgeInsets.symmetric(horizontal: 20),
           actions: <Widget>[
             ElevatedButton(
               child:
-              Text('Close'),
+              const Text('Close'),
               onPressed: () {
                 Navigator.of(context, rootNavigator: true).pop();
               },
@@ -377,8 +396,8 @@ class _LoginState extends State<Login> {
     List<SettingsTile> tiles = [];
     servers?.forEach((serverTitle, itemUrl) {
       tiles.add(SettingsTile(
-        title: serverTitle,
-        titleTextStyle:TextStyle(fontSize:13),
+        title: Text(serverTitle),
+
         // subtitle: serverUrl,
 
         leading: trailingWidget(serverTitle),
@@ -399,11 +418,12 @@ class _LoginState extends State<Login> {
           //  Navigator.pushReplacementNamed(context, '/login');
           Navigator.of(context, rootNavigator: true).pop();
           setState(() {
-            print('updating state');
+
           });
         },
       ));
     });
-    return tiles;
+
+    return tiles.isNotEmpty ? tiles : [SettingsTile(title: const Text('No servers found'))];
   }
 }

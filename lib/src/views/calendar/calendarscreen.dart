@@ -19,13 +19,13 @@ class CalendarScreen extends StatefulWidget {
   const CalendarScreen({this.navIndex=1,this.refresh=false,super.key});
 
   @override
-  State<StatefulWidget> createState() => _CalendarScreenState();
+  State<StatefulWidget> createState() => CalendarScreenState();
 }
 
-class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStateMixin  {
+class CalendarScreenState extends State<CalendarScreen> with TickerProviderStateMixin  {
   bool screenDataLoaded = false;
   Map<int,Activity> data = {};
-  Map<DateTime, List<Map<String,dynamic>>> _events = {};
+  final Map<DateTime, List<Map<String,dynamic>>> _events = {};
   ValueNotifier<List<Map<String,dynamic>>> _selectedEvents = ValueNotifier([]);
 
   Map<DateTime, List<Map<String,dynamic>>> eventsHashMap = <DateTime, List<Map<String,dynamic>>>{};
@@ -60,15 +60,19 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
     DateTime now = DateTime.now();
     ActivityVisitProvider visitProvider = Provider.of<ActivityVisitProvider>(context,listen: false);
     Map<String,dynamic> params = {
-      'user.id' : Provider.of<UserProvider>(context, listen: false).user.id.toString(),
+      'user' : Provider.of<UserProvider>(context, listen: false).user.id.toString(),
       //'activity.id' :'gt:0'
     };
-    log('called calendarscreen load, provider status: ${visitProvider.loadingStatus}');
+    if(kDebugMode) {
+      log('called calendarscreen load, provider status: ${visitProvider.loadingStatus}');
+    }
     bool reload = false;
     if(!screenDataLoaded || widget.refresh) reload = true;
     await visitProvider.getItems(params,reload:reload);
     List<ActivityVisit> items = visitProvider.data ?? [];
-    log('Item count. ${items.length}');
+    if(kDebugMode) {
+      log('Item count ${items.length}');
+    }
     for (var item in  items) {
       log(item.toString());
       if(item.startdate!=null && item.activity?.id!=null) {
@@ -76,22 +80,24 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
         if (_events[date] == null) {
           _events[date] = [];
         }
-          if(item.activity!=null && !data.containsKey(item.activity?.id)){
-            //Load activity info
+        if(item.activity!=null && !data.containsKey(item.activity?.id)){
+          //Load activity info
+          if(kDebugMode) {
             log('Retrieving details for activity ${item.activity?.id}');
-
-            Activity activity = Activity.fromJson(await Provider.of<ActivityProvider>(context,listen:false).getDetails(item.activity?.id??0,reload: true));
-            data.putIfAbsent(item.activity?.id??0, () => activity);
-
           }
-          else if(item.activity?.id==null) log('activity not set for activityvisit');
-          else log('${item.activityid}. already in events');
-          Map<String,dynamic> value = {'activity': data[item.activity?.id]!, 'activityVisit' : item};
-          log('adding event $item to date $date');
+          Activity activity = Activity.fromJson(await Provider.of<ActivityProvider>(context,listen:false).getDetails(item.activity?.id??0,reload: true));
+          data.putIfAbsent(item.activity?.id??0, () => activity);
+
+        }
+
+        Map<String,dynamic> value = {'activity': data[item.activity?.id]!, 'activityVisit' : item};
+
         _events[date]!.add(value);
 
       }
-      else log("$item startdate is null");
+      else {
+
+      }
     }
 
     //print('Adding all '+ _events.length.toString() +' events to eventsHashMap');
@@ -117,17 +123,19 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
     if(kDebugMode) {
       int eventCount = eventsHashMap[day] == null ? 0 : eventsHashMap[day]!
           .length;
-      log('events for $day: $eventCount');
+      if(kDebugMode) {
+        log('events for $day: $eventCount');
+      }
     }
-      return eventsHashMap[day] ?? [];
+    return eventsHashMap[day] ?? [];
 
   }
 
   @override
   Widget build(BuildContext context) {
 
-    Widget calendarView = defaultContent(Center(child:
-      CircularProgressIndicator(),
+    Widget calendarView = defaultContent(const Center(child:
+    CircularProgressIndicator(),
 
     ));
     if (screenDataLoaded) {
@@ -143,35 +151,34 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
           if(kDebugMode) {
             log('reloading page');
           }
-          Provider.of<ActivityVisitProvider>(context).loadingStatus = DataLoadingStatus.loading;
+          Provider.of<ActivityVisitProvider>(context,listen:false).loadingStatus = DataLoadingStatus.loading;
           constants.Router.navigate(context,'calendar',widget.navIndex,refresh: true);
         },
         child: calendarView);
   }
 
-int getHashCode(DateTime key) {
-  return key.day * 1000000 + key.month * 10000 + key.year;
-}
-void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
-
-  if (!isSameDay(_selectedDay, selectedDay)) {
-    setState(() {
-      //print('is not same day: '+selectedDay.toString());
-      _selectedDay = selectedDay;
-      _focusedDay = focusedDay;
-      //_rangeStart = null; // Important to clean those
-      //_rangeEnd = null;
-      //  _rangeSelectionMode = RangeSelectionMode.toggledOff;
-      _selectedEvents.value = _getEventsForDay(selectedDay);
-      //print(_selectedEvents);
-    });
-
-
+  int getHashCode(DateTime key) {
+    return key.day * 1000000 + key.month * 10000 + key.year;
   }
-  // else print('was same day');
-}
+  void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
+
+    if (!isSameDay(_selectedDay, selectedDay)) {
+      setState(() {
+        //print('is not same day: '+selectedDay.toString());
+        _selectedDay = selectedDay;
+        _focusedDay = focusedDay;
+        //_rangeStart = null; // Important to clean those
+        //_rangeEnd = null;
+        //  _rangeSelectionMode = RangeSelectionMode.toggledOff;
+        _selectedEvents.value = _getEventsForDay(selectedDay);
+        //print(_selectedEvents);
+      });
+
+
+    }
+    // else print('was same day');
+  }
   Widget calendarContent() {
-    log('Current locale: ${Intl.getCurrentLocale()}');
 
     final kNow = DateTime.now();
     kFirstDay = DateTime(kNow.year, kNow.month - 1, kNow.day);
@@ -190,7 +197,7 @@ void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
           focusedDay: _focusedDay,
           calendarFormat: _calendarFormat,
           startingDayOfWeek: StartingDayOfWeek.monday,
-          calendarStyle: CalendarStyle(markerDecoration: BoxDecoration(color:Colors.white,shape: BoxShape.circle,)),
+          calendarStyle: const CalendarStyle(markerDecoration: BoxDecoration(color:Colors.white,shape: BoxShape.circle,)),
           selectedDayPredicate: (day) {
             // Use `selectedDayPredicate` to determine which day is currently selected.
             // If this returns true, then `day` will be marked as selected.
@@ -218,13 +225,15 @@ void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
           child: ValueListenableBuilder<List<Map<String,dynamic>>>(
             valueListenable: _selectedEvents,
             builder: (context, value, _) {
-              print(value);
-              return ListView.builder(
+              return value.isNotEmpty ? ListView.builder(
                   itemCount: value.length,
                   itemBuilder: (BuildContext context, int index) {
 
                     return CalendarItem(value[index]);
-                  });
+                  }) : Padding(
+                padding: const EdgeInsets.all(30),
+                child: Text(AppLocalizations.of(context)!.noEventsFound),
+              );
             },
           ),
         ),
@@ -232,13 +241,13 @@ void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
     );
 
   }
-Widget defaultContent(contentChild){
-  return Padding(
-      padding:EdgeInsets.all(30),
-      child:Center(
-          child:contentChild)
+  Widget defaultContent(contentChild){
+    return Padding(
+        padding:const EdgeInsets.all(30),
+        child:Center(
+            child:contentChild)
 
-  );
+    );
 
-}
+  }
 }

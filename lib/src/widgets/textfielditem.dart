@@ -10,13 +10,13 @@ class TextFieldItem extends StatefulWidget {
   final Map<String, dynamic>? params;
   final Function onChanged;
 
-  TextFieldItem({required this.element, required this.value, required this.onChanged, this.params});
+  const TextFieldItem({super.key, required this.element, required this.value, required this.onChanged, this.params});
 
   @override
-  _TextFieldItemState createState() => _TextFieldItemState();
+  TextFieldItemState createState() => TextFieldItemState();
 }
 
-class _TextFieldItemState extends State<TextFieldItem> {
+class TextFieldItemState extends State<TextFieldItem> {
   late String selectedValue;
   final _textEditingController = TextEditingController();
 
@@ -39,14 +39,15 @@ class _TextFieldItemState extends State<TextFieldItem> {
   void updateTextFieldValue() {
     String? value = _textEditingController.text;
     setState(() {
-      this.selectedValue = value;
+      selectedValue = value;
       widget.onChanged(value);
       //DisplayForm.of(context)!.formData[widget.element.id!] = value;
     });
   }
 
+  @override
   Widget build(BuildContext context) {
-    this.selectedValue = widget.value;
+    selectedValue = widget.value;
     return TextField(
       controller: _textEditingController,
       //textDirection: TextDirection

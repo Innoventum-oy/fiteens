@@ -24,13 +24,13 @@ class DashBoard extends StatefulWidget {
   const DashBoard({this.navIndex = 0, this.refresh = false, super.key});
 
   @override
-  _DashBoardState createState() => _DashBoardState();
+  DashBoardState createState() => DashBoardState();
 }
 
-class _DashBoardState extends State<DashBoard> {
+class DashBoardState extends State<DashBoard> {
   int buildIteration = 1;
 
-  core.User user = new core.User();
+  core.User user = core.User();
   List<core.Badge> badges = [];
   bool loginPopupDisplayed = false;
   String? errorMessage;
@@ -39,11 +39,12 @@ class _DashBoardState extends State<DashBoard> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      this.buildIteration = 1;
-      this.user = Provider.of<core.UserProvider>(context, listen: false).user;
+      buildIteration = 1;
+      user = Provider.of<core.UserProvider>(context, listen: false).user;
 
       ///TODO: change to get instead of load, only reload on refresh
       Provider.of<core.UserProvider>(context, listen: false).getBadgeList();
+      Provider.of<core.WebPageProvider>(context, listen: false).clear();
       Provider.of<core.WebPageProvider>(context, listen: false).getItems({
         'language': Localizations.localeOf(context).toString(),
         'commonname': widget.viewTitle,
@@ -72,22 +73,22 @@ class _DashBoardState extends State<DashBoard> {
   Widget build(BuildContext context) {
     buildIteration++;
 
-    this.user = Provider.of<core.UserProvider>(context).user;
-    this.badges = (Provider.of<core.BadgeProvider>(context).list ?? []);
-    this.page = Provider.of<core.WebPageProvider>(context).current ?? null;
+    user = Provider.of<core.UserProvider>(context).user;
+    badges = (Provider.of<core.BadgeProvider>(context).list ?? []);
+    page = Provider.of<core.WebPageProvider>(context).current;
     if(kDebugMode) {
-      log('building dasboard state($buildIteration), ${this.badges
-          .length} badges,available score: ${this.user.getValue('availablescore')} activity count ${this.user.getValue('activitycount')}');
+      log('building dasboard state($buildIteration), ${badges
+          .length} badges,available score: ${user.getValue('availablescore')} activity count ${user.getValue('activitycount')}');
     }
 
     /// open login if user token is not found
-    if (this.user.token == null) {
+    if (user.token == null) {
       //   print('user token not found, pushing named route /login');
-      return Login();
+      return const Login();
     } else {
-      bool hasInfoPage = this.page != null &&
-              this.page!.id != null &&
-              this.page.runtimeType.toString() == 'WebPage'
+      bool hasInfoPage = page != null &&
+              page!.id != null &&
+              page.runtimeType.toString() == 'WebPage'
           ? true
           : false;
 
@@ -99,17 +100,17 @@ class _DashBoardState extends State<DashBoard> {
               //Info page button
               if (hasInfoPage)
                 IconButton(
-                    icon: Icon(Icons.info_outline_rounded),
+                    icon: const Icon(Icons.info_outline_rounded),
                     onPressed: () {
                       Navigator.of(context).push(MaterialPageRoute(
                         builder: (_) => ContentPageView(widget.viewTitle,
-                            providedPage: this.page),
+                            providedPage: page),
                       ));
                     }),
 
               //Refresh button
               IconButton(
-                  icon: Icon(Icons.refresh),
+                  icon: const Icon(Icons.refresh),
                   onPressed: () async {
                     Provider.of<core.UserProvider>(context, listen: false)
                         .refreshUser();
@@ -117,12 +118,12 @@ class _DashBoardState extends State<DashBoard> {
               IconButton(
                   icon: const Icon(Icons.logout),
                   onPressed: () async {
-                    User loggedInUser =
-                        Provider.of<UserProvider>(context, listen: false).user;
+                    UserProvider userProvider =
+                        Provider.of<UserProvider>(context, listen: false);
+                    User loggedInUser = userProvider.user;
                     await Provider.of<AuthProvider>(context, listen: false)
                         .logout(loggedInUser);
-                    Provider.of<UserProvider>(context, listen: false)
-                        .clearCurrentUser();
+                    userProvider.clearCurrentUser();
                     setState(() {
                       Navigator.of(context).pushNamedAndRemoveUntil(
                           '/', (Route<dynamic> route) => false);
@@ -132,29 +133,29 @@ class _DashBoardState extends State<DashBoard> {
             ],
           ),
           body: ListView(children: <Widget>[
-            userTile(this.user, context),
-            SizedBox(height: 10),
+            userTile(user, context),
+            const SizedBox(height: 10),
             Padding(
-                padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                 child: Card(
                     elevation: 3.0,
-                    child: achievements(this.user, badges, context))),
+                    child: achievements(user, badges, context))),
             ...navItems.map((navItem) => (navItem.displayInDashboard
                 ? dashboardTile(navItem)
                 : Container())),
-            if (Provider.of<core.UserProvider>(context).myBadges.length > 0)
+            if (Provider.of<core.UserProvider>(context).myBadges.isNotEmpty)
               Padding(
-                padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                 child: Card(
                   elevation: 3.0,
                   child: Padding(
-                    padding: EdgeInsets.all(15),
+                    padding: const EdgeInsets.all(15),
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
                             AppLocalizations.of(context)!.collectedBadges,
-                            style: TextStyle(fontSize: 20),
+                            style: const TextStyle(fontSize: 20),
                           ),
                           GridView.count(
                               crossAxisCount: 3,
@@ -162,7 +163,7 @@ class _DashBoardState extends State<DashBoard> {
                               mainAxisSpacing: 5,
                               scrollDirection: Axis.vertical,
                               shrinkWrap: true,
-                              padding: EdgeInsets.all(10),
+                              padding: const EdgeInsets.all(10),
                               childAspectRatio: 1,
                               children: collectedBadges(
                                   Provider.of<core.UserProvider>(context)
@@ -180,14 +181,14 @@ class _DashBoardState extends State<DashBoard> {
 
   Widget dashboardTile(NavigationItem item) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
       child: Card(
         elevation: 3.0,
         child: ListTile(
-          visualDensity: VisualDensity(vertical: VisualDensity.maximumDensity),
+          visualDensity: const VisualDensity(vertical: VisualDensity.maximumDensity),
           title: Text(
             AppLocalizations.of(context)!.navitem(item.label),
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 20,
             ),
           ),

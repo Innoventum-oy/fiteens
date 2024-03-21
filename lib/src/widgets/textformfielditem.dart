@@ -9,12 +9,13 @@ class TextFormFieldItem extends StatefulWidget {
   final Map<String, dynamic> params;
   final Function onChanged;
 
-  TextFormFieldItem({required this.element, required this.value, required this.onChanged,required this.params});
+  const TextFormFieldItem({super.key, required this.element, required this.value, required this.onChanged,required this.params});
 
-  _TextFormFieldItemState createState() => _TextFormFieldItemState();
+  @override
+  TextFormFieldItemState createState() => TextFormFieldItemState();
 }
 
-class _TextFormFieldItemState extends State<TextFormFieldItem> {
+class TextFormFieldItemState extends State<TextFormFieldItem> {
   late String selectedValue;
   final _textEditingController = TextEditingController();
 
@@ -40,15 +41,16 @@ class _TextFormFieldItemState extends State<TextFormFieldItem> {
     String? value = _textEditingController.text;
     //  print('running updateTextFieldValue, value: '+value);
     setState(() {
-      this.selectedValue = value;
+      selectedValue = value;
       widget.onChanged(value);
       //DisplayForm.of(context)!.formData[widget.element.id!] = value;
     });
   }
 
+  @override
   Widget build(BuildContext context) {
     //  print('building textformfield '+widget.element.id.toString()+', initialValue: '+widget.value);
-    this.selectedValue = widget.value;
+    selectedValue = widget.value;
     return TextFormField(
         autovalidateMode: AutovalidateMode.always,
         controller: _textEditingController,

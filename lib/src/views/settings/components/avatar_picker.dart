@@ -9,13 +9,13 @@ import 'package:provider/provider.dart';
 class AvatarPicker extends StatefulWidget {
   final Function? onTap;
   final String? currentImage;
-  AvatarPicker({this.onTap,this.currentImage});
+  const AvatarPicker({super.key, this.onTap,this.currentImage});
 
   @override
-  _AvatarPickerState createState() => _AvatarPickerState();
+  AvatarPickerState createState() => AvatarPickerState();
 }
 
-class _AvatarPickerState extends State<AvatarPicker> {
+class AvatarPickerState extends State<AvatarPicker> {
   List<String>? avatarImages;
   User user = User();
   bool loaded = false;
@@ -48,10 +48,10 @@ class _AvatarPickerState extends State<AvatarPicker> {
       log('avatarPicker has ${avatarImages?.length} images');
     }
     String currentAvatar = widget.currentImage ?? user.data?['avatar'] ?? '';
-    return ScreenScaffold(title: 'Pick your Avatar', child:  (avatarImages==null || avatarImages?.length == 0) ?
-    (loaded ? Center(child:Text('Could not load avatar images')) :   CircularProgressIndicator()) :
+    return ScreenScaffold(title: 'Pick your Avatar', child:  (avatarImages==null || avatarImages!.isEmpty) ?
+    (loaded ? const Center(child:Text('Could not load avatar images')) :   const CircularProgressIndicator()) :
     GridView.builder(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisSpacing: 5,
         mainAxisSpacing: 5,
         crossAxisCount: 3,
@@ -65,7 +65,7 @@ class _AvatarPickerState extends State<AvatarPicker> {
     );
   }
   Widget avatarImage(String image,{active=false}){
-    return new GestureDetector(
+    return GestureDetector(
       onTap: () {
         if(widget.onTap==null){
           user.data!['avatar'] = image;

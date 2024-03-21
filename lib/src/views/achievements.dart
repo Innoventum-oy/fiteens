@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fiteens/src/util/utils.dart';
 import 'package:fiteens/src/widgets/widgets.dart';
@@ -111,10 +110,7 @@ class AchievementsViewState extends State<AchievementsView> {
                   placeholder: 'images/badge-placeholder.jpg',
                   image: badge.badgeimageurl!,
                 )
-              : const FaIcon(
-                  IconData(0xf091,
-                      fontFamily: 'FontAwesomeSolid',
-                      fontPackage: 'font_awesome_flutter'),
+              : const Icon(Icons.emoji_events,
                   size: 60.0),
           const SizedBox(height: 5),
           Text(

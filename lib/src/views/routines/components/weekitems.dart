@@ -10,11 +10,11 @@ import '../../../util/utils.dart';
 class WeekView extends StatefulWidget{
   final List<RoutineItem>? items;
   final int startDay;
-  WeekView({this.items,this.startDay=1});
+  const WeekView({super.key, this.items,this.startDay=1});
   @override
-  _WeekViewState createState() => _WeekViewState();
+  WeekViewState createState() => WeekViewState();
 }
-class _WeekViewState extends State<WeekView> {
+class WeekViewState extends State<WeekView> {
 
 
   DateTime mostRecentWeekday(DateTime date, int weekday) =>
@@ -35,7 +35,7 @@ class _WeekViewState extends State<WeekView> {
       days.add(
         weekDayCard(calendarDay,items:dayItems)
       );
-      calendarDay = calendarDay.add(Duration(days:1));
+      calendarDay = calendarDay.add(const Duration(days:1));
     }
     return Container(
         margin: const EdgeInsets.symmetric(vertical: 20),
@@ -50,14 +50,14 @@ class _WeekViewState extends State<WeekView> {
   Widget weekDayCard(calendarDay,{List<RoutineItem>? items})
   {
     List<Widget>dayActivities = [];
-    if(items!=null && items.length>0) {
-      items.forEach((element) { dayActivities.add(
+    if(items!=null && items.isNotEmpty) {
+      for (var element in items) { dayActivities.add(
         dayItem(element.activity??Activity(), context)
       );
-      });
+      }
     }
       return Card(
-          child: Container(
+          child: SizedBox(
               width: 120,
               height: 100,
               child:InkWell(
@@ -67,10 +67,10 @@ class _WeekViewState extends State<WeekView> {
                     children: [
 
                       Padding(
-                          padding:EdgeInsets.all(5),
+                          padding:const EdgeInsets.all(5),
                           child: Column(
                             children:[
-                              Text(capitalize(DateFormat('EEEE',Localizations.localeOf(context).toString()).format(calendarDay,)),style: TextStyle(fontSize: 18),),
+                              Text(capitalize(DateFormat('EEEE',Localizations.localeOf(context).toString()).format(calendarDay,)),style: const TextStyle(fontSize: 18),),
                               ...dayActivities,
                               ]
                           )

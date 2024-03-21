@@ -13,13 +13,13 @@ class VerticalPageList extends StatefulWidget {
   final core.ImageProvider imageprovider = core.ImageProvider();
   //final List<String> pageCategory;
 
-  VerticalPageList();
+  VerticalPageList({super.key});
 
   @override
-  _VerticalPageListState createState() => _VerticalPageListState();
+  VerticalPageListState createState() => VerticalPageListState();
 }
 
-class _VerticalPageListState extends State<VerticalPageList> {
+class VerticalPageListState extends State<VerticalPageList> {
   Map<String, dynamic>? map;
   List<core.WebPage> data = [];
   core.User? user;
@@ -30,7 +30,7 @@ class _VerticalPageListState extends State<VerticalPageList> {
   int limit = 20;
   //int _pageNumber = 0;
   String? errormessage;
-  core.WebPage page = new core.WebPage();
+  core.WebPage page = core.WebPage();
 
   notify(String text) {
     final snackBar = SnackBar(
@@ -52,24 +52,23 @@ class _VerticalPageListState extends State<VerticalPageList> {
       'show_in_menu': '1',
       //'pagecategory' : "IS SET"
     };
-    this.data = await widget.provider.loadItems(params);
+    data = await widget.provider.loadItems(params);
     setState(() {
-      this._loadingState = LoadingState.done;
+      _loadingState = LoadingState.done;
     });
   }
 
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      this.user = Provider.of<core.UserProvider>(context, listen: false).user;
-      _loadPages(this.user);
+      user = Provider.of<core.UserProvider>(context, listen: false).user;
+      _loadPages(user);
     });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    print('building WebPagelist');
 
     core.User user = Provider.of<core.UserProvider>(context, listen: false).user;
 
@@ -80,27 +79,27 @@ class _VerticalPageListState extends State<VerticalPageList> {
       }
     }
     bool hasInfoPage =
-        this.page.id != null && this.page.runtimeType.toString() == 'WebPage'
+        page.id != null && page.runtimeType.toString() == 'WebPage'
             ? true
             : false;
     return DefaultTabController(
       length: 3,
-      child: new Scaffold(
-          appBar: new AppBar(
-            title: new Text(AppLocalizations.of(context)!.resources),
+      child: Scaffold(
+          appBar: AppBar(
+            title: Text(AppLocalizations.of(context)!.resources),
             actions: [
               if (hasInfoPage)
                 IconButton(
-                    icon: Icon(Icons.info_outline_rounded),
+                    icon: const Icon(Icons.info_outline_rounded),
                     onPressed: () {
                       Navigator.of(context).push(MaterialPageRoute(
                         builder: (_) => ContentPageView(widget.viewTitle,
-                            providedPage: this.page),
+                            providedPage: page),
                       ));
                     }),
               if (isTester)
                 IconButton(
-                    icon: Icon(Icons.bug_report),
+                    icon: const Icon(Icons.bug_report),
                     onPressed: () {
                       feedbackAction(context, user);
                     }),
@@ -131,18 +130,13 @@ class _VerticalPageListState extends State<VerticalPageList> {
   }
 
   Widget _getContentSection(user, pageCategory) {
-    print('loading state: ' + _loadingState.toString());
 
     switch (_loadingState) {
       case LoadingState.done:
         List<core.WebPage>? pages =
-            this.data.where((page) => pageCategory == page.category).toList();
+            data.where((page) => pageCategory == page.category).toList();
         //data loaded
-        print(pages.length.toString() +
-            ' pages of type ' +
-            pageCategory +
-            ' found');
-        if (pages.isNotEmpty)
+        if (pages.isNotEmpty) {
           return ListView.builder(
               itemCount: pages.length,
               itemBuilder: (BuildContext context, int index) {
@@ -156,14 +150,15 @@ class _VerticalPageListState extends State<VerticalPageList> {
 */
                 return WebPageListItem(pages[index]);
               });
-        else
+        } else {
           return Text(AppLocalizations.of(context)!.noResourcesFound);
+        }
       case LoadingState.error:
         //data loading returned error state
         return Align(
           alignment: Alignment.center,
           child: ListTile(
-            leading: Icon(Icons.error),
+            leading: const Icon(Icons.error),
             title: Text(
                 'Sorry, there was an error loading the data: $errormessage'),
           ),
@@ -175,7 +170,7 @@ class _VerticalPageListState extends State<VerticalPageList> {
           alignment: Alignment.center,
           child: Center(
             child: ListTile(
-              leading: CircularProgressIndicator(),
+              leading: const CircularProgressIndicator(),
               title: Text(AppLocalizations.of(context)!.loading,
                   textAlign: TextAlign.center),
             ),

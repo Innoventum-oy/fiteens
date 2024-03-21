@@ -37,11 +37,11 @@ class _RoutineScreenState extends State<RoutineScreen> {
 
   void load() async {
     log('routinescreen load called for routine ${widget.routine.id}');
-    this.routine = core.Routine.fromJson(
+    routine = core.Routine.fromJson(
         await Provider.of<core.RoutineProvider>(context, listen: false)
             .getDetails(widget.routine.id ?? 0, reload: true));
 
-    log("Routine ${this.routine} has ${routine?.items?.length} items, image: ${routine?.imageUrl}");
+    log("Routine $routine has ${routine?.items?.length} items, image: ${routine?.imageUrl}");
     routine?.items?.forEach((element) async {
       log('loading details for routineitem ${element.id}');
       core.RoutineItem r = core.RoutineItem.fromJson(
@@ -57,19 +57,19 @@ class _RoutineScreenState extends State<RoutineScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (this.routine == null) this.routine = widget.routine;
+    routine ??= widget.routine;
 
     Widget routineView;
     //RoutineItemProvider routineItemProvider = Provider.of<RoutineItemProvider>(context);
     if (kDebugMode) {
-      log('displaying routine ${this.routine}, loaded? ${this.routine?.loaded}');
+      log('displaying routine $routine, loaded? ${routine?.loaded}');
     }
 
     final TextTheme textTheme = Theme.of(context).textTheme;
 
     List<Widget> widgets = [
       Text(
-        this.routine?.name ?? AppLocalizations.of(context)!.unnamedRoutine,
+        routine?.name ?? AppLocalizations.of(context)!.unnamedRoutine,
         style: textTheme.bodyMedium
             ?.copyWith(fontSize: 20, fontWeight: FontWeight.bold),
       ),
@@ -78,10 +78,11 @@ class _RoutineScreenState extends State<RoutineScreen> {
       )
     ];
 
-    if (routine?.description != null)
+    if (routine?.description != null) {
       widgets.add(Html(
         data: (routine?.description),
       ));
+    }
 
     /// Add to calendar - button
     DateTime currentDate = DateUtils.dateOnly(DateTime.now());
@@ -99,7 +100,7 @@ class _RoutineScreenState extends State<RoutineScreen> {
         DateTimeRange? routineRange = await showDateRangePicker(
             context: context,
             firstDate: currentDate,
-            lastDate: currentDate.add(Duration(days: 365)));
+            lastDate: currentDate.add(const Duration(days: 365)));
         Map<String, dynamic> params = {
           'action': 'addroutine',
           'objectid': routine?.id.toString(),
@@ -117,14 +118,14 @@ class _RoutineScreenState extends State<RoutineScreen> {
               AppLocalizations.of(context)!.calendarUpdated,
               Row(
                 children: [
-                  Icon(Icons.check),
+                  const Icon(Icons.check),
                   Text(AppLocalizations.of(context)!.routineAddedToCalendar)
                 ],
               ));
         } else {
           log('displaying error message');
           var message = Column(children: [
-            Icon(Icons.error_outline),
+            const Icon(Icons.error_outline),
             if (result['message'] != null) Text(result['message']),
             if (result['error'] != null) Text(result['error'])
           ]);
@@ -140,9 +141,10 @@ class _RoutineScreenState extends State<RoutineScreen> {
       widgets.add(Container(
         height: 8.0,
       ));
-      if (weeks > 1)
+      if (weeks > 1) {
         widgets.add(
             Text('${AppLocalizations.of(context)!.week} ${start ~/ 7 + 1}'));
+      }
       widgets.add(WeekView(startDay: start, items: items));
     }
 
@@ -159,18 +161,16 @@ class _RoutineScreenState extends State<RoutineScreen> {
                     placeholderScale: 10,
                     image: routine!.imageUrl!,
                   )
-                : Image(image: AssetImage('images/logo.png')),
+                : const Image(image: AssetImage('images/logo.png')),
           ),
-          Container(
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  ...widgets,
-                ],
-              ),
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                ...widgets,
+              ],
             ),
           ),
         ]),
@@ -185,7 +185,7 @@ class _RoutineScreenState extends State<RoutineScreen> {
     showDialog(
         context: context,
         builder: (BuildContext builderContext) {
-          _timer = Timer(Duration(seconds: 5), () {
+          _timer = Timer(const Duration(seconds: 5), () {
             Navigator.of(context).pop();
           });
 

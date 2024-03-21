@@ -19,13 +19,13 @@ return Row(children: <Widget>[
                       );
                     },
                     child: Padding(
-                      padding: EdgeInsets.all(13.0),
+                      padding: const EdgeInsets.all(13.0),
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
                           AppLocalizations.of(context)!.achievements,
                           textAlign: TextAlign.left,
-                          style: TextStyle(fontSize: 20),
+                          style: const TextStyle(fontSize: 20),
                         ),
                       ),
                     ),
@@ -37,7 +37,7 @@ return Row(children: <Widget>[
                       Expanded(
                         flex: 2,
                         child:Padding(
-                          padding: EdgeInsets.fromLTRB(5.0,15.0,5.0,15.0),
+                          padding: const EdgeInsets.fromLTRB(5.0,15.0,5.0,15.0),
                           child:  SingleChildScrollView(
                           scrollDirection:Axis.horizontal,
 

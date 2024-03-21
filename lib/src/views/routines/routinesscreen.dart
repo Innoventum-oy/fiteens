@@ -45,7 +45,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
     Widget routineView = defaultContent(Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
         children:[
-      CircularProgressIndicator(),
+      const CircularProgressIndicator(),
       Text(AppLocalizations.of(context)!.loading)])
     );
     if (loaded) {
@@ -90,7 +90,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
   }
 Widget defaultContent(contentChild){
   return Padding(
-      padding:EdgeInsets.all(30),
+      padding:const EdgeInsets.all(30),
       child:Center(
           child:contentChild)
 

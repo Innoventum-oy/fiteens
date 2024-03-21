@@ -5,15 +5,15 @@ import 'useravatar.dart';
 Widget userTile(user,context){
   String username = user.fullname;
   return  Container(
-    decoration: new BoxDecoration(
+    decoration: const BoxDecoration(
       borderRadius: BorderRadius.all(Radius.circular(5)),
-      image: new DecorationImage(
-        image: new AssetImage('images/dashboard.png'),
+      image: DecorationImage(
+        image: AssetImage('images/dashboard.png'),
         fit: BoxFit.cover,
       ),
     ),
     child: Padding(
-      padding:EdgeInsets.all(10),
+      padding:const EdgeInsets.all(10),
       child: Row(children: <Widget>[
         Expanded(flex: 3, child: userNameLabel(context, username)),
         //User profile image (avatar)

@@ -12,9 +12,9 @@ class ChallengesTab extends StatefulWidget{
     final int navIndex;
   const ChallengesTab({this.navIndex=4,super.key,this.refresh =false});
   @override
-  _ChallengesTabState createState() => _ChallengesTabState();
+  ChallengesTabState createState() => ChallengesTabState();
 }
-class _ChallengesTabState extends State<ChallengesTab> with AutomaticKeepAliveClientMixin<ChallengesTab>{
+class ChallengesTabState extends State<ChallengesTab> with AutomaticKeepAliveClientMixin<ChallengesTab>{
 
   bool loaded = false;
   Widget defaultContent = const CircularProgressIndicator();
@@ -42,7 +42,7 @@ class _ChallengesTabState extends State<ChallengesTab> with AutomaticKeepAliveCl
       if (activityClassProvider.list != null) {
         List<ActivityClass>? items = activityClassProvider.list;
         challengesTabContent = items != null ? GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisSpacing: 5,
               mainAxisSpacing: 5,
               crossAxisCount: 2,

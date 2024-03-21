@@ -3,20 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EventLogView extends StatefulWidget {
+  const EventLogView({super.key});
+
 
   @override
-  _EventLogViewState createState() => _EventLogViewState();
+  EventLogViewState createState() => EventLogViewState();
 }
 
-class _EventLogViewState extends State<EventLogView> {
+class EventLogViewState extends State<EventLogView> {
   @override
   Widget build(BuildContext context) {
     Future<List<String>?> getEventLog() => EventLog().getMessages();
-    return new Scaffold(
-      appBar: new AppBar(
-          title: new Text(AppLocalizations.of(context)!.eventLog)),
+    return Scaffold(
+      appBar: AppBar(
+          title: Text(AppLocalizations.of(context)!.eventLog)),
       body: FutureBuilder(
-        initialData: [],
+        initialData: const [],
           future: getEventLog(),
           builder: (context, AsyncSnapshot snapshot) {
             if(snapshot.data.length>0){
@@ -30,7 +32,9 @@ class _EventLogViewState extends State<EventLogView> {
                 );
               });
             }
-            else return Container();
+            else {
+              return Container();
+            }
           }
       ),
     );

@@ -7,20 +7,22 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:core/core.dart' as core;
 
 class ResetPassword extends StatefulWidget {
+  const ResetPassword({super.key});
+
   @override
-  _ResetPasswordState createState() => _ResetPasswordState();
+  ResetPasswordState createState() => ResetPasswordState();
 }
 
-class _ResetPasswordState extends State<ResetPassword> {
-  final formKey = new GlobalKey<FormState>();
+class ResetPasswordState extends State<ResetPassword> {
+  final formKey = GlobalKey<FormState>();
 
   String? _contact, _confirmKey, _password;
 
   // core.ApiClient _apiClient = core.ApiClient();
-  core.Auth _auth = core.Auth();
+  final core.Auth _auth = core.Auth();
   Widget getConfirmationKeyForm(auth) {
-    final _contactController = TextEditingController();
-    var getVerificationCode = () {
+    final contactController = TextEditingController();
+    getVerificationCode() {
       final form = formKey.currentState;
 
       if (form!.validate()) {
@@ -35,7 +37,7 @@ class _ResetPasswordState extends State<ResetPassword> {
             setState(() {
               auth.setContactMethodId(response?['contactmethodid']);
               if(response?['userid']!=null) auth.setUserId(response?['userid']);
-              print('contact method id set to '+response!['contactmethodid'].toString());
+
               auth.setVerificationStatus(core.VerificationStatus.codeReceived);
             });
 
@@ -44,19 +46,18 @@ class _ResetPasswordState extends State<ResetPassword> {
             Flushbar(
               title: AppLocalizations.of(context)!.requestFailed,
               message: response?['message'].toString()??AppLocalizations.of(context)!.requestFailed,
-              duration: Duration(seconds: 3),
+              duration: const Duration(seconds: 3),
             ).show(context);
           }
         });
       } else {
-        print("form is invalid");
       }
-    };
+    }
 
     var loading = Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        CircularProgressIndicator(),
+        const CircularProgressIndicator(),
         Text(AppLocalizations.of(context)!.processing)
       ],
     );
@@ -64,26 +65,26 @@ class _ResetPasswordState extends State<ResetPassword> {
     String? validateContact(String? value)
     {
 
-      String? _msg;
+      String? msg;
       if(value!.isEmpty) return AppLocalizations.of(context)!.pleaseEnterPhoneOrEmail;
 
       //test for phone number pattern
       String pattern = r'(^(?:[+0])?[0-9]{10,14}$)';
-      RegExp regExp = new RegExp(pattern);
+      RegExp regExp = RegExp(pattern);
       if (regExp.hasMatch(value)) {
         return null;
       }
       //test for email pattern
-      RegExp regex = new RegExp(
+      RegExp regex = RegExp(
           r'^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
       if (!regex.hasMatch(value)) {
-        _msg = AppLocalizations.of(context)!.pleaseProvideValidPhoneOrEmail;
+        msg = AppLocalizations.of(context)!.pleaseProvideValidPhoneOrEmail;
       }
-      return _msg;
+      return msg;
     }
 
     final contactField = TextFormField(
-      controller: _contactController,
+      controller: contactController,
       autofocus: false,
       validator: validateContact,
       onSaved: (value) => _contact = value,
@@ -95,16 +96,16 @@ class _ResetPasswordState extends State<ResetPassword> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 15.0),
+        const SizedBox(height: 15.0),
         label(AppLocalizations.of(context)!.emailOrPhoneNumber),
-        SizedBox(height: 5.0),
+        const SizedBox(height: 5.0),
         contactField,
-        SizedBox(height: 20.0),
+        const SizedBox(height: 20.0),
         auth.verificationStatus == core.VerificationStatus.validating
             ? loading
             : longButtons(AppLocalizations.of(context)!.getCode,
             getVerificationCode),
-        SizedBox(height: 5.0),
+        const SizedBox(height: 5.0),
 
       ],
     );
@@ -112,19 +113,18 @@ class _ResetPasswordState extends State<ResetPassword> {
 
 
   Widget enterConfirmationKeyForm(auth) {
-    final _confirmationController = TextEditingController();
-    print('current _confirmkey value: '+_confirmKey.toString());
+    final confirmationController = TextEditingController();
     var loading = Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        CircularProgressIndicator(),
+        const CircularProgressIndicator(),
         Text(AppLocalizations.of(context)!.processing)
       ],
     );
 
     final confirmationKeyField = TextFormField(
       autofocus: true,
-      controller: _confirmationController,
+      controller: confirmationController,
       validator: (value) =>
       value!.isEmpty ? AppLocalizations.of(context)!.pleaseEnterConfirmationKey : null,
       onSaved: (value) => _confirmKey = value,
@@ -132,19 +132,16 @@ class _ResetPasswordState extends State<ResetPassword> {
           AppLocalizations.of(context)!.confirmationKey, Icons.vpn_key),
     );
 
-    var sendVerificationCode = () {
-      print('sending confirmation key');
+    sendVerificationCode() {
       final form = formKey.currentState;
 
       if (form!.validate()) {
         form.save();
-        print('checking confirmationkey - user: '+auth.userId+',  contactmethodid '+auth.contactMethodId.toString()+', key: '+_confirmKey.toString());
 
         final Future<Map<String, dynamic>> successfulMessage =
         _auth.sendConfirmationKey(userid: auth.userId,contact: auth.contactMethodId, code:_confirmKey!.toString());
 
         successfulMessage.then((response) {
-          print('received response from sendConfirmationKey');
           if (response['status'] == 'success') {
             setState(() {
               auth.setSinglePass(response['singlepass']);
@@ -152,31 +149,29 @@ class _ResetPasswordState extends State<ResetPassword> {
             });
 
           } else {
-            print('sendConfirmationKey returned status '+response['status']);
             String msg = '';
             if(response['messages']!=null) msg+= response['messages'].join(', ');
 
             Flushbar(
               title: AppLocalizations.of(context)!.requestFailed,
               message: msg,
-              duration: Duration(seconds: 3),
+              duration: const Duration(seconds: 3),
             ).show(context);
           }
         });
       } else {
-        print("form is invalid");
       }
-    };
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 15.0),
+        const SizedBox(height: 15.0),
         label(AppLocalizations.of(context)!.confirmationKey),
-        SizedBox(height: 5.0),
+        const SizedBox(height: 5.0),
         confirmationKeyField,
 
-        SizedBox(height: 20.0),
+        const SizedBox(height: 20.0),
         auth.verificationStatus == core.VerificationStatus.validating
             ? loading
             : longButtons(AppLocalizations.of(context)!.btnSend,
@@ -191,7 +186,7 @@ class _ResetPasswordState extends State<ResetPassword> {
     var loading = Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        CircularProgressIndicator(),
+        const CircularProgressIndicator(),
         Text(AppLocalizations.of(context)!.processing)
       ],
     );
@@ -206,7 +201,7 @@ class _ResetPasswordState extends State<ResetPassword> {
           AppLocalizations.of(context)!.confirmPassword, Icons.lock),
     );
 
-    var setPassword= () {
+    setPassword() {
       final form = formKey.currentState;
 
       if (form!.validate()) {
@@ -217,7 +212,6 @@ class _ResetPasswordState extends State<ResetPassword> {
         successfulMessage.then((response) {
           if (response['status'] == 'success') {
             setState(() {
-              print('password successfully changed for user');
               auth.setVerificationStatus(core.VerificationStatus.passwordChanged);
 
             });
@@ -226,28 +220,27 @@ class _ResetPasswordState extends State<ResetPassword> {
             Flushbar(
               title: AppLocalizations.of(context)!.requestFailed,
               message: response['message'].toString(),
-              duration: Duration(seconds: 3),
+              duration: const Duration(seconds: 3),
             ).show(context);
           }
         });
       } else {
-        print("form is invalid");
       }
-    };
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 15.0),
+        const SizedBox(height: 15.0),
         label(AppLocalizations.of(context)!.password),
-        SizedBox(height: 5.0),
+        const SizedBox(height: 5.0),
         passwordField,
-        SizedBox(height: 20.0),
+        const SizedBox(height: 20.0),
         auth.loggedInStatus == core.Status.authenticating
             ? loading
             : longButtons(AppLocalizations.of(context)!.btnSetNewPassword,
             setPassword),
-        SizedBox(height: 5.0),
+        const SizedBox(height: 5.0),
 
       ],
     );
@@ -255,7 +248,7 @@ class _ResetPasswordState extends State<ResetPassword> {
   Widget successForm()
   {
     return Text(AppLocalizations.of(context)!.passwordChanged,
-        style: TextStyle(fontWeight: FontWeight.w300));
+        style: const TextStyle(fontWeight: FontWeight.w300));
 
   }
   Widget bottomNavigation(auth) {
@@ -265,16 +258,16 @@ class _ResetPasswordState extends State<ResetPassword> {
       children: <Widget>[
         Expanded(child:ElevatedButton(
           child: Text(AppLocalizations.of(context)!.login,
-              style: TextStyle(fontWeight: FontWeight.w300)),
+              style: const TextStyle(fontWeight: FontWeight.w300)),
           onPressed: () {
             Navigator.pushReplacementNamed(context, '/login');
           },
         )),
-        SizedBox(width:10),
+        const SizedBox(width:10),
         Expanded(child:ElevatedButton(
 
           child: Text(AppLocalizations.of(context)!.signUp,
-              style: TextStyle(fontWeight: FontWeight.w300)),
+              style: const TextStyle(fontWeight: FontWeight.w300)),
           onPressed: () {
             Navigator.pushNamed(context, '/register');
           },
@@ -290,7 +283,7 @@ class _ResetPasswordState extends State<ResetPassword> {
       // display button to return to code request form
         return TextButton(
             child: Text(AppLocalizations.of(context)!.requestNewCode,
-                style: TextStyle(fontWeight: FontWeight.w300)),
+                style: const TextStyle(fontWeight: FontWeight.w300)),
             onPressed: () async {
               setState(() {
                 auth.setVerificationStatus(core.VerificationStatus.codeReceived);
@@ -300,7 +293,7 @@ class _ResetPasswordState extends State<ResetPassword> {
       default:
         return TextButton(
             child: Text(AppLocalizations.of(context)!.previous,
-                style: TextStyle(fontWeight: FontWeight.w300)),
+                style: const TextStyle(fontWeight: FontWeight.w300)),
             onPressed: () async {
               setState(() {
                 auth.setVerificationStatus(core.VerificationStatus.codeNotRequested);
@@ -322,7 +315,7 @@ class _ResetPasswordState extends State<ResetPassword> {
           elevation: 0.1,
         ),
         body: Container(
-          padding: EdgeInsets.all(40.0),
+          padding: const EdgeInsets.all(40.0),
           child: Column(
               children:
               [Form(
@@ -340,7 +333,6 @@ class _ResetPasswordState extends State<ResetPassword> {
   Widget passwordRetrievalFormBody(auth)
   {
 
-    print('verification status:'+auth.verificationStatus.toString());
 
     switch(auth.verificationStatus)
     {

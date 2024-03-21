@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 0.9.2+7
+version: 0.9.6+11
 
 environment:
   sdk: ">=2.17.0 "
@@ -27,7 +27,7 @@ dependencies:
    #internationalization:
   flutter_localizations:
       sdk: flutter
-  intl: ^0.18.0
+  intl: ^0.19.0
   provider: ^6.0.0
 
   #scoped_model: "^1.1.0"
@@ -47,10 +47,7 @@ dependencies:
   flutter_html: ^3.0.0-alpha.2
   settings_ui: ^2.0.1
   percent_indicator: ^4.0.0
-  widget_arrows: ^0.6.0
-  font_awesome_flutter: ^9.2.0
-  glob: ^2.0.1
-  package_info: ^2.0.0
+  package_info_plus: ^5.0.1
   feedback: ^3.0.0
   wakelock: ^0.6.0+1
   graphview: ^1.0.0
@@ -62,14 +59,14 @@ dependencies:
     git:
       url: git@github.com:Innoventum-oy/core.git
       path: core/
-  queue: ^3.1.0+2
   hive_flutter: ^1.1.0
-  flutter_settings_ui: ^2.0.1
-  loading_gifs: ^0.3.0
+  flutter_settings_ui: ^3.0.0
   flutter_radar_chart: ^0.2.1
   collection: ^1.17.2
-  pod_player: ^0.2.0
-
+  pod_player: ^0.2.1
+  html: ^0.15.4
+  loading_gifs: ^0.3.0
+  calendar_date_picker2: ^0.5.5
 
 dev_dependencies:
   flutter_test:
@@ -93,8 +90,7 @@ flutter_icons:
   adaptive_icon_foreground: "images/logo.png"
 
 dependency_overrides:
-  font_awesome_flutter:
-    path: /Users/jleinone/flutter_projects/font_awesome_flutter
+
   #dependency updates in local package
   wakelock:
     git:
@@ -104,12 +100,7 @@ dependency_overrides:
     git:
       url: https://github.com/amb-jannel/wakelock/
       path: wakelock_windows
-  webviewx:
-    git:
-      url: https://github.com/amb-jannel/webviewx/
-  date_range_form_field:
-    git:
-      url: https://github.com/jleinone/date_range_form_field.git
+
   core:
     path: /Users/jleinone/flutter_projects/core/core
     # local path for faster development

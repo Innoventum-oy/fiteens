@@ -134,6 +134,7 @@
   "noActivitiesFound": "No se encontraron actividades",
   "noContactMethodsFound": "No se encontraron métodos de contacto",
   "noDescription": "Sin descripción",
+  "noEventsFound": "No se encontraron eventos",
   "noFormsFound": "No se encontraron formularios",
   "noResourcesFound": "No hay recursos disponibles actualmente",
   "noRoutinesFound": "No se encontraron rutinas",
@@ -178,6 +179,7 @@
   "requestFailed": "Error de solicitud",
   "requestNewCode": "Obtener nuevo código",
   "requestNewPasswordTitle": "Obtener nueva contraseña",
+  "references": "Referencias",
   "resources": "Recursos",
   "resume": "Reanudar",
   "retrievingCoordinates": "Obteniendo coordenadas",
@@ -219,5 +221,6 @@
   "yes": "Sí",
   "youHaveThisBadge": "Tienes este logro",
   "yourAnswerHasBeenSaved": "Tu respuesta ha sido guardada",
-  "yourPassword": "Tu contraseña"
+  "yourPassword": "Tu contraseña",
+  "yourLogDates" : "Fechas de registro"
 }

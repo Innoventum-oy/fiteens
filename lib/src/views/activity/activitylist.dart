@@ -12,12 +12,12 @@ class ActivityList extends StatefulWidget {
   final core.ActivityProvider activityProvider;
   final core.ImageProvider imageProvider;
   final String viewType;
-  ActivityList(this.activityProvider,this.imageProvider,{this.viewType='all'});
+  const ActivityList(this.activityProvider,this.imageProvider,{super.key, this.viewType='all'});
   @override
-  _ActivityListState createState() => _ActivityListState();
+  ActivityListState createState() => ActivityListState();
 }
 
-class _ActivityListState extends State<ActivityList>  {
+class ActivityListState extends State<ActivityList>  {
 
   Map<String,dynamic>? map;
   List<core.Activity> data =[];
@@ -53,7 +53,6 @@ class _ActivityListState extends State<ActivityList>  {
       'api_key':user.token,
 
     };
-    print("activitylist type:"+widget.viewType);
 
     switch(widget.viewType)
     {
@@ -78,7 +77,6 @@ class _ActivityListState extends State<ActivityList>  {
 
 
     }
-    print('Loading activitylist page $_pageNumber');
     try {
 
       var nextActivities =
@@ -88,7 +86,7 @@ class _ActivityListState extends State<ActivityList>  {
         if(nextActivities.isNotEmpty) {
           data.addAll(nextActivities);
           if(kDebugMode) {
-            print(data.length.toString() + ' activities currently loaded!');
+            print('${data.length} activities currently loaded!');
           }
           _isLoading = false;
           _pageNumber++;
@@ -99,9 +97,8 @@ class _ActivityListState extends State<ActivityList>  {
           }
           }
       });
-    } catch (e,stack) {
+    } catch (e) {
       _isLoading = false;
-      print('loadItems returned error $e\n Stack trace:\n $stack');
       errormessage = e.toString();
       if (_loadingState == LoadingState.loading) {
         setState(() => _loadingState = LoadingState.error);
@@ -124,24 +121,22 @@ class _ActivityListState extends State<ActivityList>  {
   @override
   Widget build(BuildContext context){
 
-  print('viewtype: '+widget.viewType);
 
   core.User user = Provider.of<core.UserProvider>(context,listen: false).user;
   bool isTester = false;
   if(user.data!=null) {
-    print(user.data.toString());
     if (user.data!['istester'] != null) {
       if (user.data!['istester'] == 'true') isTester = true;
     }
   }
 
-  return new Scaffold(
-      appBar: new AppBar(
-          title: new Text(
+  return Scaffold(
+      appBar: AppBar(
+          title: Text(
             widget.viewType=='locations' ? AppLocalizations.of(context)!.locations : AppLocalizations.of(context)!.activities),
           actions: [
           if(isTester) IconButton(
-      icon: Icon(Icons.bug_report),
+      icon: const Icon(Icons.bug_report),
     onPressed:(){feedbackAction(context,user); }
     ),
     ]
@@ -162,7 +157,6 @@ class _ActivityListState extends State<ActivityList>  {
             itemCount: data.length,
             itemBuilder: (BuildContext context, int index) {
               if (!_isLoading && index > (data.length * 0.7)) {
-              print('calling loadnextpage, user token is '+user.token);
                 _loadNextPage(user);
               }
 
@@ -172,7 +166,7 @@ class _ActivityListState extends State<ActivityList>  {
         //data loading returned error state
         return Align(alignment:Alignment.center,
             child:ListTile(
-              leading: Icon(Icons.error),
+              leading: const Icon(Icons.error),
               title: Text('Sorry, there was an error loading the data: $errormessage'),
             ),
         );
@@ -182,7 +176,7 @@ class _ActivityListState extends State<ActivityList>  {
         return Align(alignment:Alignment.center,
           child:Center(
             child:ListTile(
-              leading:CircularProgressIndicator(),
+              leading:const CircularProgressIndicator(),
               title: Text(AppLocalizations.of(context)!.loading,textAlign: TextAlign.center),
           ),
           ),

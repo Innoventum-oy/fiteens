@@ -13,6 +13,10 @@ MaterialButton longButtons(String title, Function()? fun,
     onPressed: fun,
     textColor: textColor,
     color: color ?? buttonColorPrimary,
+    height: 45,
+    minWidth: 600,
+    shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(8))),
     child: SizedBox(
       width: double.infinity,
       child: Text(
@@ -20,10 +24,6 @@ MaterialButton longButtons(String title, Function()? fun,
         textAlign: TextAlign.center,
       ),
     ),
-    height: 45,
-    minWidth: 600,
-    shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(8))),
   );
 }
 
@@ -36,7 +36,7 @@ InputDecoration buildInputDecoration(String hintText, IconData? icon,{Widget? su
     hintText: hintText,
     labelText: labelText,
     suffixIcon: suffixIcon,
-    contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+    contentPadding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
     border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
   );
 }

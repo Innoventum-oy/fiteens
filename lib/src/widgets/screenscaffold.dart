@@ -12,7 +12,7 @@ class ScreenScaffold extends StatefulWidget{
   final int? navigationIndex;  // index for bottomNavigation
   final bool refresh; // refresh view indicator
   final Function? onRefresh;// refresh functionality, causes refresh button to appear
-  const ScreenScaffold({Key? key, required this.title, required this.child, this.appBarButtons,this.navigationIndex=1,this.refresh=false,this.onRefresh}) : super(key:key);
+  const ScreenScaffold({super.key, required this.title, required this.child, this.appBarButtons,this.navigationIndex=1,this.refresh=false,this.onRefresh});
 
   @override
   State<ScreenScaffold> createState() => _ScreenScaffoldState();
@@ -26,29 +26,36 @@ class _ScreenScaffoldState extends State<ScreenScaffold>{
   Widget build(BuildContext context) {
 
     core.User user = Provider.of<core.UserProvider>(context).user;
-
+    core.UserProvider userProvider = Provider.of<core.UserProvider>(context,listen:false);
     if(kDebugMode)
     {
       print('building screen scaffold ${widget.title}');
     }
     ImageProvider image;
     String? avatar = user.data?['avatar'];
-    if(avatar!=null)
+    if(avatar!=null) {
       image = Image.asset(avatar.replaceAll('"', ''),
           width:20,
           height:20,
           fit:BoxFit.cover
       ).image;
-    else if (user.image != null && user.image!.isNotEmpty)
-      image = Image.network(
-          width:30,
+    } else if (user.image != null && user.image!.isNotEmpty) {
+      image = Image
+          .network(
+          width: 30,
           user.image!.replaceAll('"', ''),
           fit: BoxFit.cover
-      ).image;
-    else image = Image.asset('images/profile.png',
-          width:30,
-          fit:BoxFit.cover
-      ).image;
+      )
+          .image;
+    }
+    else {
+      image = Image
+          .asset('images/profile.png',
+          width: 30,
+          fit: BoxFit.cover
+      )
+          .image;
+    }
     return Scaffold(
       appBar: AppBar(
 
@@ -63,16 +70,16 @@ class _ScreenScaffoldState extends State<ScreenScaffold>{
             radius:20,
               backgroundImage: image,
           ),
-          if(widget.onRefresh!=null) IconButton(onPressed: ()=> widget.onRefresh!(), icon: Icon(Icons.refresh)),
+          if(widget.onRefresh!=null) IconButton(onPressed: ()=> widget.onRefresh!(), icon: const Icon(Icons.refresh)),
           ...?widget.appBarButtons,
           if(user.id!=null) IconButton(
               icon: const Icon(Icons.logout),
               onPressed: () async {
                 core.User loggedInUser =
-                    Provider.of<core.UserProvider>(context, listen: false).user;
+                    userProvider.user;
                 await Provider.of<core.AuthProvider>(context, listen: false)
                     .logout(loggedInUser);
-                Provider.of<core.UserProvider>(context, listen: false).clearCurrentUser();
+                userProvider.clearCurrentUser();
 
                 setState(() {
                   Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);

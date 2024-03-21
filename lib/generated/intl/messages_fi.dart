@@ -213,6 +213,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "noContactMethodsFound":
             MessageLookupByLibrary.simpleMessage("Yhteystietoja ei löytynyt"),
         "noDescription": MessageLookupByLibrary.simpleMessage("Ei kuvausta"),
+        "noEventsFound": MessageLookupByLibrary.simpleMessage("Ei tapahtumia"),
         "noFormsFound": MessageLookupByLibrary.simpleMessage("Ei lomakkeita"),
         "noResourcesFound":
             MessageLookupByLibrary.simpleMessage("Ei resursseja"),
@@ -271,6 +272,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "ratingSaved":
             MessageLookupByLibrary.simpleMessage("Arvio tallennettu"),
         "readMore": MessageLookupByLibrary.simpleMessage("Lue lisää"),
+        "references": MessageLookupByLibrary.simpleMessage("Lähteet"),
         "refresh": MessageLookupByLibrary.simpleMessage("Lataa uudelleen"),
         "registrationFailed":
             MessageLookupByLibrary.simpleMessage("Tilin luonti epäonnistui"),
@@ -340,6 +342,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Olet ansainnut tämän saavutuksen"),
         "yourAnswerHasBeenSaved": MessageLookupByLibrary.simpleMessage(
             "Vastauksen tallentaminen onnistui"),
+        "yourLogDates":
+            MessageLookupByLibrary.simpleMessage("Kirjaamasi päivämäärät"),
         "yourPassword": MessageLookupByLibrary.simpleMessage("Syötä salasanasi")
       };
 }

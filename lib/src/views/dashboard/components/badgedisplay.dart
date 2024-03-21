@@ -9,8 +9,8 @@ import '../../badge.dart';
 Widget badgeDisplay(badge, activityCount, key,context) {
   if(kDebugMode){
     // log activity count and required activities
-    print('activity count: '+activityCount.toString());
-    print('required activities: '+badge.getValue('requiredactivities').toString());
+    print('activity count: $activityCount');
+    print('required activities: ${badge.getValue('requiredactivities')}');
   }
   double percentage = badge.getValue('requiredactivities') != null
       ? activityCount / int.parse(badge.getValue('requiredactivities'))
@@ -19,7 +19,7 @@ Widget badgeDisplay(badge, activityCount, key,context) {
   //print('badge color: '+badge.color);
   return Padding(
     //Indicator 1/X
-    padding: EdgeInsets.only(left: 5),
+    padding: const EdgeInsets.only(left: 5),
     child: GestureDetector(
       onTap: () {
         Navigator.push(
@@ -35,8 +35,8 @@ Widget badgeDisplay(badge, activityCount, key,context) {
           center: Center(
             child: Stack(alignment: Alignment.center, children: [
               Icon(Icons.emoji_events, size: 35.0, semanticLabel: badge.name),
-              Text((percentage * 100).round().toString() + '%',
-                  style: TextStyle(fontSize: 9, color: Colors.black)),
+              Text('${(percentage * 100).round()}%',
+                  style: const TextStyle(fontSize: 9, color: Colors.black)),
             ]),
           ),
           backgroundColor: Colors.yellow,

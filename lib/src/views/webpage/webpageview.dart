@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:fiteens/src/util/styles.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:core/core.dart' as core;
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../widgets/videoplayer.dart';
 
@@ -18,19 +19,19 @@ class WebPageView extends StatefulWidget {
   final core.WebPageProvider provider;
   final core.ImageProvider imageProvider;
 
-  WebPageView(this._webPage, this.provider, this.imageProvider);
+  const WebPageView(this._webPage, this.provider, this.imageProvider, {super.key});
 
   @override
-  _WebPageViewState createState() => _WebPageViewState();
+  WebPageViewState createState() =>WebPageViewState();
 }
 
-class _WebPageViewState extends State<WebPageView> {
+class WebPageViewState extends State<WebPageView> {
   //final ApiClient _apiClient = ApiClient();
   Map<String, dynamic>? map;
 
   int iteration = 1;
   int buildtime = 1;
-  core.WebPage webPage = new core.WebPage();
+  core.WebPage webPage = core.WebPage();
   LoadingState _loadingState = LoadingState.waiting;
   //bool _visible = false;
   core.User? user;
@@ -42,7 +43,7 @@ class _WebPageViewState extends State<WebPageView> {
     final snackBar = SnackBar(
       content: Text(
         text,
-        style: TextStyle(color: Colors.white),
+        style: const TextStyle(color: Colors.white),
       ),
     );
 
@@ -54,11 +55,11 @@ class _WebPageViewState extends State<WebPageView> {
   @override
   void initState() {
     super.initState();
-    this.webPage = widget._webPage;
+    webPage = widget._webPage;
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
 
-      _loadWebPage(this.user);
+      _loadWebPage(user);
 
     });
 
@@ -66,11 +67,11 @@ class _WebPageViewState extends State<WebPageView> {
   }
 
   void _loadWebPage(user) async {
-    if (_loadingState == LoadingState.loading)
+    if (_loadingState == LoadingState.loading) {
       return;
-    else if (_loadingState == LoadingState.waiting)
+    } else if (_loadingState == LoadingState.waiting) {
       _loadingState = LoadingState.loading;
-
+    }
     try {
       dynamic details =
           await widget.provider.getDetails(widget._webPage.id!);
@@ -83,15 +84,14 @@ class _WebPageViewState extends State<WebPageView> {
           if(kDebugMode){
             log('webpageview: loaded details for id ${widget._webPage.id} with data $details');
           }
-          this.webPage = core.WebPage.fromJson(details);
+          webPage = core.WebPage.fromJson(details);
           _loadingState = LoadingState.done;
         } else {
           _loadingState = LoadingState.error;
         }
 
       });
-    } catch (e, stack) {
-      print('loadDetails returned error $e\n Stack trace:\n $stack');
+    } catch (e) {
       //Notify(e.toString());
       _loadingState = LoadingState.error;
       e.toString();
@@ -102,8 +102,7 @@ class _WebPageViewState extends State<WebPageView> {
 
   @override
   Widget build(BuildContext context) {
-     print('rebuilding webPage view');
-    this.user = Provider.of<core.UserProvider>(context).user;
+    user = Provider.of<core.UserProvider>(context).user;
 
     return Scaffold(
         backgroundColor:appBackground,
@@ -124,7 +123,7 @@ class _WebPageViewState extends State<WebPageView> {
   }
 
   Widget _buildAppBar() {
-    core.WebPage page = this.webPage;
+    core.WebPage page = webPage;
 
 
     Widget heroWidget = Hero(
@@ -136,7 +135,7 @@ class _WebPageViewState extends State<WebPageView> {
         placeholder: 'images/webPage-placeholder.png',
         image: widget._webPage.thumbnailUrl!,
       )
-          : Image(
+          : const Image(
           image: AssetImage('images/webPage-placeholder.png')),
     );
 
@@ -151,13 +150,14 @@ class _WebPageViewState extends State<WebPageView> {
             VideoPlayerElement(
               url: Uri.https(baseUrl!,page.data?['videourl']).toString(),
             )
-                : CircularProgressIndicator()) :
+                : const CircularProgressIndicator()) :
             GestureDetector(
               onTap: () {
-                if (widget._webPage.thumbnailUrl != null)
+                if (widget._webPage.thumbnailUrl != null) {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
                     return DetailScreen(widget._webPage.thumbnailUrl!);
                   }));
+                }
               },
               child: heroWidget
             ),
@@ -173,10 +173,6 @@ class _WebPageViewState extends State<WebPageView> {
     //final TextTheme textTheme = Theme.of(context).textTheme;
     core.WebPage webPage = this.webPage;
 
-    print('building ContentSection for id ' +
-        webPage.id.toString() +
-        '/' +
-        widget._webPage.id.toString());
 
     // List<Widget> buttons = [];
 /*
@@ -198,7 +194,7 @@ class _WebPageViewState extends State<WebPageView> {
     return SliverList(
       delegate: SliverChildListDelegate(<Widget>[
         Container(
-          decoration: BoxDecoration(color: const Color(0xff222128)),
+          decoration: const BoxDecoration(color: Color(0xff222128)),
           child: Padding(
             padding:
                 const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -230,6 +226,9 @@ class _WebPageViewState extends State<WebPageView> {
                 for (dynamic text in webPage.textcontents!)
                   Html(
                     data: text.toString(),
+                    onLinkTap: (url, _, __, ) {
+                      launchUrl(Uri.parse(url!));
+                    },
                     //  style: const TextStyle(color: Colors.white, fontSize: 13.0),
                   ),
                 /* if (webPage.description != null)
@@ -245,6 +244,19 @@ class _WebPageViewState extends State<WebPageView> {
                   height: 8.0,
                 ),
 
+                if(webPage.getValue('references')!=null)
+                  Text(
+                    AppLocalizations.of(context)!.references,
+                    style: const TextStyle(color: Colors.white, fontSize: 15.0),
+                  ),
+                if(webPage.getValue('references')!=null)
+                  Html(
+                    data: webPage.getValue('references')!,
+                    onLinkTap: (url, _, __, ) {
+                      launchUrl(Uri.parse(url!));
+                    },
+                    //  style: const TextStyle(color: Colors.white, fontSize: 13.0),
+                  ),
                 //youtubePlayerWidget(webPage.videoId),
 /*
     if(webPage.objectrating!=null)
@@ -375,7 +387,7 @@ class _WebPageViewState extends State<WebPageView> {
 
 class DetailScreen extends StatelessWidget {
   final String? url;
-  DetailScreen(String this.url, {super.key});
+  const DetailScreen(String this.url, {super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -26,8 +26,9 @@ _pushWidgetWithFade(BuildContext context, Widget widget, {replace = false}) {
           Animation secondaryAnimation) {
         return widget;
       });
-  if (replace)
+  if (replace) {
     Navigator.of(context).pushReplacement(route);
-  else
+  } else {
     Navigator.of(context).push(route);
+  }
 }

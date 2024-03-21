@@ -7,38 +7,40 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:core/core.dart' as core;
 
 enum ActionStatus {
-  Idle,
-  Loading,
-  Success,
-  Fail
+  idle,
+  loading,
+  success,
+  fail
 
 }
 class DeleteAccountAction extends StatefulWidget {
+  const DeleteAccountAction({super.key});
+
   @override
-  _DeleteAccountActionState createState() => _DeleteAccountActionState();
+  DeleteAccountActionState createState() => DeleteAccountActionState();
 }
 
-class _DeleteAccountActionState extends State<DeleteAccountAction> {
-  final formKey = new GlobalKey<FormState>();
+class DeleteAccountActionState extends State<DeleteAccountAction> {
+  final formKey = GlobalKey<FormState>();
 
-  ActionStatus formStatus = ActionStatus.Idle;
+  ActionStatus formStatus = ActionStatus.idle;
   core.User? user;
 
   void deleteAccount() {
     //final form = this.formKey.currentState;
 
     Provider.of<core.UserProvider>(context, listen: false).deleteUserAccount(
-        this.user ?? new core.User()
+        user ?? core.User()
     ).then((responsedata) async {
       var response = responsedata['data'] ?? responsedata;
-      if(response!=null) if( response['status']!=null) {
+      if(response!=null && response['status']!=null) {
 
         switch(response['status']) {
           case 'error':
             Flushbar(
               title: AppLocalizations.of(context)!.deletingAccountFailed,
               message: response['message'] !=null ? response['message'].toString() : response['error'].toString(),
-              duration: Duration(seconds: 10),
+              duration: const Duration(seconds: 10),
             ).show(context);
 
             break;
@@ -48,7 +50,7 @@ class _DeleteAccountActionState extends State<DeleteAccountAction> {
            await Flushbar(
               title: AppLocalizations.of(context)!.accountDeleted,
               message: response['message'] !=null ? response['message'].toString() : response.toString(),
-              duration: Duration(seconds: 10),
+              duration: const Duration(seconds: 10),
             ).show(context);
             Navigator.pushNamedAndRemoveUntil(context, '/login', (_) => false);
 
@@ -59,7 +61,7 @@ class _DeleteAccountActionState extends State<DeleteAccountAction> {
         Flushbar(
           title: AppLocalizations.of(context)!.deletingAccountFailed,
           message: response['error'] !=null ? response['error'].toString() : response.toString(),
-          duration: Duration(seconds: 10),
+          duration: const Duration(seconds: 10),
         ).show(context);
       }
     });
@@ -72,18 +74,18 @@ class _DeleteAccountActionState extends State<DeleteAccountAction> {
     var loading = Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        CircularProgressIndicator(),
+        const CircularProgressIndicator(),
         Text(AppLocalizations.of(context)!.pleaseWaitSendingCode)
       ],
     );
 
     List <Widget> formfields = [];
 
-    formfields.add(SizedBox(height: 10.0));
+    formfields.add(const SizedBox(height: 10.0));
     formfields.add(label(AppLocalizations.of(context)!.deleteYourAccount));
-    formfields.add(SizedBox(height: 5.0));
+    formfields.add(const SizedBox(height: 5.0));
 
-    formfields.add( this.formStatus == ActionStatus.Loading
+    formfields.add( formStatus == ActionStatus.loading
         ? loading
         : longButtons(AppLocalizations.of(context)!.deleteAccount, confirmDeleteAccount));
 
@@ -96,16 +98,16 @@ class _DeleteAccountActionState extends State<DeleteAccountAction> {
     var loading = Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        CircularProgressIndicator(),
+        const CircularProgressIndicator(),
         Text(AppLocalizations.of(context)!.loading)
       ],
     );
 
     switch(status){
 
-      case ActionStatus.Idle:
+      case ActionStatus.idle:
         return Container(
-          padding: EdgeInsets.symmetric(vertical:10,horizontal: 30),
+          padding: const EdgeInsets.symmetric(vertical:10,horizontal: 30),
           child: Form(
             key: formKey,
             child: Column(
@@ -122,32 +124,32 @@ class _DeleteAccountActionState extends State<DeleteAccountAction> {
         );
 
 
-      case ActionStatus.Loading:
+      case ActionStatus.loading:
       // display spinner
         return loading;
 
-      case ActionStatus.Success:
+      case ActionStatus.success:
 
         return  Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Padding(
-              padding:EdgeInsets.all(10),
+              padding:const EdgeInsets.all(10),
               child:Row(
                   children:[
 
-                    Icon(Icons.check),
+                    const Icon(Icons.check),
                     Text(AppLocalizations.of(context)!.accountDeleted,
-                        style:TextStyle(fontSize:20)),
+                        style:const TextStyle(fontSize:20)),
                   ]),),
-            SizedBox(height: 15.0),
+            const SizedBox(height: 15.0),
             ElevatedButton(
                 onPressed: () {
                   setState(() {
-                    this.formStatus = ActionStatus.Idle;
+                    formStatus = ActionStatus.idle;
                   });
                 },
-                child: Text(AppLocalizations.of(context)!.enterNewCode,style: TextStyle(fontWeight: FontWeight.w300))),
+                child: Text(AppLocalizations.of(context)!.enterNewCode,style: const TextStyle(fontWeight: FontWeight.w300))),
 
 
           ],
@@ -188,8 +190,8 @@ class _DeleteAccountActionState extends State<DeleteAccountAction> {
   @override
   Widget build(BuildContext context) {
 
-    this.user = Provider.of<core.UserProvider>(context).user;
-    return deleteAccountBody(this.formStatus);
+    user = Provider.of<core.UserProvider>(context).user;
+    return deleteAccountBody(formStatus);
 
 
   }

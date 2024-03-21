@@ -147,48 +147,57 @@ class _WellbeingScreenState extends State<WellbeingScreen> {
     List<Color> graphColors = [];
     if (userAnswersets.isNotEmpty) {
       int i = 0;
-      userAnswersets.forEach((answerset) {
-        List<int> row = [];
+      for (var answerset in userAnswersets) {
+        // Limit to 5 latest answers
+        if( i<= 4) {
+          List<int> row = [];
 
-        /// Group data by elementgroups (features)
-        features.forEach((feature) {
-          int featureScore = 0;
+          /// Group data by elementgroups (features)
+          for (var feature in features) {
+            int featureScore = 0;
 
-          /// Get the form elements in each group
-          form.elements?.where((element) =>
-          element.data?['formelementgroup'] == feature['id']).forEach((
-              element) {
-            /// Find the score of answers for the elements
+            /// Get the form elements in each group
+            form.elements?.where((element) =>
+            element.data?['formelementgroup'] == feature['id']).forEach((
+                element) {
+              /// Find the score of answers for the elements
 
-            List<dynamic> answers = answerset['answers'].entries.toList();
+              List<dynamic> answers = answerset['answers'].entries.toList();
 
-            dynamic answer = answers.firstWhereOrNull((entry) =>
-            entry.value['formelementid'].toString() == element.id.toString());
+              dynamic answer = answers.firstWhereOrNull((entry) =>
+              entry.value['formelementid'].toString() == element.id.toString());
 
-            if (answer != null) {
-              List options = element.data!['data'] as List;
-              dynamic selectedOption = options.firstWhere((e) =>
-              e['id'] == answer.value['answer']);
-              featureScore += double.parse(selectedOption['score']).round();
-            }
+              if (answer != null) {
+                List options = element.data!['data'] as List;
+                dynamic selectedOption = options.firstWhere((e) =>
+                e['id'] == answer.value['answer']);
+                featureScore += double.parse(selectedOption['score']).round();
+              }
+            });
+            int divider = feature['maxscore'] != null && feature['maxscore'] > 0
+                ? feature['maxscore']
+                : 16;
+
+            /// Calculate the score as percent of max score
+            featureScore = (featureScore / divider * 100).round();
+            row.add(featureScore);
+            // Log the max score for each feature
+            log('feature ${feature['title']} maxscore: ${feature['maxscore']}');
+          }
+          Color c = colors[i++];
+          answerData.add({
+            'answerset': answerset,
+            'date': DateFormat('yyyy-MM-dd HH:mm:ss').parse(
+                answerset['editdate']),
+            'data': row,
+            'color': c
           });
-          /// Calculate the score as percent of max score
-          featureScore = (featureScore / (feature['maxscore'] ?? 16) * 100).round();
-          row.add(featureScore);
-        });
-        Color c = colors[i++];
-        answerData.add({
-          'answerset': answerset,
-          'date': DateFormat('yyyy-MM-dd HH:mm:ss').parse(
-              answerset['editdate']),
-          'data': row,
-          'color': c
-        });
-        if(answerset['show']!=false){
-          data.add(row);
-          graphColors.add(c);
+          if (answerset['show'] != false) {
+            data.add(row);
+            graphColors.add(c);
+          }
         }
-      });
+      }
     }
 
     // Sample answersets with date
@@ -208,10 +217,10 @@ class _WellbeingScreenState extends State<WellbeingScreen> {
     }
 
     */
-    List<String> featureTitles = this.features.map((
+    List<String> featureTitles = features.map((
         feature) => feature['title'] as String).toList();
-    List<String> featureLongTitles = this.features.map((
-        feature) => feature['description'] as String).toList();
+    List<String> featureLongTitles = features.map((
+        feature) => (feature['description'] ?? '') as String).toList();
     return ScreenScaffold(
         title: AppLocalizations.of(context)!.navitem('mywellbeing'),
         navigationIndex: widget.navIndex,
@@ -234,7 +243,7 @@ class _WellbeingScreenState extends State<WellbeingScreen> {
                       .height * 0.5,
                       child: wellbeingView(
                           data, features: featureTitles, colors: graphColors)),
-                  if(userAnswersets.isEmpty) Center(
+                  if(userAnswersets.isEmpty) const Center(
                       child: Text('Fill in the self assessment')),
                   //        Center(child:Text("$answers answer times generated")),
                   if(userAnswersets.isNotEmpty) headerSheet(featureLongTitles),
@@ -250,9 +259,9 @@ class _WellbeingScreenState extends State<WellbeingScreen> {
         ) : Center(child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircularProgressIndicator(color: Colors.white10,),
-            SizedBox(width: 10,),
-            Text(AppLocalizations.of(context)!.loading, style: TextStyle(
+            const CircularProgressIndicator(color: Colors.white10,),
+            const SizedBox(width: 10,),
+            Text(AppLocalizations.of(context)!.loading, style: const TextStyle(
                 color: Colors.white10
             ),)
           ],
@@ -272,8 +281,8 @@ class _WellbeingScreenState extends State<WellbeingScreen> {
         reverseAxis: false,
         graphColors: colors,
         outlineColor: Colors.white10,
-        ticksTextStyle: TextStyle(color: Colors.orange, fontSize: 12),
-        featuresTextStyle: TextStyle(color: Colors.white, fontSize: 16,),
+        ticksTextStyle: const TextStyle(color: Colors.orange, fontSize: 12),
+        featuresTextStyle: const TextStyle(color: Colors.white, fontSize: 16,),
         sides: features.length,
 
       );
@@ -281,24 +290,24 @@ class _WellbeingScreenState extends State<WellbeingScreen> {
 
   Widget headerSheet(headers) {
     List<Widget> row = [
-      SizedBox(width: 60,child:Icon(Icons.visibility),),
-    ConstrainedBox(constraints: BoxConstraints.tight(Size(100,20)),child: Text(AppLocalizations.of(context)!.answerDate))];
+      const SizedBox(width: 60,child:Icon(Icons.visibility),),
+    ConstrainedBox(constraints: BoxConstraints.tight(const Size(100,20)),child: Text(AppLocalizations.of(context)!.answerDate))];
     for (String header in headers) {
-      row.add(Container(
+      row.add(SizedBox(
           height: 150,
           child: RotatedBox(
               quarterTurns: 3,
               child: Text(header,
                   maxLines: 2,
 
-                  style: TextStyle()
+                  style: const TextStyle()
               )))
 
       );
     }
     return Card(
         child: Padding(
-            padding: EdgeInsets.all(5),
+            padding: const EdgeInsets.all(5),
             child: Row(
 
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -328,14 +337,14 @@ class _WellbeingScreenState extends State<WellbeingScreen> {
               ? Icons.visibility_sharp
               : Icons.visibility_off)),
       ),
-      ConstrainedBox(constraints: BoxConstraints.tight(Size(100,20)),child: Text(DateFormat.yMMMd().format(date)))
+      ConstrainedBox(constraints: BoxConstraints.tight(const Size(100,20)),child: Text(DateFormat.yMMMd().format(date)))
     ];
     List<int> answerData = data['data'];
     for (int i = 0; i < headers.length; i++) {
       row.add(Text(answerData[i].toString()));
     }
     return Card(child: Container(color: data['color'],
-      child: Padding(padding: EdgeInsets.all(5),
+      child: Padding(padding: const EdgeInsets.all(5),
           child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: row)
       ),)
@@ -344,7 +353,7 @@ class _WellbeingScreenState extends State<WellbeingScreen> {
 
   Widget defaultContent(contentChild) {
     return Padding(
-        padding: EdgeInsets.all(30),
+        padding: const EdgeInsets.all(30),
         child: Center(
             child: contentChild)
     );

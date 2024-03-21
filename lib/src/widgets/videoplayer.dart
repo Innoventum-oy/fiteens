@@ -1,8 +1,6 @@
 // Create stateful videoplayer widget with given url
 
 import 'dart:developer';
-
-import 'package:fiteens/src/util/constants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pod_player/pod_player.dart';

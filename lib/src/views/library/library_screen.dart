@@ -23,6 +23,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
   bool loaded = false;
 
   Widget defaultContent = const Center(child:CircularProgressIndicator());
+  @override
   void initState(){
     super.initState();
     if(kDebugMode){
@@ -36,19 +37,22 @@ class _LibraryScreenState extends State<LibraryScreen> {
   _loadPages();
   }
   _loadPages() async {
-    log('loading pages');
+
+    WebPageProvider webPageProvider =  Provider.of<WebPageProvider>(context,listen:false);
     final Map<String, String> params = {
       'fields':
-      'id,pagetitle,textcontents,thumbnailurl,accesslevel,commonname,pagecategory',
+      'id,pagetitle,textcontents,thumbnailurl,accesslevel,commonname,pagecategory,references',
       'sort': 'pagetitle',
       'status': '2',
       'show_in_menu': '1',
       'language' : await Settings().getValue('language'),
       //'pagecategory' : "IS SET"
     };
-    WebPageProvider webPageProvider =  Provider.of<WebPageProvider>(context,listen:false);
+
     webPageProvider .loadItems(params).then((value){
-      log('${webPageProvider.list?.length} pages loaded');
+      if(kDebugMode) {
+        log('${webPageProvider.list?.length} pages loaded');
+      }
       webPageProvider.loadingStatus = DataLoadingStatus.loaded;
     });
 
@@ -77,7 +81,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                 if (activityClassProvider.list != null) {
                   List<ActivityClass>? items = activityClassProvider.list;
                   return items != null ? GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisSpacing: 5,
                         mainAxisSpacing: 5,
                         crossAxisCount: 2,
@@ -97,7 +101,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                 }
               } else {
 
-                return Padding(padding:EdgeInsets.all(20),child:Column(children:[defaultContent,Text(activityClassProvider.loadingStatus.toString())]));
+                return Padding(padding:const EdgeInsets.all(20),child:Column(children:[defaultContent,Text(AppLocalizations.of(context)!.loading)]));
               }
             }),
         // Library
@@ -134,7 +138,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                   });
 
                   return items != null ? GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisSpacing: 5,
                         mainAxisSpacing: 5,
                         crossAxisCount: 2,

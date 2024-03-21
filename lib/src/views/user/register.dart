@@ -9,40 +9,42 @@ import 'package:core/core.dart' as core;
 
 import '../dashboard/components/useravatar.dart';
 
-enum ContactMethod { Phone, Email }
+enum ContactMethod { phone, email }
 
 class Register extends StatefulWidget {
-  @override
-  _RegisterState createState() => _RegisterState();
+  const Register({super.key});
 
-  static _RegisterState? of(BuildContext context) =>
-      context.findAncestorStateOfType<_RegisterState>();
+  @override
+  RegisterState createState() => RegisterState();
+
+  static RegisterState? of(BuildContext context) =>
+      context.findAncestorStateOfType<RegisterState>();
 }
 
-class _RegisterState extends State<Register> {
-  final formKey = new GlobalKey<FormState>();
+class RegisterState extends State<Register> {
+  final formKey = GlobalKey<FormState>();
 
   //final core.ApiClient _apiClient = core.ApiClient();
   final core.Auth _auth = core.Auth();
-  Map <String,dynamic> _formData = {};
-  Map <String,bool> _showPassword = {};
+  final Map <String,dynamic> _formData = {};
+  final Map <String,bool> _showPassword = {};
   bool isOver13 = true;
-  ContactMethod selectedContactMethod = ContactMethod.Phone;
+  ContactMethod selectedContactMethod = ContactMethod.phone;
 
   Map<String, TextEditingController> controllers = {
-    'lastname': new TextEditingController(),
-    'firstname': new TextEditingController(),
-    'email': new TextEditingController(),
-    'phone': new TextEditingController(),
-    'registrationCode': new TextEditingController(),
-    'password': new TextEditingController(),
-    'confirmPassword' : new TextEditingController(),
-    'guardianName': new TextEditingController(),
-    'guardianPhone': new TextEditingController(),
+    'lastname': TextEditingController(),
+    'firstname': TextEditingController(),
+    'email': TextEditingController(),
+    'phone': TextEditingController(),
+    'registrationCode': TextEditingController(),
+    'password': TextEditingController(),
+    'confirmPassword' : TextEditingController(),
+    'guardianName': TextEditingController(),
+    'guardianPhone': TextEditingController(),
   };
 
   List<Widget> formButtons(auth, userProvider) {
-    var doRegister = () {
+    doRegister() {
       final form = formKey.currentState;
       if (form!.validate()) {
         form.save();
@@ -60,7 +62,7 @@ class _RegisterState extends State<Register> {
           data: {'avatar': _formData['avatar']},
         )!.then((responseData) {
           var response = responseData['data'] ?? responseData;
-          if (response != null) if (response['status'] != null) {
+          if (response != null && response['status'] != null) {
             switch (response['status']) {
               case 'error':
                 Flushbar(
@@ -68,7 +70,7 @@ class _RegisterState extends State<Register> {
                   message: response['message'] != null
                       ? response['message'].toString()
                       : response['error'].toString(),
-                  duration: Duration(seconds: 10),
+                  duration: const Duration(seconds: 10),
                 ).show(context);
 
                 break;
@@ -76,7 +78,7 @@ class _RegisterState extends State<Register> {
               case 'success':
                 if (response['user'] != null) {
                   var userData = response['user'];
-                  print('saving users to UserPreferences');
+
                   core.User authUser = core.User.fromJson(userData);
 
                   core.UserPreferences.saveUser(authUser);
@@ -86,7 +88,7 @@ class _RegisterState extends State<Register> {
                   Provider.of<core.UserProvider>(context, listen: false)
                       .setUser(authUser);
                   setState(() {
-                    print('setting registeredStatus to Registered');
+
                     auth.setRegisteredStatus(core.Status.registered);
                   });
                 }
@@ -97,7 +99,7 @@ class _RegisterState extends State<Register> {
               message: response['error'] != null
                   ? response['error'].toString()
                   : response.toString(),
-              duration: Duration(seconds: 10),
+              duration: const Duration(seconds: 10),
             ).show(context);
           }
         });
@@ -105,58 +107,60 @@ class _RegisterState extends State<Register> {
         Flushbar(
           title: AppLocalizations.of(context)!.errorsInForm,
           message: AppLocalizations.of(context)!.pleaseCompleteFormProperly,
-          duration: Duration(seconds: 10),
+          duration: const Duration(seconds: 10),
         ).show(context);
       }
-    };
+    }
     String? validateName(String? value) {
-      String? _msg;
+      String? msg;
       if (value!.isEmpty) {
-        _msg = AppLocalizations.of(context)!.pleaseProvideYourName;
+        msg = AppLocalizations.of(context)!.pleaseProvideYourName;
       }
-      return _msg;
+      return msg;
     }
 
     String? validatePhone(String? value) {
-      String? _msg;
-      if (value!.isEmpty)
+      String? msg;
+      if (value!.isEmpty) {
         return AppLocalizations.of(context)!.pleaseEnterPhoneNumber;
+      }
 
       //test for phone number pattern
       String pattern = r'(^(?:[+0])?[0-9]{8,12}$)';
-      RegExp regExp = new RegExp(pattern);
+      RegExp regExp = RegExp(pattern);
       if (!regExp.hasMatch(value)) {
-        _msg = AppLocalizations.of(context)!.pleaseProvideValidPhoneNumber;
+        msg = AppLocalizations.of(context)!.pleaseProvideValidPhoneNumber;
       }
 
-      return _msg;
+      return msg;
     }
 
     String? validateGuardianPhone(String? value) {
-      String? _msg;
-      if (this.isOver13) return null;
-      if (value!.isEmpty)
+      String? msg;
+      if (isOver13) return null;
+      if (value!.isEmpty) {
         return AppLocalizations.of(context)!.pleaseEnterPhoneNumber;
+      }
 
       //test for phone number pattern
       String pattern = r'(^(?:[+0])?[0-9]{8,12}$)';
-      RegExp regExp = new RegExp(pattern);
+      RegExp regExp = RegExp(pattern);
       if (!regExp.hasMatch(value)) {
-        _msg = AppLocalizations.of(context)!.pleaseProvideValidPhoneNumber;
+        msg = AppLocalizations.of(context)!.pleaseProvideValidPhoneNumber;
       }
-      return _msg;
+      return msg;
     }
 
     String? validateEmail(String? value) {
-      String? _msg;
-      RegExp regex = new RegExp(
+      String? msg;
+      RegExp regex = RegExp(
           r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
       if (value!.isEmpty) {
-        _msg = AppLocalizations.of(context)!.pleaseProvideValidEmail;
+        msg = AppLocalizations.of(context)!.pleaseProvideValidEmail;
       } else if (!regex.hasMatch(value)) {
-        _msg = AppLocalizations.of(context)!.pleaseProvideValidEmail;
+        msg = AppLocalizations.of(context)!.pleaseProvideValidEmail;
       }
-      return _msg;
+      return msg;
     }
 
     Widget showTextIconButton(field){
@@ -201,7 +205,7 @@ class _RegisterState extends State<Register> {
           decoration: buildInputDecoration(title, icon,suffixIcon: suffix),
 
           ),
-          SizedBox(height: 10.0),
+          const SizedBox(height: 10.0),
         ]
       );
     }
@@ -224,7 +228,7 @@ class _RegisterState extends State<Register> {
     final guardianNameField = registrationField(
       title: AppLocalizations.of(context)!.guardianName,
       icon: Icons.person,
-      validatorFunction: (value) => value!.isEmpty && !this.isOver13
+      validatorFunction: (value) => value!.isEmpty && !isOver13
           ? AppLocalizations.of(context)!.valueIsRequired
           : null,
       controller:  controllers['guardianName'],
@@ -285,8 +289,9 @@ class _RegisterState extends State<Register> {
           return AppLocalizations.of(context)!.passwordsDontMatch;
 
         }
-        if (value!.isEmpty)
+        if (value!.isEmpty) {
           return AppLocalizations.of(context)!.passwordIsRequired;
+        }
         return null;
       },
       isPassword: true,
@@ -295,7 +300,7 @@ class _RegisterState extends State<Register> {
     var loading = Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        CircularProgressIndicator(),
+        const CircularProgressIndicator(),
         Text(AppLocalizations.of(context)!.pleaseWaitRegistering)
       ],
     );
@@ -324,7 +329,7 @@ class _RegisterState extends State<Register> {
         {'value': AppLocalizations.of(context)!.no, 'id': 0}
       ]),
     ];
-    if (!this.isOver13) {
+    if (!isOver13) {
       formFields.addAll([
 
         guardianNameField,
@@ -337,7 +342,7 @@ class _RegisterState extends State<Register> {
       confirmPasswordField,
     ]);
     switch (selectedContactMethod) {
-      case ContactMethod.Email:
+      case ContactMethod.email:
         //add email field + change to phone field button
         //clear possible phone field value
         _formData['phone'] = '';
@@ -347,11 +352,11 @@ class _RegisterState extends State<Register> {
             onPressed: () {
               // Change to phone field
               setState(() {
-                selectedContactMethod = ContactMethod.Phone;
+                selectedContactMethod = ContactMethod.phone;
               });
             },
             child: Text(AppLocalizations.of(context)!.btnUsePhone,
-                style: TextStyle(fontWeight: FontWeight.w300))));
+                style: const TextStyle(fontWeight: FontWeight.w300))));
         break;
 
       default:
@@ -365,15 +370,15 @@ class _RegisterState extends State<Register> {
             onPressed: () {
               // Change to email field
               setState(() {
-                selectedContactMethod = ContactMethod.Email;
+                selectedContactMethod = ContactMethod.email;
               });
             },
             child: Text(AppLocalizations.of(context)!.btnUseEmail,
-                style: TextStyle(fontWeight: FontWeight.w300))));
+                style: const TextStyle(fontWeight: FontWeight.w300))));
     }
 
     formFields.add(codeField);
-    formFields.add(SizedBox(height: 10.0));
+    formFields.add(const SizedBox(height: 10.0));
     formFields.add(auth.registeredStatus == core.Status.authenticating
         ? loading
         : longButtons(AppLocalizations.of(context)!.createAccount, doRegister));
@@ -385,7 +390,7 @@ class _RegisterState extends State<Register> {
     var loading = Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        CircularProgressIndicator(),
+        const CircularProgressIndicator(),
         Text(AppLocalizations.of(context)!.pleaseWaitRegistering)
       ],
     );
@@ -393,7 +398,7 @@ class _RegisterState extends State<Register> {
     switch (auth.registeredStatus) {
       case core.Status.notRegistered:
         return Container(
-          padding: EdgeInsets.all(40.0),
+          padding: const EdgeInsets.all(40.0),
           child: Form(
             key: formKey,
             child: Column(
@@ -411,16 +416,16 @@ class _RegisterState extends State<Register> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Center(child: Icon(Icons.check_circle,size: 80,)),
+            const Center(child: Icon(Icons.check_circle,size: 80,)),
             Center(child:Text(AppLocalizations.of(context)!.accountCreated),),
-            SizedBox(height: 15.0),
+            const SizedBox(height: 15.0),
             ElevatedButton(
                 onPressed: () {
                   // Navigate to dashboard
                   Navigator.pushReplacementNamed(context, '/dashboard');
                 },
                 child: Text(AppLocalizations.of(context)!.btnContinue,
-                    style: TextStyle(fontWeight: FontWeight.w300)))
+                    style: const TextStyle(fontWeight: FontWeight.w300)))
           ],
         );
 
@@ -431,7 +436,7 @@ class _RegisterState extends State<Register> {
 
   @override
   Widget build(BuildContext context) {
-    print('building registration form, avatar: ${_formData['avatar']}');
+
     core.AuthProvider auth = Provider.of<core.AuthProvider>(context);
     core.UserProvider userProvider = Provider.of<core.UserProvider>(context);
     return SafeArea(
@@ -450,7 +455,7 @@ class AgeSelectDisplay extends StatefulWidget {
   final List<dynamic> options;
   final int? selectedOption; // default / original selected option
 
-  AgeSelectDisplay({required this.options, this.selectedOption});
+  const AgeSelectDisplay({super.key, required this.options, this.selectedOption});
 
   @override
   RadioGroupWidget createState() => RadioGroupWidget();
@@ -460,32 +465,29 @@ class RadioGroupWidget extends State<AgeSelectDisplay> {
   // Default Radio Button Item
   int? selectedOptionValue;
 
+  @override
   Widget build(BuildContext context) {
     //  print('building radio group; group value is '+this.selectedOptionValue.toString());
 
-    return Container(
-      //height: 350.0,
-      child: Column(children: [
-        ...widget.options
-            .map((data) => RadioListTile<dynamic>(
-                  title: Text("${data['value']}"),
-                  groupValue: this.selectedOptionValue,
-                  value: data['id'],
-                  onChanged: (val) {
-                    setState(() {
-                      //   print('selecting: '+data.value.toString()+' ('+data.id.toString()+')');
-                      this.selectedOptionValue = data['id'];
-                      Register.of(context)!.setState(() {
-                        Register.of(context)!.isOver13 =
-                            data['id'] == 1 ? true : false;
-                      });
-                      print('is over 13?' +
-                          Register.of(context)!.isOver13.toString());
+    return Column(children: [
+      ...widget.options
+          .map((data) => RadioListTile<dynamic>(
+                title: Text("${data['value']}"),
+                groupValue: selectedOptionValue,
+                value: data['id'],
+                onChanged: (val) {
+                  setState(() {
+                    //   print('selecting: '+data.value.toString()+' ('+data.id.toString()+')');
+                    selectedOptionValue = data['id'];
+                    Register.of(context)!.setState(() {
+                      Register.of(context)!.isOver13 =
+                          data['id'] == 1 ? true : false;
                     });
-                  },
-                ))
-            .toList(),
-      ]),
-    );
+
+                  });
+                },
+              ))
+          ,
+    ]);
   }
 }

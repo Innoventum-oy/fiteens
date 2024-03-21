@@ -2,9 +2,9 @@ import 'package:fiteens/src/util/utils.dart';
 import 'package:flutter/material.dart';
 
 const Color primary = Colors.white;//const Color(0xFF981f4f);
-const Color primaryDark = const Color(0xFF9d1a6f);
-const Color colorAccent = const Color(0xFF65BFA6);
-const Color salmon = const Color(0xFFF47663);
+const Color primaryDark = Color(0xFF9d1a6f);
+const Color colorAccent = Color(0xFF65BFA6);
+const Color salmon = Color(0xFFF47663);
 
 const Color appBackground = Color(0xFF283F4D);
 const Color secondaryThemeColor = Color(0xFF299fe0);// = createMaterialColor('#FEDE39');//yellow
@@ -13,8 +13,8 @@ const Color effect = Color(0xFFFEDE39);
 const Color buttonColorSecondary = Color(0xFF299fe0);
 const Color buttonColorPrimary = Color(0xFFF47B6A);
 final TextStyle captionStyle = TextStyle(color: Colors.grey[400]);
-final TextStyle whiteBody = TextStyle(color: Colors.white);
-final TextStyle inputLabel = TextStyle(color: Colors.white);
+const TextStyle whiteBody = TextStyle(color: Colors.white);
+const TextStyle inputLabel = TextStyle(color: Colors.white);
 
 ThemeData appTheme = ThemeData(
   fontFamily: 'Nunito',
@@ -23,7 +23,7 @@ ThemeData appTheme = ThemeData(
   // brightness: Brightness.dark,
   canvasColor: appBackground,
   scaffoldBackgroundColor: appBackground,
-  colorScheme: ColorScheme.dark().copyWith(
+  colorScheme: const ColorScheme.dark().copyWith(
     brightness: Brightness.dark,
     //primaryContainer: canvasColor,
     primary: primary,
@@ -37,10 +37,11 @@ ThemeData appTheme = ThemeData(
       buttonColorPrimary, // text button color: blue
     ),
   ),
+
   radioTheme: RadioThemeData(
     fillColor: MaterialStateColor.resolveWith((states) => secondaryThemeColor)
   ),
-  appBarTheme: AppBarTheme(
+  appBarTheme: const AppBarTheme(
     backgroundColor: appBackground,
     foregroundColor: appForeground,
   ),
@@ -49,9 +50,9 @@ ThemeData appTheme = ThemeData(
     color: createMaterialColor('#283F4D'), // blue
   ),
   // primaryTextTheme: Typography.whiteHelsinki,
-  bottomNavigationBarTheme: BottomNavigationBarThemeData(backgroundColor: Colors.black),
+  bottomNavigationBarTheme: const BottomNavigationBarThemeData(backgroundColor: Colors.black),
   inputDecorationTheme: InputDecorationTheme(
-    enabledBorder: OutlineInputBorder(
+    enabledBorder: const OutlineInputBorder(
       borderSide: BorderSide(
           width: 1, color: secondaryThemeColor),
     ),
@@ -59,8 +60,8 @@ ThemeData appTheme = ThemeData(
       borderSide: BorderSide(
           width: 1, color: createMaterialColor('#FF66b42c')),
     ),
-    labelStyle: TextStyle(color: Colors.white),
-    hintStyle: TextStyle(color: Colors.white),
+    labelStyle: const TextStyle(color: Colors.white),
+    hintStyle: const TextStyle(color: Colors.white),
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(

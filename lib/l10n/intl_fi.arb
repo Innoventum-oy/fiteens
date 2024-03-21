@@ -135,6 +135,7 @@
   "noActivitiesFound": "Ei aktiviteetteja",
   "noContactMethodsFound": "Yhteystietoja ei löytynyt",
   "noDescription": "Ei kuvausta",
+  "noEventsFound": "Ei tapahtumia",
   "noFormsFound": "Ei lomakkeita",
   "noResourcesFound": "Ei resursseja",
   "noRoutinesFound": "Ei harjoitusohjelmia",
@@ -181,6 +182,7 @@
   "requestNewPasswordTitle": "Vaihda salasana",
   "resources": "Resurssit",
   "resume": "Jatka",
+  "references": "Lähteet",
   "retrievingCoordinates": "Haetaan sijaintia",
   "routineAddedToCalendar": "Harjoitus lisätty kalenteriin",
   "routines": "Harjoitusohjelmat",
@@ -220,5 +222,6 @@
   "yes": "kyllä",
   "youHaveThisBadge": "Olet ansainnut tämän saavutuksen",
   "yourAnswerHasBeenSaved": "Vastauksen tallentaminen onnistui",
-  "yourPassword": "Syötä salasanasi"
+  "yourPassword": "Syötä salasanasi",
+  "yourLogDates": "Kirjaamasi päivämäärät"
 }

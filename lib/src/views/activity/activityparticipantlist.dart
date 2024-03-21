@@ -14,15 +14,16 @@ class ActivityParticipantList extends StatefulWidget {
   final core.ActivityDate _activityDate;
   final core.Activity _activity;
 
-  ActivityParticipantList(this._activityDate,this._activity);
+  const ActivityParticipantList(this._activityDate,this._activity, {super.key});
 
   @override
-  _ActivityParticipantListState createState() =>
-      _ActivityParticipantListState();
+  ActivityParticipantListState createState() =>
+      ActivityParticipantListState();
 }
 
-class _ActivityParticipantListState extends State<ActivityParticipantList> {
-  final core.ApiClient _apiClient = core.ApiClient();
+class ActivityParticipantListState extends State<ActivityParticipantList> {
+  //final core.ApiClient _apiClient = core.ApiClient();
+
   bool userListLoaded = false;
   bool visitListLoaded = false;
   List<core.User> users = [];
@@ -47,33 +48,27 @@ class _ActivityParticipantListState extends State<ActivityParticipantList> {
         userListLoaded = true;
         if (activityUserData.isNotEmpty) {
           users.addAll(activityUserData);
-          print(activityUserData.length.toString() + ' users loaded');
           _loadActivityVisits(widget._activity.id!,widget._activityDate);
         } else {
-          print('no users found for activity');
         }
       });
-    } catch (e, stack) {
-      print('loadActivityUsers returned error $e\n Stack trace:\n $stack');
+    } catch (e) {
       //Notify(e.toString());
       e.toString();
     }
   }
   void _loadActivityVisits(activity,activitydate) async {
     try {
-      this.activityVisitData =
+      activityVisitData =
       await Provider.of<core.ActivityProvider>(context).getActivityDateVisits(widget._activity.id!,activitydate);
 
       setState(() {
         visitListLoaded = true;
-        if (this.activityVisitData.isNotEmpty) {
-          print(this.activityVisitData.length.toString() + ' visits loaded');
+        if (activityVisitData.isNotEmpty) {
         } else {
-          print('no visit information found for activity');
         }
       });
-    } catch (e, stack) {
-      print('loadActivityVisits returned error $e\n Stack trace:\n $stack');
+    } catch (e) {
       //Notify(e.toString());
       e.toString();
     }
@@ -93,12 +88,13 @@ class _ActivityParticipantListState extends State<ActivityParticipantList> {
 
   @override
   Widget build(BuildContext context) {
-    var titleDateFormat = new DateFormat('dd.MM hh:mm');
-    return new Scaffold(
-        appBar: new AppBar(
-          title: new Text(AppLocalizations.of(context)!.participants+ ' '+(widget._activityDate.startdate !=null ? titleDateFormat.format(widget._activityDate.startdate ?? DateTime.now()).toString() : ''))
+
+    var titleDateFormat = DateFormat('dd.MM hh:mm');
+    return Scaffold(
+        appBar: AppBar(
+          title: Text('${AppLocalizations.of(context)!.participants} ${widget._activityDate.startdate !=null ? titleDateFormat.format(widget._activityDate.startdate ?? DateTime.now()).toString() : ''}')
         ),
-        body: userListLoaded ? userList() : Center(child:CircularProgressIndicator(),
+        body: userListLoaded ? userList() : const Center(child:CircularProgressIndicator(),
         ),
     );
 
@@ -106,17 +102,18 @@ class _ActivityParticipantListState extends State<ActivityParticipantList> {
   Widget userList()
   {
     final loggedInUser = Provider.of<core.UserProvider>(context, listen: false).user;
-    if(users.isEmpty)
+    if(users.isEmpty) {
       return Align(
           alignment: Alignment.center,
           child:Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children:[
-              Icon(Icons.info),
+              const Icon(Icons.info),
               Text(AppLocalizations.of(context)!.noUsersFound,textAlign:TextAlign.center,)
           ]),
       );
+    }
     return ListView.builder(
         itemBuilder: (context,index){
           core.User user = users[index];
@@ -124,7 +121,7 @@ class _ActivityParticipantListState extends State<ActivityParticipantList> {
       return SwitchListTile(
       //  isThreeLine: true,
         value: activityVisitData[user.id.toString()]=='visited' ?true:false,
-        title: Text(user.firstname!+' '+user.lastname!),
+        title: Text('${user.firstname!} ${user.lastname!}'),
        // subtitle:
         secondary: InkWell(
             child: CircleAvatar(
@@ -144,12 +141,10 @@ class _ActivityParticipantListState extends State<ActivityParticipantList> {
         onChanged: (bool value) async {
 
             notify(value ? AppLocalizations.of(context)!.activityRecorded : AppLocalizations.of(context)!.visitRemoved);
-            Map<String,dynamic> result = await _apiClient.updateActivityRegistration(activityId:widget._activity.id!,visitStatus:value ? 'visited':'cancelled',visitor: user,user:loggedInUser,visitDate:widget._activityDate) ;
+            Map<String,dynamic> result = await Provider.of<core.ActivityProvider>(context,listen: false).updateActivityRegistration(activityId:widget._activity.id!,visitStatus:value ? 'visited':'cancelled',visitor: user,user:loggedInUser,visitDate:widget._activityDate) ;
             setState(() {
             if(result['visitstatus']!=null) {
-              print('updatevisit returned visitstatus '+result['visitstatus'].toString()+' for user '+result['userid']);
               activityVisitData[result['userid']] = result['visitstatus'];
-              print(activityVisitData);
             }
 
           });

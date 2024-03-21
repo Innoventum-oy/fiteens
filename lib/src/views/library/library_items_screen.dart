@@ -32,7 +32,8 @@ class _LibraryItemsScreenState extends State<LibraryItemsScreen> {
       log('Libraryscreen initState - loading activities');
     }
     Map<String,dynamic> params = {
-    'activitystatus' : 'active',  // only load active items
+    'activitystatus' : 'active',  // only load active items'
+      'sort' : 'name',
       'activityclass' : widget.activityClass.id.toString()
     };
     Provider.of<ActivityProvider>(context,listen: false).getItems(params,reload: widget.refresh || loaded==false ? true : false);
@@ -56,42 +57,43 @@ class _LibraryItemsScreenState extends State<LibraryItemsScreen> {
               List<Widget> actions = [
                 ElevatedButton(
                   onPressed: () async {
+                    NavigatorState navigator = Navigator.of(context, rootNavigator: true);
                     if (item.id != null) {
                       dynamic result = await activityProvider.delete(item.id ?? 0);
                       log("result: $result");
-                      if (result['status']=='success') setState(() {
+                      if (result['status']=='success') {
+                        setState(() {
                         items.removeAt(index);
-                        //Navigator.of(context, rootNavigator: true).pop(true);
-                        if(Navigator.of(context, rootNavigator: true).canPop()) Navigator.of(context, rootNavigator: true).pop(false);
+                        if(navigator.canPop()) navigator.pop(false);
                       });
-                      else {
-                        if(Navigator.of(context, rootNavigator: true).canPop()) Navigator.of(context, rootNavigator: true).pop(false);
+                      } else {
+                        if(navigator.canPop()) navigator.pop(false);
                         notifyDialog('Failed to delete item',Text(result['error'] ?? 'Failed to delete item'),context);
 
                       }
                     }
 
                   },
-                  child: Text('Delete'),),
+                  child: const Text('Delete'),),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.of(context, rootNavigator: true).pop(false);
                   },
-                  child: Text('Cancel'),)
+                  child: const Text('Cancel'),)
               ];
           return item.accesslevel>=20 ? Dismissible(
               key: Key(item.toString()),
               confirmDismiss: (direction) async {
-                return await popupDialog("Delete item?",Text("Item will be permanently deleted from the library, are you sure?"), context,actions: actions);
+                return await popupDialog("Delete item?",const Text("Item will be permanently deleted from the library, are you sure?"), context,actions: actions);
 
               },
               background: Container(
                   color:Colors.red,
-                  padding: EdgeInsets.only(right: 20.0),
+                  padding: const EdgeInsets.only(right: 20.0),
                   alignment: Alignment.centerRight,
-              child: Text('Delete',
+              child: const Text('Delete',
                   textAlign: TextAlign.right,
-                  style: new TextStyle(color: Colors.white))
+                  style: TextStyle(color: Colors.white))
               ),
               child:ActivityItem(item,navIndex: widget.navIndex,)
           ) : ActivityItem(item,navIndex: widget.navIndex);
@@ -102,11 +104,9 @@ class _LibraryItemsScreenState extends State<LibraryItemsScreen> {
       }
     }
     else {
-      /*if (!connection.appOnline) {
-        defaultContent = Text(AppLocalizations.of(context)!.applicationOffline);
+      if(kDebugMode){
+        log('Loading status: ${activityProvider.loadingStatus}');
       }
-
-       */
       libraryView = Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -129,7 +129,7 @@ class _LibraryItemsScreenState extends State<LibraryItemsScreen> {
 
           constants.Router.navigate(context,'library',widget.navIndex,refresh: true);
         },
-        child: loaded ? libraryView : CircularProgressIndicator()
+        child: loaded ? libraryView : const CircularProgressIndicator()
     );
     }
 

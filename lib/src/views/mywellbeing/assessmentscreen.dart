@@ -23,7 +23,7 @@ class AssessmentScreen extends StatefulWidget {
 class _AssessmentScreenState extends State<AssessmentScreen> {
 
   final _pageViewController = PageController(initialPage: 0);
-  final formKey = new GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
   Map<int, core.FormElementData> selectedOptions = {};
   int? answersetKey;
   Map<int, dynamic> formData = {};
@@ -54,25 +54,24 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
   }
   Widget assessmentView(){
 
-    var sendForm = () {
+    sendForm() {
       final formState = formKey.currentState;
       if (formState!.validate()) {
         formState.save();
         bool hasData = false;
         Map<String, dynamic> requestData = {};
-        this.formData.forEach((key, value) {
+        formData.forEach((key, value) {
           if (value != null) hasData = true;
           if (value.runtimeType.toString() == 'bool' && value != false) {
             hasData = true;
-
           }
           if (value.runtimeType.toString() == 'String' && value.isNotEmpty && value!='null') {
             hasData = true;
-
           }
 
-          if(hasData)
-            requestData.putIfAbsent('element_' + key.toString(), () => value);
+          if(hasData) {
+            requestData.putIfAbsent('element_$key', () => value);
+          }
         });
         setState(() {
           loading = true;
@@ -83,43 +82,42 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
           'formid': widget.form.id.toString(),
 
         };
-        if (this.answersetKey != null) {
-          params['answersetid'] = this.answersetKey.toString();
+        if (answersetKey != null) {
+          params['answersetid'] = answersetKey.toString();
         }
-        if (hasData)
+        if (hasData) {
           _apiClient
-              .saveFormData(params, requestData)!
+              .saveFormData(params, requestData)
               .then((var response) async {
-            if (response['answersetid'] is int) {
-              this.answersetKey = response['answersetid'];
+            if (response?['answersetid'] is int) {
+              answersetKey = response?['answersetid'];
             }
             setState(() {
               loading = false;
             });
-            switch (response['status']) {
+            switch (response?['status']) {
               case 'fail':
               case 'error':
                 if(kDebugMode) log(response.toString());
                 Flushbar(
                   title: AppLocalizations.of(context)!.savingDataFailed,
-                  message: response['message'] != null
-                      ? response['message'].toString()
+                  message: response != null?['message'].toString()
                       : response.toString(),
-                  duration: Duration(seconds: 10),
+                  duration: const Duration(seconds: 10),
                 ).show(context);
-                if(response['data']!=null && kDebugMode)
-                  response['data'].forEach((key,dataset){
-                    log(key.toString()+': '+dataset.toString());
+                if(response?['data']!=null && kDebugMode) {
+                  response?['data'].forEach((key,dataset){
+                    log('$key: $dataset');
                   });
+                }
                 break;
 
               case 'success':
                 Flushbar(
                   title: AppLocalizations.of(context)!.answerSaved,
-                  message: response['message'] != null
-                      ? response['message'].toString()
+                  message: response != null?['message'].toString()
                       : AppLocalizations.of(context)!.answerSaved,
-                  duration: Duration(seconds: 10),
+                  duration: const Duration(seconds: 10),
                 ).show(context);
 
                 showDialog<String>(
@@ -129,8 +127,7 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
                       Text(AppLocalizations.of(NavigationService.navigatorKey.currentContext ?? context)!.answerSaved),
                       content: SingleChildScrollView(
                           child: Text(
-                            response['message'] != null
-                                ? response['message'].toString()
+                             response!=null?['message'].toString()
                                 : AppLocalizations.of(NavigationService.navigatorKey.currentContext ?? context)!.answerSaved,
                           )),
                       actions: <Widget>[
@@ -148,21 +145,21 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
                     ));
             }
           });
-        else {
+        } else {
           Flushbar(
             title: AppLocalizations.of(context)!.errorsInForm,
             message: AppLocalizations.of(context)!.pleaseCompleteFormProperly,
-            duration: Duration(seconds: 10),
+            duration: const Duration(seconds: 10),
           ).show(context);
         }
       } else {
         Flushbar(
           title: AppLocalizations.of(context)!.errorsInForm,
           message: AppLocalizations.of(context)!.pleaseCompleteFormProperly,
-          duration: Duration(seconds: 10),
+          duration: const Duration(seconds: 10),
         ).show(context);
       }
-    };
+    }
 
     Iterable<core.FormElement> pages = widget.form.elements?.where((element) => element.type=='radio') ?? [];
 
@@ -177,19 +174,20 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
 
           // add button to previous page
           buttons.add(ElevatedButton.icon(onPressed: () =>
-              _pageViewController.previousPage( duration: Duration(
+              _pageViewController.previousPage( duration: const Duration(
                   milliseconds: 300), curve: Curves.linear),
-              icon: Icon(Icons.arrow_back),
+              icon: const Icon(Icons.arrow_back),
                   label: Text(AppLocalizations.of(context)!.previous)));
         }
         if (index < pages.length-1) {
           // add button to next page
 
           buttons.add(ElevatedButton.icon(onPressed: () {
-              if (_pageViewController.hasClients)
-              _pageViewController.nextPage( duration: Duration(
-                  milliseconds: 300), curve: Curves.linear);},
-              icon: Icon(Icons.arrow_forward),
+              if (_pageViewController.hasClients) {
+                _pageViewController.nextPage( duration: const Duration(
+                  milliseconds: 300), curve: Curves.linear);
+              }},
+              icon: const Icon(Icons.arrow_forward),
               label: Text(AppLocalizations
                   .of(context)!.next)));
         }
@@ -198,7 +196,7 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
           buttons.add(
             ElevatedButton.icon(
               onPressed: ()=>loading ? null : sendForm(),
-              icon:loading ? CircularProgressIndicator() : Icon(Icons.send),
+              icon:loading ? const CircularProgressIndicator() : const Icon(Icons.send),
               label: Text(loading ? AppLocalizations.of(context)!.loading : AppLocalizations.of(context)!.sendAnswer)
             )
           );
@@ -217,10 +215,10 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
             });
             if(advance && index < pages.length) {
 
-              _pageViewController.nextPage( duration: Duration(
+              _pageViewController.nextPage( duration: const Duration(
                 milliseconds: 300), curve: Curves.linear);
             }
-      }, selectedOption: formData[e.id] ?? null,
+      }, selectedOption: formData[e.id],
       buttons: buttons,
       index:index+1,
       pageCount: pages.length),
@@ -232,7 +230,7 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
 }
 Widget defaultContent(contentChild){
   return Padding(
-      padding:EdgeInsets.all(30),
+      padding:const EdgeInsets.all(30),
       child:Center(
           child:contentChild)
 

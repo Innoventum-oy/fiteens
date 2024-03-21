@@ -135,6 +135,7 @@
   "noActivitiesFound": "Tegevusi ei leitud",
   "noContactMethodsFound": "Kontaktmeetodeid ei leitud",
   "noDescription": "Kirjeldus puudub",
+  "noEventsFound": "Sündmusi ei leitud",
   "noFormsFound": "Vorme ei leitud",
   "noResourcesFound": "Hetkel pole saadaval ressursse",
   "noRoutinesFound": "Rutineid ei leitud",
@@ -174,6 +175,7 @@
   "processing": "Töötlemine",
   "ratingSaved": "Hinnang salvestatud",
   "readMore": "Loe edasi",
+  "references": "Viited",
   "refresh": "Värskenda",
   "registrationFailed": "Registreerimine ebaõnnestus",
   "requestFailed": "Päring ebaõnnestus",
@@ -220,5 +222,6 @@
   "yes": "Jah",
   "youHaveThisBadge": "Sul on see saavutus",
   "yourAnswerHasBeenSaved": "Sinu vastus on salvestatud",
-  "yourPassword": "Sinu parool"
+  "yourPassword": "Sinu parool",
+  "yourLogDates": "Sinu logi kuupäevad"
 }

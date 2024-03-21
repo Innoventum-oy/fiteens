@@ -19,12 +19,12 @@ class ContentPageView extends StatefulWidget {
   final Widget? bottomNavigationBar;
 
   ContentPageView(this.commonname,
-      {this.language='en',this.providedPage, this.route, this.bottomNavigationBar});
+      {super.key, this.language='en',this.providedPage, this.route, this.bottomNavigationBar});
   @override
-  _ContentPageViewState createState() => _ContentPageViewState();
+  ContentPageViewState createState() => ContentPageViewState();
 }
 
-class _ContentPageViewState extends State<ContentPageView> {
+class ContentPageViewState extends State<ContentPageView> {
   String? errormessage;
   WebPage? page;
 
@@ -35,7 +35,7 @@ class _ContentPageViewState extends State<ContentPageView> {
       User user = Provider.of<UserProvider>(context, listen: false).user;
 
       if (widget.providedPage != null) {
-        this.page =widget.providedPage!;
+        page =widget.providedPage!;
 
       } else {
         final Map<String, String> params = {
@@ -52,15 +52,15 @@ class _ContentPageViewState extends State<ContentPageView> {
 
   @override
   Widget build(BuildContext context) {
-    if(this.page==null) this.page = Provider.of<WebPageProvider>(context).page;
-    String pageTitle = this.page?.pagetitle ?? AppLocalizations.of(context)!.pageContent;
+    page ??= Provider.of<WebPageProvider>(context).page;
+    String pageTitle = page?.pagetitle ?? AppLocalizations.of(context)!.pageContent;
     return Scaffold(
         appBar: AppBar(
           title: Text(pageTitle),
           elevation: 0.1,
         ),
-        body: _pageContentSection(this.page),
-        bottomNavigationBar: widget.bottomNavigationBar ?? null);
+        body: _pageContentSection(page),
+        bottomNavigationBar: widget.bottomNavigationBar);
   }
 
 
@@ -68,25 +68,29 @@ class _ContentPageViewState extends State<ContentPageView> {
   Widget _pageContentSection(page) {
     List<Widget> textContents = [];
     //textContents.add(Text(page.pagetitle!=null ? page.pagetitle : 'No title',style: Theme.of(context).textTheme.headline4),);
-    if (page != null && page.textcontents != null)
-      for (var i in page.textcontents)
+    if (page != null && page.textcontents != null) {
+      for (var i in page.textcontents) {
         textContents.add(Html(data: i.toString()));
-    if (widget.route == null)
+      }
+    }
+    if (widget.route == null) {
       textContents.add(Align(
         alignment: Alignment.center,
         child: ElevatedButton(
             onPressed: () {
               if (widget.route != null) {
                 if(kDebugMode){
-                  print('pushing route' + widget.route!);
+                  print('pushing route${widget.route!}');
                 }
                 Navigator.pushNamedAndRemoveUntil(
                     context, widget.route!, (Route<dynamic> route) => false);
-              } else
+              } else {
                 Navigator.pop(context);
+              }
             },
             child: Text(AppLocalizations.of(context)!.btnReturn)),
       ));
-    return Container(child: Column(children: textContents));
+    }
+    return Column(children: textContents);
   }
 }

@@ -1,4 +1,4 @@
-/// Widget list creator for available activity badges */
+
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
@@ -17,7 +17,7 @@ List<Widget> badgeDisplays(badges, activityCount,context) {
   }
     for (var badge in badges) {
 
-      Key badgeKey = Key('badge-' + badge.id.toString());
+      Key badgeKey = Key('badge-${badge.id}');
       data.add(badgeDisplay(badge, activityCount, badgeKey,context!));
       if (!firstVisibleBadgeSet) {
         double percentage = badge.getValue('requiredactivities') != null
@@ -27,8 +27,9 @@ List<Widget> badgeDisplays(badges, activityCount,context) {
           //ensure this badge is visible
           // print('ensuring badge '+badge.name+' should be visible, percentage is '+percentage.toString());
           firstVisibleBadgeSet = true;
-          if (context != null)
+          if (context != null) {
             Scrollable.ensureVisible(context!);
+          }
         }
       }
     }

@@ -11,14 +11,14 @@ class WebPageList extends StatefulWidget {
   final String? pageCategory;
   final int height;
   final double width;
-  WebPageList(this.webPageProvider, this.imageProvider,
-      {this.pageCategory, this.height = 400, this.width = 200});
+  const WebPageList(this.webPageProvider, this.imageProvider,
+      {super.key, this.pageCategory, this.height = 400, this.width = 200});
 
   @override
-  _WebPageListState createState() => _WebPageListState();
+  WebPageListState createState() => WebPageListState();
 }
 
-class _WebPageListState extends State<WebPageList> {
+class WebPageListState extends State<WebPageList> {
   Map<String, dynamic>? map;
   List<core.WebPage> data = [];
   core.User? user;
@@ -54,21 +54,20 @@ class _WebPageListState extends State<WebPageList> {
       'method': 'json',
       'sort': 'title',
     };
-    if (widget.pageCategory != null)
+    if (widget.pageCategory != null) {
       params['pagecategory.commonname'] = widget.pageCategory!;
+    }
 
     try {
       dynamic pages = await widget.webPageProvider.loadItems(params);
       setState(() {
         _loadingState = LoadingState.done;
         data.addAll(pages);
-        print(data.length.toString() + ' pages currently loaded!');
         // _isLoading = false;
         _pageNumber++;
       });
-    } catch (e, stack) {
+    } catch (e) {
       //  _isLoading = false;
-      print('loadItems returned error $e\n Stack trace:\n $stack');
       errorMessage = e.toString();
       if (_loadingState == LoadingState.loading ||
           _loadingState == LoadingState.waiting) {
@@ -79,27 +78,24 @@ class _WebPageListState extends State<WebPageList> {
 
   @override
   void initState() {
-    print('initState called for WebPageList');
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       //User user = Provider.of<UserProvider>(context,listen:false).user;
-      this.data = [];
-      _loadNextPage(this.user);
+      data = [];
+      _loadNextPage(user);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    print('build $iteration called for WebPageList');
-    this.iteration++;
-    this.user = context.watch<core.UserProvider>().user;
+    iteration++;
+    user = context.watch<core.UserProvider>().user;
     //this.user = Provider.of<UserProvider>(context).user;
 
     return _getContentSection(user);
   }
 
   Widget _getContentSection(user) {
-    print('loading state: ' + _loadingState.toString());
 
     switch (_loadingState) {
       case LoadingState.done:
@@ -121,7 +117,7 @@ class _WebPageListState extends State<WebPageList> {
         return Align(
           alignment: Alignment.center,
           child: ListTile(
-            leading: Icon(Icons.error),
+            leading: const Icon(Icons.error),
             title: Text(
                 'Sorry, there was an error loading the data: $errorMessage'),
           ),
@@ -133,7 +129,7 @@ class _WebPageListState extends State<WebPageList> {
           alignment: Alignment.center,
           child: Center(
             child: ListTile(
-              leading: CircularProgressIndicator(),
+              leading: const CircularProgressIndicator(),
               title: Text(AppLocalizations.of(context)!.loading,
                   textAlign: TextAlign.center),
             ),
@@ -163,8 +159,8 @@ class _WebPageListState extends State<WebPageList> {
       return Align(
           alignment: Alignment.topRight,
           child: Container(
-              padding: EdgeInsets.all(2.0),
-              decoration: BoxDecoration(
+              padding: const EdgeInsets.all(2.0),
+              decoration: const BoxDecoration(
                   color: Colors.yellow,
                   borderRadius: BorderRadius.all(Radius.circular(5))),
               child: Row(
@@ -178,8 +174,8 @@ class _WebPageListState extends State<WebPageList> {
     switch (webPage.readstatus) {
       case 'accepted':
         readStatusInfo = statusInfoWrap([
-          Icon(Icons.check_circle_outlined, color: Colors.green),
-          Text(
+          const Icon(Icons.check_circle_outlined, color: Colors.green),
+          const Text(
             'Luettu',
             style: TextStyle(color: Colors.black),
           ),
@@ -187,8 +183,8 @@ class _WebPageListState extends State<WebPageList> {
         break;
       case 'pending':
         readStatusInfo = statusInfoWrap([
-          Icon(Icons.bookmark, color: Colors.black),
-          Text(
+          const Icon(Icons.bookmark, color: Colors.black),
+          const Text(
             'Lukulistalla',
             style: TextStyle(color: Colors.black),
           ),
@@ -202,7 +198,7 @@ class _WebPageListState extends State<WebPageList> {
     return SizedBox(
         width: widget.width,
         child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 4.0),
+            padding: const EdgeInsets.symmetric(horizontal: 4.0),
             child: InkWell(
                 onTap: () => goToWebPage(context, webPage),
                 child: Column(
@@ -217,7 +213,7 @@ class _WebPageListState extends State<WebPageList> {
                                   width: (widget.width - 10),
                                   height: (widget.height - 105),
                                   fit: BoxFit.cover)
-                              : Icon(Icons.book),
+                              : const Icon(Icons.book),
                           Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: readStatusInfo)
