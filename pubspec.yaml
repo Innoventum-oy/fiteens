@@ -60,7 +60,7 @@ dependencies:
       url: git@github.com:Innoventum-oy/core.git
       path: core/
   hive_flutter: ^1.1.0
-  flutter_settings_ui: ^f3.0.1
+  flutter_settings_ui: ^3.0.1
   flutter_radar_chart: ^0.2.1
   collection: ^1.17.2
   pod_player: ^0.2.1
