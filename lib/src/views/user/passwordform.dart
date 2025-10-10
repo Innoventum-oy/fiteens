@@ -2,7 +2,7 @@ import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:fiteens/src/widgets/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:fiteens/l10n/app_localizations.dart';
 
 import 'package:core/core.dart' as core;
 
@@ -28,11 +28,11 @@ class ResetPasswordState extends State<ResetPassword> {
       if (form!.validate()) {
         form.save();
 
-        final Future<Map<String, dynamic>?> successfulMessage =
+        final Future<core.ApiResponse> successfulMessage =
         _auth.getConfirmationKey(_contact!);
 
-        successfulMessage.then((response) {
-
+        successfulMessage.then((responseData) {
+          Map? response = responseData.data;
           if (response?['status'] == 'success') {
             setState(() {
               auth.setContactMethodId(response?['contactmethodid']);
@@ -138,10 +138,11 @@ class ResetPasswordState extends State<ResetPassword> {
       if (form!.validate()) {
         form.save();
 
-        final Future<Map<String, dynamic>> successfulMessage =
+        final Future<core.ApiResponse> successfulMessage =
         _auth.sendConfirmationKey(userid: auth.userId,contact: auth.contactMethodId, code:_confirmKey!.toString());
 
-        successfulMessage.then((response) {
+        successfulMessage.then((responseData) {
+          Map response = responseData.data!;
           if (response['status'] == 'success') {
             setState(() {
               auth.setSinglePass(response['singlepass']);
@@ -206,10 +207,11 @@ class ResetPasswordState extends State<ResetPassword> {
 
       if (form!.validate()) {
         form.save();
-        final Future<Map<String, dynamic>> successfulMessage =
+        final Future<core.ApiResponse> successfulMessage =
         _auth.changePassword(userid: auth.userId, password:_password, singlepass: auth.singlePass);
 
-        successfulMessage.then((response) {
+        successfulMessage.then((responseData) {
+          Map response = responseData.data!;
           if (response['status'] == 'success') {
             setState(() {
               auth.setVerificationStatus(core.VerificationStatus.passwordChanged);

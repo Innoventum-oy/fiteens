@@ -2,7 +2,7 @@ import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:fiteens/src/widgets/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:fiteens/l10n/app_localizations.dart';
 
 import 'package:core/core.dart' as core;
 
@@ -31,8 +31,8 @@ class DeleteAccountActionState extends State<DeleteAccountAction> {
 
     Provider.of<core.UserProvider>(context, listen: false).deleteUserAccount(
         user ?? core.User()
-    ).then((responsedata) async {
-      var response = responsedata['data'] ?? responsedata;
+    ).then((core.ApiResponse responseData) async {
+      var response = responseData.data;
       if(response!=null && response['status']!=null) {
 
         switch(response['status']) {

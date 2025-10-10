@@ -5,7 +5,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart'; // important
+import 'package:fiteens/l10n/app_localizations.dart'; // important
 
 import 'package:core/core.dart';
 

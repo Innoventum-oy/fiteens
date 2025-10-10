@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 0.9.6+11
+version: 1.0.0+12
 
 environment:
   sdk: ">=2.17.0 "
@@ -27,7 +27,7 @@ dependencies:
    #internationalization:
   flutter_localizations:
       sdk: flutter
-  intl: ^0.19.0
+  intl: ^0.20.2
   provider: ^6.0.0
 
   #scoped_model: "^1.1.0"
@@ -47,9 +47,9 @@ dependencies:
   flutter_html: ^3.0.0-alpha.2
   settings_ui: ^2.0.1
   percent_indicator: ^4.0.0
-  package_info_plus: ^5.0.1
+  package_info_plus: ^8.1.0
   feedback: ^3.0.0
-  wakelock: ^0.6.0+1
+
   graphview: ^1.0.0
   modal_bottom_sheet: ^2.0.0
   # file downloads
@@ -60,7 +60,7 @@ dependencies:
       url: git@github.com:Innoventum-oy/core.git
       path: core/
   hive_flutter: ^1.1.0
-  flutter_settings_ui: ^3.0.0
+  flutter_settings_ui: ^f3.0.1
   flutter_radar_chart: ^0.2.1
   collection: ^1.17.2
   pod_player: ^0.2.1
@@ -91,15 +91,6 @@ flutter_icons:
 
 dependency_overrides:
 
-  #dependency updates in local package
-  wakelock:
-    git:
-      url: https://github.com/amb-jannel/wakelock/
-      path: wakelock/
-  wakelock_windows:
-    git:
-      url: https://github.com/amb-jannel/wakelock/
-      path: wakelock_windows
 
   core:
     path: /Users/jleinone/flutter_projects/core/core

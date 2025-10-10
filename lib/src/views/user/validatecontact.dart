@@ -2,7 +2,7 @@ import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:fiteens/src/widgets/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:fiteens/l10n/app_localizations.dart';
 import 'package:core/core.dart' as core;
 
 class ValidateContact extends StatefulWidget {
@@ -113,10 +113,11 @@ class ValidateContactState extends State<ValidateContact> {
       if (form!.validate()) {
         form.save();
 
-        final Future<Map<String, dynamic>?> successfulMessage =
+        final Future<core.ApiResponse> successfulMessage =
         core.Auth().getConfirmationKey(_contact!);
 
-        successfulMessage.then((response) {
+        successfulMessage.then((responseData) {
+          Map<String, dynamic>? response = responseData.data;
           if (response?['status'] == 'success') {
             setState(() {
               auth.setContactMethodId(response?['contactmethodid']);
@@ -281,10 +282,11 @@ class ValidateContactState extends State<ValidateContact> {
       if (form!.validate()) {
         form.save();
 
-        final Future<Map<String, dynamic>> successfulMessage =
+        final Future<core.ApiResponse> successfulMessage =
         core.Auth().sendConfirmationKey(userid: auth.userId,contact: auth.contactMethodId, code:_confirmKey!.toString());
 
-        successfulMessage.then((response) {
+        successfulMessage.then((responseData) {
+          Map<String, dynamic> response = responseData.data ?? {};
           if (response['status'] == 'success') {
             setState(() {
               auth.setSinglePass(response['singlepass']);

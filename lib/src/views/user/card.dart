@@ -5,7 +5,7 @@ import 'package:fiteens/src/views/user/deleteaccountform.dart';
 import 'package:fiteens/src/views/user/validatecontact.dart';
 
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:fiteens/l10n/app_localizations.dart';
 
 import 'package:core/core.dart' as core;
 

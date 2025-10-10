@@ -6,7 +6,7 @@ import 'package:fiteens/src/views/calendar/calendarscreen.dart';
 import 'package:fiteens/src/views/user/card.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart'; // important
+import 'package:fiteens/l10n/app_localizations.dart'; // important
 import 'package:fiteens/src/views/achievements.dart';
 import 'package:fiteens/src/views/dashboard/dashboard.dart';
 import 'package:fiteens/src/views/webpage/pagelist.dart';

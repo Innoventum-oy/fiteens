@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:fiteens/l10n/app_localizations.dart'; // important
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:fiteens/src/views/user/card.dart';
@@ -141,10 +141,10 @@ class ActivityParticipantListState extends State<ActivityParticipantList> {
         onChanged: (bool value) async {
 
             notify(value ? AppLocalizations.of(context)!.activityRecorded : AppLocalizations.of(context)!.visitRemoved);
-            Map<String,dynamic> result = await Provider.of<core.ActivityProvider>(context,listen: false).updateActivityRegistration(activityId:widget._activity.id!,visitStatus:value ? 'visited':'cancelled',visitor: user,user:loggedInUser,visitDate:widget._activityDate) ;
+            Map<String,dynamic>? result = await Provider.of<core.ActivityProvider>(context,listen: false).updateActivityRegistration(activityId:widget._activity.id!,visitStatus:value ? 'visited':'cancelled',visitor: user,user:loggedInUser,visitDate:widget._activityDate) ;
             setState(() {
-            if(result['visitstatus']!=null) {
-              activityVisitData[result['userid']] = result['visitstatus'];
+            if(result?['visitstatus']!=null) {
+              activityVisitData[result?['userid']] = result?['visitstatus'];
             }
 
           });

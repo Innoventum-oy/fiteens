@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:fiteens/l10n/app_localizations.dart'; // important
 import 'package:fiteens/src/util/utils.dart';
 import 'package:fiteens/src/views/activity/activitylist_item.dart';
 import 'package:provider/provider.dart';

@@ -1,11 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:fiteens/l10n/app_localizations.dart'; // important
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:fiteens/src/util/utils.dart';
 import 'package:fiteens/src/views/user/card.dart';
-import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:core/core.dart' as core;
 
 /// TODO: update this view

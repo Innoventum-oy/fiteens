@@ -2,7 +2,7 @@ import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:fiteens/src/widgets/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:fiteens/l10n/app_localizations.dart';
 import 'package:core/core.dart' as core;
 
 enum CodeStatus {
@@ -39,8 +39,8 @@ class JoinGroupFormState extends State<JoinGroupForm> {
         Provider.of<core.UserProvider>(context,listen:false).joinGroup(
              _registrationCode.toString(),
             user ?? core.User()
-        ).then((responsedata) {
-          var response = responsedata['data'] ?? responsedata;
+        ).then((core.ApiResponse responseData) {
+          dynamic response = responseData.data;
           if(response!=null && response['status']!=null) {
 
             switch(response['status']) {

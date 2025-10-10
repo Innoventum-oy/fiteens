@@ -46,7 +46,7 @@ ThemeData appTheme = ThemeData(
     foregroundColor: appForeground,
   ),
 
-  cardTheme: CardTheme(
+  cardTheme: CardThemeData(
     color: createMaterialColor('#283F4D'), // blue
   ),
   // primaryTextTheme: Typography.whiteHelsinki,

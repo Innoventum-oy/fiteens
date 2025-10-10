@@ -8,7 +8,7 @@ import 'package:fiteens/src/widgets/widgets.dart';
 import 'package:fiteens/src/views/webpage/webpagetextcontent.dart';
 import 'package:flutter_settings_ui/flutter_settings_ui.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:fiteens/l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:core/core.dart' as core;
 
@@ -221,10 +221,11 @@ class LoginState extends State<Login> {
           }
         });
 
-        final Future<Map<String, dynamic>> successfulMessage =
+        final Future<core.ApiResponse> successfulMessage =
         auth.login(_contact!, _password!);
 
-        successfulMessage.then((response) {
+        successfulMessage.then((responseData) {
+          Map response = responseData.data!;
           if (response['status']) {
             core.User user = response['user'];
             userProvider.setUser(user);

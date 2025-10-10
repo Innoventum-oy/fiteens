@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:fiteens/src/widgets/screenscaffold.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:fiteens/l10n/app_localizations.dart'; // important
 import 'package:flutter_html/flutter_html.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -277,23 +277,23 @@ class ActivityScreenState extends State<ActivityScreen> {
     }
     if (activityProvider.loadingStatus != core.DataLoadingStatus.loading) {
 
-      Map<String,dynamic> result = await activityProvider.registerForActivity(
+      Map<String,dynamic>? result = await activityProvider.registerForActivity(
           activity.id,
           user,
           visitstatus: visitstatus,
           visit:visit
       );
       setState(() {
-        switch(result['status'])
+        switch(result?['status'])
         {
           case 'success':
              List<Widget> messageTexts = [
 
               Text(activity.getValue('feedback')!=null ? parse(activity.getValue('feedback')).body!.text : AppLocalizations.of(context)!.activityRecorded)
               ];
-            if(result['messages'] != null){
+            if(result?['messages'] != null){
               // add the messages as List of Text widgets to the messagetexts list
-              messageTexts.addAll(result['messages'].map<Widget>((message) => Text(message)).toList());
+              messageTexts.addAll(result?['messages'].map<Widget>((message) => Text(message)).toList());
             }
             Widget messageContents = Column(
                 mainAxisSize: MainAxisSize.min,
@@ -307,19 +307,19 @@ class ActivityScreenState extends State<ActivityScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children:[
               const Icon(Icons.error_outline),
-              Text(result['message']),
-             if (result['errormessage']!=null) Text(result['errormessage'])
+              Text(result?['message']),
+             if (result?['errormessage']!=null) Text(result?['errormessage'])
             ]);
             showMessage(context, AppLocalizations.of(context)!.error,message);
 
         }
-      if(result['activityvisit']!=null){
+      if(result?['activityvisit']!=null){
         // set / update activityvisit data
-        log("updating visit data from : ${result['activityvisit']}");
+        log("updating visit data from : ${result?['activityvisit']}");
         setState(() {
           // this - reference is required here
           refreshVisits();
-          this.visit = core.ActivityVisit.fromJson(result['activityvisit']);
+          this.visit = core.ActivityVisit.fromJson(result?['activityvisit']);
         });
 
       }

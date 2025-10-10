@@ -1,7 +1,7 @@
 import 'package:core/core.dart' as core;
 import 'package:flutter/material.dart';
 import 'package:fiteens/src/util/navigator.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:fiteens/l10n/app_localizations.dart';
 
 import '../../util/styles.dart';
 

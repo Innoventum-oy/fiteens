@@ -1,12 +1,11 @@
 import 'dart:collection';
 import 'dart:developer';
 import 'package:core/core.dart';
-import 'package:intl/intl.dart';
 import 'package:fiteens/src/widgets/screenscaffold.dart';
 import 'package:flutter/foundation.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:fiteens/l10n/app_localizations.dart'; // important
 import 'package:provider/provider.dart';
 import '../../util/constants.dart' as constants;
 import 'components/calendaritem.dart';

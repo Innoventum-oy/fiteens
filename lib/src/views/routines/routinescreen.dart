@@ -6,7 +6,7 @@ import 'package:core/core.dart';
 import 'package:fiteens/src/views/routines/components/weekitems.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:fiteens/l10n/app_localizations.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:loading_gifs/loading_gifs.dart';
 import 'package:provider/provider.dart';
