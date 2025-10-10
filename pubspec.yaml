@@ -51,7 +51,7 @@ dependencies:
   feedback: ^3.0.0
 
   graphview: ^1.0.0
-  modal_bottom_sheet: ^2.0.0
+  modal_bottom_sheet: ^3.0.0
   # file downloads
   dio: ^5.3.3
   cached_network_image: ^3.2.3
@@ -66,14 +66,14 @@ dependencies:
   pod_player: ^0.2.1
   html: ^0.15.4
   loading_gifs: ^0.3.0
-  calendar_date_picker2: ^0.5.5
+  calendar_date_picker2: ^2.0.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_native_splash: ^2.1.6
-  flutter_launcher_icons: ^0.13.1
-  flutter_lints: ^3.0.0
+  flutter_launcher_icons: ^0.14.4
+  flutter_lints: ^6.0.0
 
 #if you make changes, regenerate with flutter pub run flutter_native_splash:create
 flutter_native_splash:
