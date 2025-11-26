@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0+12
+version: 1.0.1+15
 
 environment:
   sdk: ">=2.17.0 "
@@ -47,7 +47,7 @@ dependencies:
   flutter_html: ^3.0.0-alpha.2
   settings_ui: ^2.0.1
   percent_indicator: ^4.0.0
-  package_info_plus: ^8.1.0
+  package_info_plus: ^9.0.0
   feedback: ^3.0.0
 
   graphview: ^1.0.0
@@ -67,6 +67,7 @@ dependencies:
   html: ^0.15.4
   loading_gifs: ^0.3.0
   calendar_date_picker2: ^2.0.1
+  loader_overlay: ^5.0.0
 
 dev_dependencies:
   flutter_test:
@@ -116,7 +117,7 @@ flutter:
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.dev/assets-and-images/#resolution-aware.
+  # https://flutter.dev/assets-and-images/#resolution-awaffre.
 
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/assets-and-images/#from-packages
@@ -149,3 +150,6 @@ fonts:
 
 flutter_intl:
   enabled: true
+  class_name: AppLocalizations
+scripts:
+  gen_l10n: ./generate.sh

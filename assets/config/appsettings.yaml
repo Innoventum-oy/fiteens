@@ -11,3 +11,4 @@ endpoints:
   requestValidationToken: /api/dispatcher/registration
   checkValidationToken: /api/dispatcher/registration
   getContactMethods: /api/dispatcher/registration
+apiVersion: 1.1

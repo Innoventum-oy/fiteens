@@ -571,6 +571,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings => 'settings';
 
   @override
+  String get server => 'Server';
+
+  @override
   String get signUp => 'Sign up';
 
   @override

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:fiteens/src/util/navigator.dart';
 import 'package:intl/intl.dart';
-import 'package:fiteens/l10n/app_localizations.dart'; // important
+import 'package:fiteens/generated/l10n.dart'; // important
 import 'package:provider/provider.dart';
 
 import 'package:core/core.dart' as core;
@@ -32,7 +32,7 @@ class _ActivityListItemState extends State<ActivityListItem>{
     String dateinfo = widget.activityItem.nexteventdate==null ? '':(calculateDifference(widget.activityItem.nexteventdate!)!=0 ? DateFormat('kk:mm dd.MM.yyyy').format(widget.activityItem.nexteventdate!) : 'Today ${DateFormat('kk:mm ').format(widget.activityItem.nexteventdate!)}');
     List<Widget> buttons=[];
     buttons.add(ElevatedButton(
-      child: Text(AppLocalizations.of(context)!.readMore),
+      child: Text(AppLocalizations.of(context).readMore),
       onPressed: () {
         /* open activity view */
         goToActivity(context, widget.activityItem);
@@ -45,7 +45,7 @@ class _ActivityListItemState extends State<ActivityListItem>{
         && ( widget.activityItem.registrationenddate==null || widget.activityItem.registrationenddate!.isAfter(DateTime.now()))
         && user.token!=null) {
       buttons.add(ElevatedButton(
-        child: activityProvider.loadingStatus == core.DataLoadingStatus.loading ? const CircularProgressIndicator() : Text( AppLocalizations.of(context)!.signUp),
+        child: activityProvider.loadingStatus == core.DataLoadingStatus.loading ? const CircularProgressIndicator() : Text( AppLocalizations.of(context).signUp),
         onPressed: () {
           activityProvider.loadingStatus == core.DataLoadingStatus.loading ? null : activityProvider.registerForActivity(widget.activityItem.id, user);
 
@@ -70,7 +70,7 @@ class _ActivityListItemState extends State<ActivityListItem>{
           children: <Widget>[
              ListTile(
               leading: const Icon(Icons.event),
-              title: Text((widget.activityItem.name ?? AppLocalizations.of(context)!.unnamedActivity)),
+              title: Text((widget.activityItem.name ?? AppLocalizations.of(context).unnamedActivity)),
               subtitle: Text(subtitle,
                overflow: TextOverflow.ellipsis,
                 maxLines:5),

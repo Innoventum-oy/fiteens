@@ -5,7 +5,7 @@ import 'package:fiteens/src/widgets/popupdialog.dart';
 import 'package:fiteens/src/widgets/screenscaffold.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:fiteens/l10n/app_localizations.dart';
+import 'package:fiteens/generated/l10n.dart';
 import 'package:provider/provider.dart';
 import '../../util/constants.dart' as constants;
 import '../../widgets/notifydialog.dart';
@@ -25,19 +25,72 @@ class _LibraryItemsScreenState extends State<LibraryItemsScreen> {
 
   Widget defaultContent = const CircularProgressIndicator();
   bool loaded = false;
+  bool isLoadingNewCategory = false;
+  int? currentActivityClassId;
+
   @override
   void initState(){
     super.initState();
     if(kDebugMode){
       log('Libraryscreen initState - loading activities');
     }
+    currentActivityClassId = widget.activityClass.id;
+    _loadActivities();
+  }
+
+  @override
+  void didUpdateWidget(LibraryItemsScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Check if the activity class has changed
+    if (oldWidget.activityClass.id != widget.activityClass.id) {
+      if (kDebugMode) {
+        log('Activity class changed from ${oldWidget.activityClass.id} to ${widget.activityClass.id}');
+      }
+      setState(() {
+        isLoadingNewCategory = true;
+        currentActivityClassId = widget.activityClass.id;
+      });
+      _loadActivities();
+    }
+  }
+
+  void _loadActivities() {
     Map<String,dynamic> params = {
-    'activitystatus' : 'active',  // only load active items'
-      'sort' : 'name',
+      'activitystatus' : 'active',  // only load active items'
+      //'sort' : 'attribute:name',
       'activityclass' : widget.activityClass.id.toString()
     };
-    Provider.of<ActivityProvider>(context,listen: false).getItems(params,reload: widget.refresh || loaded==false ? true : false);
-    loaded = true;
+
+    if (kDebugMode) {
+      log('Loading activities for class ${widget.activityClass.id}');
+    }
+
+    Provider.of<ActivityProvider>(context,listen: false).getItems(params,reload: widget.refresh || loaded==false ? true : false).then((_) {
+      if (mounted) {
+        // Wait a brief moment to ensure provider has updated its state
+        Future.delayed(const Duration(milliseconds: 50), () {
+          if (mounted) {
+            setState(() {
+              loaded = true;
+              isLoadingNewCategory = false;
+              if (kDebugMode) {
+                log('Activities loaded for class ${widget.activityClass.id}');
+              }
+            });
+          }
+        });
+      }
+    }).catchError((error) {
+      if (kDebugMode) {
+        log('Error loading activities: $error');
+      }
+      if (mounted) {
+        setState(() {
+          loaded = true;
+          isLoadingNewCategory = false;
+        });
+      }
+    });
   }
 
   @override
@@ -45,12 +98,46 @@ class _LibraryItemsScreenState extends State<LibraryItemsScreen> {
 
     /// Provider provides us with the data
     ActivityProvider activityProvider = Provider.of<ActivityProvider>(context);
+
+    // Show loading indicator if we're switching categories OR if provider is still loading
+    if (isLoadingNewCategory || !loaded || activityProvider.loadingStatus != DataLoadingStatus.loaded) {
+      if (kDebugMode) {
+        log('Showing loading indicator - isLoadingNewCategory: $isLoadingNewCategory, loaded: $loaded, provider status: ${activityProvider.loadingStatus}');
+      }
+      return ScreenScaffold(
+        title: "${AppLocalizations.of(context).library} - ${widget.activityClass.name}",
+        navigationIndex: widget.navIndex,
+        refresh: widget.refresh,
+        onRefresh: (){
+          if(kDebugMode) {
+            log('reloading page');
+          }
+          constants.Router.navigate(context,'library',widget.navIndex,refresh: true);
+        },
+        child: const Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(height: 16),
+              Text('Loading activities...'),
+            ],
+          ),
+        ),
+      );
+    }
+
     Widget libraryView;
     if (activityProvider.loadingStatus == DataLoadingStatus.loaded) {
 
       if (activityProvider.list != null) {
         List<Activity>? items = activityProvider.list;
-        libraryView = items!=null ? ListView.builder(
+
+        if (kDebugMode && items != null) {
+          log('Provider has ${items.length} items for class $currentActivityClassId');
+        }
+
+        libraryView = items != null && items.isNotEmpty ? ListView.builder(
             itemCount: items.length,
             itemBuilder: (BuildContext context, int index){
               final item = items[index];
@@ -97,28 +184,27 @@ class _LibraryItemsScreenState extends State<LibraryItemsScreen> {
               ),
               child:ActivityItem(item,navIndex: widget.navIndex,)
           ) : ActivityItem(item,navIndex: widget.navIndex);
-        }) : Text(AppLocalizations.of(context)!.noActivitiesFound);
+        }) : Text(AppLocalizations.of(context).noActivitiesFound);
       }
       else {
-        libraryView = Text(AppLocalizations.of(context)!.noActivitiesFound);
+        libraryView = Text(AppLocalizations.of(context).noActivitiesFound);
       }
     }
     else {
       if(kDebugMode){
-        log('Loading status: ${activityProvider.loadingStatus}');
+        log('Provider still loading - status: ${activityProvider.loadingStatus}');
       }
-      libraryView = Column(
+      libraryView = const Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Center(child: defaultContent)
-
+          Center(child: CircularProgressIndicator())
         ],
       );
 
     }
     return ScreenScaffold(
-        title: "${AppLocalizations.of(context)!.library} - ${widget.activityClass.name}",
+        title: "${AppLocalizations.of(context).library} - ${widget.activityClass.name}",
         navigationIndex: widget.navIndex,
         refresh: widget.refresh,
 
@@ -129,7 +215,7 @@ class _LibraryItemsScreenState extends State<LibraryItemsScreen> {
 
           constants.Router.navigate(context,'library',widget.navIndex,refresh: true);
         },
-        child: loaded ? libraryView : const CircularProgressIndicator()
+        child: libraryView
     );
     }
 

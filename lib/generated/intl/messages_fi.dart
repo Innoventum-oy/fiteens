@@ -341,6 +341,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Ei ansaittuja pisteitä",
     ),
     "sendAnswer": MessageLookupByLibrary.simpleMessage("Lähetä vastaus"),
+    "server": MessageLookupByLibrary.simpleMessage("Palvelin"),
     "settings": MessageLookupByLibrary.simpleMessage("Asetukset"),
     "signUp": MessageLookupByLibrary.simpleMessage("Uusi tili"),
     "startAssessment": MessageLookupByLibrary.simpleMessage("Aloita arviointi"),

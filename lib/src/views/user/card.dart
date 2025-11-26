@@ -5,7 +5,7 @@ import 'package:fiteens/src/views/user/deleteaccountform.dart';
 import 'package:fiteens/src/views/user/validatecontact.dart';
 
 import 'package:provider/provider.dart';
-import 'package:fiteens/l10n/app_localizations.dart';
+import 'package:fiteens/generated/l10n.dart';
 
 import 'package:core/core.dart' as core;
 
@@ -60,7 +60,7 @@ class MyCardState extends State<MyCard> {
                           child: Text(i.address.toString())),
                       Expanded(
                         flex:2,
-                          child:(i.verified! ? Icon(Icons.check_circle_outlined,semanticLabel:AppLocalizations.of(context)!.verified) : TextButton(
+                          child:(i.verified! ? Icon(Icons.check_circle_outlined,semanticLabel:AppLocalizations.of(context).verified) : TextButton(
                         onPressed: () {
                           Provider.of<core.AuthProvider>(context,listen:false).setVerificationStatus(core.VerificationStatus.codeNotRequested);
                           Navigator.push(
@@ -69,7 +69,7 @@ class MyCardState extends State<MyCard> {
                               );
                         },
                         child:Text(
-                          AppLocalizations.of(context)!.verify ,
+                          AppLocalizations.of(context).verify ,
                           style: const TextStyle(
                            // fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -86,7 +86,7 @@ class MyCardState extends State<MyCard> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.userInformation),
+        title: Text(AppLocalizations.of(context).userInformation),
         elevation: 0.1,
       ),
       body: ListView(children: <Widget>[
@@ -114,7 +114,7 @@ class MyCardState extends State<MyCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children:[
                     Text(
-                      AppLocalizations.of(context)!.otherItems,
+                      AppLocalizations.of(context).otherItems,
                       style: Theme.of(context).textTheme.headlineSmall,
                     ),
                     TextButton(
@@ -125,7 +125,7 @@ class MyCardState extends State<MyCard> {
                                 builder: (_) => ContentPageView('login-info'))
                             );
                           });},
-                        child: Text(AppLocalizations.of(context)!.welcomeInfo,
+                        child: Text(AppLocalizations.of(context).welcomeInfo,
                         textAlign: TextAlign.left,)
                     ),
                   ]
@@ -148,7 +148,7 @@ class MyCardState extends State<MyCard> {
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        child: Text(AppLocalizations.of(context)!.btnReturn)
+                        child: Text(AppLocalizations.of(context).btnReturn)
                     ),
                   ),
                 ),
@@ -166,7 +166,7 @@ class MyCardState extends State<MyCard> {
 
 
                       },
-                      child: Text(AppLocalizations.of(context)!.logout),
+                      child: Text(AppLocalizations.of(context).logout),
                     ),
                   ),
 

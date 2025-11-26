@@ -1,10 +1,11 @@
 import 'dart:developer';
 
 import 'package:another_flushbar/flushbar.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fiteens/src/widgets/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:fiteens/l10n/app_localizations.dart';
+import 'package:fiteens/generated/l10n.dart';
 import 'package:core/core.dart' as core;
 
 import '../dashboard/components/useravatar.dart';
@@ -61,15 +62,29 @@ class RegisterState extends State<Register> {
           guardianPhone: _formData['guardianphone'],
           data: {'avatar': _formData['avatar']},
         ).then((core.ApiResponse responseData) {
-          var response = responseData.data;
+          if (kDebugMode) {
+            log('Registration response: ${responseData.rawData}', name: 'Register');
+            log('Response data: ${responseData.data}', name: 'Register');
+            log('Response status: ${responseData.status}', name: 'Register');
+          }
+
+          // Use rawData for error responses since they don't have 'data' wrapper
+          var response = responseData.rawData ?? responseData.data;
+
           if (response != null && response['status'] != null) {
             switch (response['status']) {
               case 'error':
+                String errorMessage = response['message']?.toString() ??
+                                     response['error']?.toString() ??
+                                     AppLocalizations.of(context).registrationFailed;
+
+                if (kDebugMode) {
+                  log('Registration error: $errorMessage', name: 'Register');
+                }
+
                 Flushbar(
-                  title: AppLocalizations.of(context)!.registrationFailed,
-                  message: response['message'] != null
-                      ? response['message'].toString()
-                      : response['error'].toString(),
+                  title: AppLocalizations.of(context).registrationFailed,
+                  message: errorMessage,
                   duration: const Duration(seconds: 10),
                 ).show(context);
 
@@ -94,19 +109,27 @@ class RegisterState extends State<Register> {
                 }
             }
           } else {
+            // Fallback for unexpected response format
+            String errorMsg = response?['error']?.toString() ??
+                             response?['message']?.toString() ??
+                             responseData.message ??
+                             AppLocalizations.of(context).registrationFailed;
+
+            if (kDebugMode) {
+              log('Registration unexpected response: $response', name: 'Register');
+            }
+
             Flushbar(
-              title: AppLocalizations.of(context)!.registrationFailed,
-              message: response['error'] != null
-                  ? response['error'].toString()
-                  : response.toString(),
+              title: AppLocalizations.of(context).registrationFailed,
+              message: errorMsg,
               duration: const Duration(seconds: 10),
             ).show(context);
           }
         });
       } else {
         Flushbar(
-          title: AppLocalizations.of(context)!.errorsInForm,
-          message: AppLocalizations.of(context)!.pleaseCompleteFormProperly,
+          title: AppLocalizations.of(context).errorsInForm,
+          message: AppLocalizations.of(context).pleaseCompleteFormProperly,
           duration: const Duration(seconds: 10),
         ).show(context);
       }
@@ -114,7 +137,7 @@ class RegisterState extends State<Register> {
     String? validateName(String? value) {
       String? msg;
       if (value!.isEmpty) {
-        msg = AppLocalizations.of(context)!.pleaseProvideYourName;
+        msg = AppLocalizations.of(context).pleaseProvideYourName;
       }
       return msg;
     }
@@ -122,14 +145,14 @@ class RegisterState extends State<Register> {
     String? validatePhone(String? value) {
       String? msg;
       if (value!.isEmpty) {
-        return AppLocalizations.of(context)!.pleaseEnterPhoneNumber;
+        return AppLocalizations.of(context).pleaseEnterPhoneNumber;
       }
 
       //test for phone number pattern
       String pattern = r'(^(?:[+0])?[0-9]{8,12}$)';
       RegExp regExp = RegExp(pattern);
       if (!regExp.hasMatch(value)) {
-        msg = AppLocalizations.of(context)!.pleaseProvideValidPhoneNumber;
+        msg = AppLocalizations.of(context).pleaseProvideValidPhoneNumber;
       }
 
       return msg;
@@ -139,14 +162,14 @@ class RegisterState extends State<Register> {
       String? msg;
       if (isOver13) return null;
       if (value!.isEmpty) {
-        return AppLocalizations.of(context)!.pleaseEnterPhoneNumber;
+        return AppLocalizations.of(context).pleaseEnterPhoneNumber;
       }
 
       //test for phone number pattern
       String pattern = r'(^(?:[+0])?[0-9]{8,12}$)';
       RegExp regExp = RegExp(pattern);
       if (!regExp.hasMatch(value)) {
-        msg = AppLocalizations.of(context)!.pleaseProvideValidPhoneNumber;
+        msg = AppLocalizations.of(context).pleaseProvideValidPhoneNumber;
       }
       return msg;
     }
@@ -156,9 +179,9 @@ class RegisterState extends State<Register> {
       RegExp regex = RegExp(
           r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
       if (value!.isEmpty) {
-        msg = AppLocalizations.of(context)!.pleaseProvideValidEmail;
+        msg = AppLocalizations.of(context).pleaseProvideValidEmail;
       } else if (!regex.hasMatch(value)) {
-        msg = AppLocalizations.of(context)!.pleaseProvideValidEmail;
+        msg = AppLocalizations.of(context).pleaseProvideValidEmail;
       }
       return msg;
     }
@@ -212,7 +235,7 @@ class RegisterState extends State<Register> {
 
     final firstnameField = registrationField(
         field: 'firstname',
-        title: AppLocalizations.of(context)!.firstName,
+        title: AppLocalizations.of(context).firstName,
         icon : Icons.person,
         controller: controllers['firstname'],
         validatorFunction: validateName
@@ -220,16 +243,16 @@ class RegisterState extends State<Register> {
 
     final lastnameField = registrationField(
         field: 'lastname',
-        title:AppLocalizations.of(context)!.lastName,
+        title:AppLocalizations.of(context).lastName,
         icon:Icons.person,
         controller: controllers['lastname'],
       validatorFunction: validateName);
 
     final guardianNameField = registrationField(
-      title: AppLocalizations.of(context)!.guardianName,
+      title: AppLocalizations.of(context).guardianName,
       icon: Icons.person,
       validatorFunction: (value) => value!.isEmpty && !isOver13
-          ? AppLocalizations.of(context)!.valueIsRequired
+          ? AppLocalizations.of(context).valueIsRequired
           : null,
       controller:  controllers['guardianName'],
       field: 'guardianName',
@@ -237,14 +260,14 @@ class RegisterState extends State<Register> {
 
     final codeField = registrationField(
       field: 'registrationCode',
-      title: AppLocalizations.of(context)!.groupCode,
+      title: AppLocalizations.of(context).groupCode,
       icon: Icons.code,
       controller: controllers['registrationCode']
     );
 
     final emailField = registrationField(
       field: 'email',
-      title: AppLocalizations.of(context)!.email,
+      title: AppLocalizations.of(context).email,
       icon: Icons.email,
       controller: controllers['email'],
       validatorFunction: validateEmail,
@@ -252,7 +275,7 @@ class RegisterState extends State<Register> {
 
     final phoneField = registrationField(
       field: 'phone',
-      title: AppLocalizations.of(context)!.phone,
+      title: AppLocalizations.of(context).phone,
       icon: Icons.phone_iphone,
       controller: controllers['phone'],
       validatorFunction: validatePhone,
@@ -260,7 +283,7 @@ class RegisterState extends State<Register> {
 
     final guardianPhoneField = registrationField(
       field: 'guardianPhone',
-      title: AppLocalizations.of(context)!.guardianPhone,
+      title: AppLocalizations.of(context).guardianPhone,
       icon: Icons.phone_iphone,
       controller: controllers['guardianPhone'],
       validatorFunction: validateGuardianPhone,
@@ -268,29 +291,29 @@ class RegisterState extends State<Register> {
 
     final passwordField = registrationField(
       field: 'password',
-      title: AppLocalizations.of(context)!.enterPassword,
+      title: AppLocalizations.of(context).enterPassword,
       icon: Icons.lock,
       controller:controllers['password'],
       validatorFunction: (value) => value!.isEmpty
-          ? AppLocalizations.of(context)!.pleaseEnterPassword
+          ? AppLocalizations.of(context).pleaseEnterPassword
           : null,
       isPassword: true
     );
 
     final confirmPasswordField = registrationField(
       field:'confirmPassword',
-      title:AppLocalizations.of(context)!.confirmPassword,
+      title:AppLocalizations.of(context).confirmPassword,
       icon: Icons.lock,
       controller:controllers['confirmpassword'],
       validatorFunction: (value) {
         _formData.forEach((key, value) {log("$key: $value");});
         if (value != _formData['password']) {
           log("${_formData['password']} != $value");
-          return AppLocalizations.of(context)!.passwordsDontMatch;
+          return AppLocalizations.of(context).passwordsDontMatch;
 
         }
         if (value!.isEmpty) {
-          return AppLocalizations.of(context)!.passwordIsRequired;
+          return AppLocalizations.of(context).passwordIsRequired;
         }
         return null;
       },
@@ -301,7 +324,7 @@ class RegisterState extends State<Register> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         const CircularProgressIndicator(),
-        Text(AppLocalizations.of(context)!.pleaseWaitRegistering)
+        Text(AppLocalizations.of(context).pleaseWaitRegistering)
       ],
     );
 
@@ -316,17 +339,17 @@ class RegisterState extends State<Register> {
           Navigator.pop(context);
         }),
         if (_formData['avatar'] == null)
-          Text(AppLocalizations.of(context)!.clickPictureToChooseAvatar)
+          Text(AppLocalizations.of(context).clickPictureToChooseAvatar)
       ])),
 
       firstnameField,
 
       lastnameField,
 
-      label(AppLocalizations.of(context)!.ageOver13),
+      label(AppLocalizations.of(context).ageOver13),
       AgeSelectDisplay(options: [
-        {'value': AppLocalizations.of(context)!.yes, 'id': 1},
-        {'value': AppLocalizations.of(context)!.no, 'id': 0}
+        {'value': AppLocalizations.of(context).yes, 'id': 1},
+        {'value': AppLocalizations.of(context).no, 'id': 0}
       ]),
     ];
     if (!isOver13) {
@@ -355,7 +378,7 @@ class RegisterState extends State<Register> {
                 selectedContactMethod = ContactMethod.phone;
               });
             },
-            child: Text(AppLocalizations.of(context)!.btnUsePhone,
+            child: Text(AppLocalizations.of(context).btnUsePhone,
                 style: const TextStyle(fontWeight: FontWeight.w300))));
         break;
 
@@ -373,7 +396,7 @@ class RegisterState extends State<Register> {
                 selectedContactMethod = ContactMethod.email;
               });
             },
-            child: Text(AppLocalizations.of(context)!.btnUseEmail,
+            child: Text(AppLocalizations.of(context).btnUseEmail,
                 style: const TextStyle(fontWeight: FontWeight.w300))));
     }
 
@@ -381,7 +404,7 @@ class RegisterState extends State<Register> {
     formFields.add(const SizedBox(height: 10.0));
     formFields.add(auth.registeredStatus == core.Status.authenticating
         ? loading
-        : longButtons(AppLocalizations.of(context)!.createAccount, doRegister));
+        : longButtons(AppLocalizations.of(context).createAccount, doRegister));
 
     return formFields;
   }
@@ -391,7 +414,7 @@ class RegisterState extends State<Register> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         const CircularProgressIndicator(),
-        Text(AppLocalizations.of(context)!.pleaseWaitRegistering)
+        Text(AppLocalizations.of(context).pleaseWaitRegistering)
       ],
     );
 
@@ -417,14 +440,14 @@ class RegisterState extends State<Register> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             const Center(child: Icon(Icons.check_circle,size: 80,)),
-            Center(child:Text(AppLocalizations.of(context)!.accountCreated),),
+            Center(child:Text(AppLocalizations.of(context).accountCreated),),
             const SizedBox(height: 15.0),
             ElevatedButton(
                 onPressed: () {
                   // Navigate to dashboard
                   Navigator.pushReplacementNamed(context, '/dashboard');
                 },
-                child: Text(AppLocalizations.of(context)!.btnContinue,
+                child: Text(AppLocalizations.of(context).btnContinue,
                     style: const TextStyle(fontWeight: FontWeight.w300)))
           ],
         );
@@ -442,7 +465,7 @@ class RegisterState extends State<Register> {
     return SafeArea(
       child: Scaffold(
           appBar: AppBar(
-            title: Text(AppLocalizations.of(context)!.createAccount),
+            title: Text(AppLocalizations.of(context).createAccount),
             elevation: 0.1,
           ),
           body: SingleChildScrollView(

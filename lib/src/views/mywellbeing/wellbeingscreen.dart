@@ -7,7 +7,7 @@ import 'package:fiteens/src/widgets/screenscaffold.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_radar_chart/flutter_radar_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:fiteens/l10n/app_localizations.dart';
+import 'package:fiteens/generated/l10n.dart';
 import 'package:intl/intl.dart';
 import '../../util/constants.dart' as constants;
 import '../../util/navigator.dart';
@@ -92,13 +92,30 @@ class _WellbeingScreenState extends State<WellbeingScreen> {
         .getElements(params);
 
     log("${result.length} elements loaded");
+
     setState(() {
       form.loadingStatus = core.LoadingStatus.ready;
+
+      // Initialize elements list if null
+      if (form.elements == null) {
+        form.elements = [];
+        if (kDebugMode) {
+          log('Initialized form.elements list');
+        }
+      }
 
       form.elements?.clear();
       for (var i in result) {
         form.elements?.add(i);
+        if (kDebugMode) {
+          log('Added element: id=${i.id}, type=${i.type}, title=${i.title}');
+        }
       }
+
+      if (kDebugMode) {
+        log('Form now has ${form.elements?.length ?? 0} elements');
+      }
+
       loadAnswersets(form);
     });
   }
@@ -222,7 +239,7 @@ class _WellbeingScreenState extends State<WellbeingScreen> {
     List<String> featureLongTitles = features.map((
         feature) => (feature['description'] ?? '') as String).toList();
     return ScreenScaffold(
-        title: AppLocalizations.of(context)!.navitem('mywellbeing'),
+        title: AppLocalizations.of(context).navitem('mywellbeing'),
         navigationIndex: widget.navIndex,
         refresh: widget.refresh,
         onRefresh: () {
@@ -249,10 +266,28 @@ class _WellbeingScreenState extends State<WellbeingScreen> {
                   if(userAnswersets.isNotEmpty) headerSheet(featureLongTitles),
                   ...answerData.map((e) => answerSheet(e, featureTitles)),
                   ElevatedButton(
-                      onPressed: () => goToWidget(context, AssessmentScreen(
-                        form: form, navIndex: widget.navIndex,)),
+                      onPressed: () {
+                        // Debug logging to verify form state before navigation
+                        if (kDebugMode) {
+                          log('Opening assessment screen');
+                          log('Form ID: ${form.id}');
+                          log('Form elements count: ${form.elements?.length ?? 0}');
+                          log('Form loading status: ${form.loadingStatus}');
+                          if (form.elements != null && form.elements!.isNotEmpty) {
+                            log('First few elements:');
+                            for (var i = 0; i < math.min(3, form.elements!.length); i++) {
+                              var element = form.elements![i];
+                              log('  Element $i: id=${element.id}, type=${element.type}, title=${element.title}');
+                            }
+                          } else {
+                            log('WARNING: Form has no elements!');
+                          }
+                        }
+                        goToWidget(context, AssessmentScreen(
+                          form: form, navIndex: widget.navIndex,));
+                      },
                       child: Text(
-                        AppLocalizations.of(context)!.startAssessment,)
+                        AppLocalizations.of(context).startAssessment,)
                   ),
                 ]
             )
@@ -261,7 +296,7 @@ class _WellbeingScreenState extends State<WellbeingScreen> {
           children: [
             const CircularProgressIndicator(color: Colors.white10,),
             const SizedBox(width: 10,),
-            Text(AppLocalizations.of(context)!.loading, style: const TextStyle(
+            Text(AppLocalizations.of(context).loading, style: const TextStyle(
                 color: Colors.white10
             ),)
           ],
@@ -291,7 +326,7 @@ class _WellbeingScreenState extends State<WellbeingScreen> {
   Widget headerSheet(headers) {
     List<Widget> row = [
       const SizedBox(width: 60,child:Icon(Icons.visibility),),
-    ConstrainedBox(constraints: BoxConstraints.tight(const Size(100,20)),child: Text(AppLocalizations.of(context)!.answerDate))];
+    ConstrainedBox(constraints: BoxConstraints.tight(const Size(100,20)),child: Text(AppLocalizations.of(context).answerDate))];
     for (String header in headers) {
       row.add(SizedBox(
           height: 150,

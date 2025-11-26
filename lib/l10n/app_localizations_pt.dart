@@ -577,6 +577,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get settings => 'Configurações';
 
   @override
+  String get server => 'Server';
+
+  @override
   String get signUp => 'Inscrever-se';
 
   @override

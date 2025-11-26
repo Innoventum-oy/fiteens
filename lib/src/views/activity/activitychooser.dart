@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fiteens/l10n/app_localizations.dart'; // important
+import 'package:fiteens/generated/l10n.dart'; // important
 import 'package:fiteens/src/util/utils.dart';
 import 'package:fiteens/src/views/activity/activitylist_item.dart';
 import 'package:provider/provider.dart';
@@ -121,7 +121,7 @@ class ActivityListState extends State<ActivityList>  {
     return Scaffold(
         appBar: AppBar(
             title: Text(
-                widget.viewType=='locations' ? AppLocalizations.of(context)!.locations : AppLocalizations.of(context)!.activities),
+                widget.viewType=='locations' ? AppLocalizations.of(context).locations : AppLocalizations.of(context).activities),
             actions: [
               if(isTester) IconButton(
                   icon: const Icon(Icons.bug_report),
@@ -164,7 +164,7 @@ class ActivityListState extends State<ActivityList>  {
           child:Center(
             child:ListTile(
               leading:const CircularProgressIndicator(),
-              title: Text(AppLocalizations.of(context)!.loading,textAlign: TextAlign.center),
+              title: Text(AppLocalizations.of(context).loading,textAlign: TextAlign.center),
             ),
           ),
         );

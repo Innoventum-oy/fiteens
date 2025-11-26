@@ -1,6 +1,6 @@
 // Single badge view
 import 'package:flutter/material.dart';
-import 'package:fiteens/l10n/app_localizations.dart'; // important
+import 'package:fiteens/generated/l10n.dart'; // important
 import 'package:fiteens/src/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:core/core.dart' as core;
@@ -80,11 +80,29 @@ class BadgeViewState extends State<BadgeView> {
             Hero(
               tag: "Badge-Tag-${widget._badge.id}",
               child: widget._badge.badgeimageurl != null
-                  ? FadeInImage.assetNetwork(
+                  ? Image.network(
+                      widget._badge.badgeimageurl!,
                       fit: BoxFit.contain,
                       width: double.infinity,
-                      placeholder: 'images/badge-placeholder.jpg',
-                      image: widget._badge.badgeimageurl!,
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Center(
+                          child: CircularProgressIndicator(
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes!
+                                : null,
+                          ),
+                        );
+                      },
+                      errorBuilder: (context, error, stackTrace) {
+                        // Fallback to placeholder image when network image fails
+                        return const Image(
+                          image: AssetImage('images/badge-placeholder.jpg'),
+                          fit: BoxFit.contain,
+                          width: double.infinity,
+                        );
+                      },
                     )
                   : const Image(
                       image: AssetImage('images/badge-placeholder.jpg')),
@@ -109,7 +127,7 @@ class BadgeViewState extends State<BadgeView> {
           padding: const EdgeInsets.all(20),
           child: Row(children: [
             const Icon(Icons.check),
-            Text(AppLocalizations.of(context)!.youHaveThisBadge)
+            Text(AppLocalizations.of(context).youHaveThisBadge)
           ])));
     }
 
@@ -126,7 +144,7 @@ class BadgeViewState extends State<BadgeView> {
                 Text(
                   badgeObject.name != null
                       ? badgeObject.name.toString()
-                      : AppLocalizations.of(context)!.unnamed,
+                      : AppLocalizations.of(context).unnamed,
                   style: const TextStyle(
                       color: Colors.white,
                       fontSize: 20,

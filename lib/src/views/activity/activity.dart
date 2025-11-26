@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:fiteens/src/widgets/screenscaffold.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:fiteens/l10n/app_localizations.dart'; // important
+import 'package:fiteens/generated/l10n.dart'; // important
 import 'package:flutter_html/flutter_html.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -85,18 +85,41 @@ class ActivityScreenState extends State<ActivityScreen> {
     refreshVisits();
 
     if(activityData!=null) {
-      log('Loaded details for ${widget._activity.id} : $activityData');
-      activity = core.Activity.fromJson(activityData);
+      if(kDebugMode) {
+        log('Loaded details for ${widget._activity.id} : $activityData');
+      }
 
-      activityProvider.current = activity;
+      // Handle case where API returns a List instead of Map
+      if (activityData is List) {
+        if (kDebugMode) {
+          log('WARNING: getDetails returned a List for activity ${widget._activity.id}, expected Map');
+        }
+        // Try to use the first item if it exists and is a Map
+        if (activityData.isNotEmpty && activityData[0] is Map) {
+          activityData = activityData[0];
+          if (kDebugMode) {
+            log('Using first item from List as activity data');
+          }
+        } else {
+          if (kDebugMode) {
+            log('ERROR: Cannot extract valid activity data from List');
+          }
+          activityData = null; // Set to null to trigger the error handling below
+        }
+      }
 
+      if (activityData != null) {
+        activity = core.Activity.fromJson(activityData);
+        activityProvider.current = activity;
+      }
     }
-    else{
+
+    if (activityData == null) {
       if(kDebugMode) {
         log('Failed to load details for ${widget._activity.id}');
       }
-
     }
+
     setState(() {
       activity.loaded = true;
     });
@@ -110,7 +133,7 @@ class ActivityScreenState extends State<ActivityScreen> {
     if(kDebugMode){
       log('build - activity loaded status for ${activity.name}: ${activity.loaded}, visit: ${visit?.id} - status : ${visit?.visitstatus}');
     }
-    return ScreenScaffold(title: activity.name ?? AppLocalizations.of(context)!.activity,
+    return ScreenScaffold(title: activity.name ?? AppLocalizations.of(context).activity,
         navigationIndex: widget.navIndex,
         child: activity.loaded ? CustomScrollView(
           slivers: <Widget>[
@@ -134,7 +157,7 @@ class ActivityScreenState extends State<ActivityScreen> {
         // already done
         buttons.add(ElevatedButton.icon(
           icon: const Icon(Icons.check),
-            onPressed: ((){}), label: Text(AppLocalizations.of(context)!.alreadyDone), ));
+            onPressed: ((){}), label: Text(AppLocalizations.of(context).alreadyDone), ));
       }
       else if(visit!=null && visit.visitstatus == 'cancelled'){
         buttons.add(ElevatedButton.icon(
@@ -149,14 +172,14 @@ class ActivityScreenState extends State<ActivityScreen> {
               width: 20,
               child: CircularProgressIndicator(
                 value: null,
-                semanticsLabel: AppLocalizations.of(context)!.loading,
-              )) : Text(AppLocalizations.of(context)!.btnMarkAsDone),
+                semanticsLabel: AppLocalizations.of(context).loading,
+              )) : Text(AppLocalizations.of(context).btnMarkAsDone),
           onPressed: () {
             if (visit != null) {
               if (visit.startdate!.isAfter(DateTime.now())) {
                 showMessage(
-                    context, AppLocalizations.of(context)!.eventInFuture, Text(
-                    AppLocalizations.of(context)!.eventCannotBeMarkedBeforeDate(
+                    context, AppLocalizations.of(context).eventInFuture, Text(
+                    AppLocalizations.of(context).eventCannotBeMarkedBeforeDate(
                         DateFormat('d.M.y').format(visit.startdate!))));
                 return;
               }
@@ -179,14 +202,14 @@ class ActivityScreenState extends State<ActivityScreen> {
               width: 20,
               child: CircularProgressIndicator(
                 value: null,
-                semanticsLabel: AppLocalizations.of(context)!.loading,
-              )) : Text(AppLocalizations.of(context)!.btnSkip),
+                semanticsLabel: AppLocalizations.of(context).loading,
+              )) : Text(AppLocalizations.of(context).btnSkip),
           onPressed: () {
 
               if (visit.startdate!.isAfter(DateTime.now())) {
                 showMessage(
-                    context, AppLocalizations.of(context)!.eventInFuture, Text(
-                    AppLocalizations.of(context)!.eventCannotBeSkippedBeforeDate(
+                    context, AppLocalizations.of(context).eventInFuture, Text(
+                    AppLocalizations.of(context).eventCannotBeSkippedBeforeDate(
                         DateFormat('d.M.y').format(visit.startdate!))));
                 return;
               }
@@ -209,7 +232,7 @@ class ActivityScreenState extends State<ActivityScreen> {
     if (activity.accesslevel >= 20) {
       /*
       buttons.add(ElevatedButton(
-        child: Text(AppLocalizations.of(context)!.qrScanner),
+        child: Text(AppLocalizations.of(context).qrScanner),
         onPressed: () {
           Navigator.push(
               context,
@@ -219,7 +242,7 @@ class ActivityScreenState extends State<ActivityScreen> {
       ));
 */
       buttons.add(ElevatedButton(
-        child: Text(AppLocalizations.of(context)!.eventLog),
+        child: Text(AppLocalizations.of(context).eventLog),
         onPressed: () {
           Navigator.push(
               context,
@@ -232,8 +255,8 @@ class ActivityScreenState extends State<ActivityScreen> {
    /* for testing
     buttons.add(
 
-        ElevatedButton(onPressed: ()=> showMessage(context,AppLocalizations.of(context)!.activityRecorded ,
-           Text(activity.getValue('feedback')!=null ? parse(activity.getValue('feedback')).body!.text : AppLocalizations.of(context)!.activityRecorded)
+        ElevatedButton(onPressed: ()=> showMessage(context,AppLocalizations.of(context).activityRecorded ,
+           Text(activity.getValue('feedback')!=null ? parse(activity.getValue('feedback')).body!.text : AppLocalizations.of(context).activityRecorded)
            ,autoDismiss: false
         )
             , child: Text('Test message'))
@@ -283,47 +306,90 @@ class ActivityScreenState extends State<ActivityScreen> {
           visitstatus: visitstatus,
           visit:visit
       );
-      setState(() {
-        switch(result?['status'])
-        {
-          case 'success':
-             List<Widget> messageTexts = [
 
-              Text(activity.getValue('feedback')!=null ? parse(activity.getValue('feedback')).body!.text : AppLocalizations.of(context)!.activityRecorded)
-              ];
-            if(result?['messages'] != null){
-              // add the messages as List of Text widgets to the messagetexts list
-              messageTexts.addAll(result?['messages'].map<Widget>((message) => Text(message)).toList());
-            }
-            Widget messageContents = Column(
-                mainAxisSize: MainAxisSize.min,
-
-                children:[...messageTexts]);
-            showMessage(context,AppLocalizations.of(context)!.activityRecorded ,messageContents,autoDismiss: false);
-
-            break;
-          default:
-            var message = Column(
-                mainAxisSize: MainAxisSize.min,
-                children:[
-              const Icon(Icons.error_outline),
-              Text(result?['message']),
-             if (result?['errormessage']!=null) Text(result?['errormessage'])
-            ]);
-            showMessage(context, AppLocalizations.of(context)!.error,message);
-
+      if (kDebugMode) {
+        log('=== RECORD ACTIVITY DEBUG ===');
+        log('result is null: ${result == null}');
+        if (result != null) {
+          log('result type: ${result.runtimeType}');
+          log('result keys: ${result.keys.join(", ")}');
+          log('result["status"]: ${result['status']}');
+          log('result.toString(): $result');
         }
-      if(result?['activityvisit']!=null){
-        // set / update activityvisit data
-        log("updating visit data from : ${result?['activityvisit']}");
+        log('============================');
+      }
+
+      // Handle null result (e.g., 500 server error) BEFORE setState
+      if (result == null) {
+        if (kDebugMode) {
+          log('ERROR: registerForActivity returned null result');
+        }
+        var message = const Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.error_outline),
+              Text('Server error occurred. Please try again later.'),
+            ]);
+        showMessage(context, AppLocalizations.of(context).error, message);
+        return;
+      }
+
+      if (kDebugMode) {
+        log('registerForActivity result status: ${result['status']}');
+        log('registerForActivity result: $result');
+      }
+
+      // Process the result and show appropriate message
+      String resultStatus = result['status']?.toString() ?? 'unknown';
+
+      if (resultStatus == 'success') {
+        // Build success message
+        List<Widget> messageTexts = [
+          Text(activity.getValue('feedback')!=null ? parse(activity.getValue('feedback')).body!.text : AppLocalizations.of(context).activityRecorded)
+        ];
+
+        if(result['messages'] != null){
+          // add the messages as List of Text widgets to the messagetexts list
+          messageTexts.addAll(result['messages'].map<Widget>((message) => Text(message.toString())).toList());
+        }
+
+        Widget messageContents = Column(
+            mainAxisSize: MainAxisSize.min,
+            children:[...messageTexts]);
+
+        // Update state first
         setState(() {
-          // this - reference is required here
-          refreshVisits();
-          this.visit = core.ActivityVisit.fromJson(result?['activityvisit']);
+          if(result['activityvisit']!=null){
+            log("updating visit data from : ${result['activityvisit']}");
+            this.visit = core.ActivityVisit.fromJson(result['activityvisit']);
+          }
         });
 
+        // Show success message AFTER setState
+        showMessage(context, AppLocalizations.of(context).activityRecorded, messageContents, autoDismiss: false);
+
+        // Refresh visits after showing message
+        if(result['activityvisit']!=null){
+          refreshVisits();
+        }
+      } else {
+        // Handle error case
+        String errorMessage = result['message']?.toString() ??
+                              result['errormessage']?.toString() ??
+                              'An error occurred';
+
+        var message = Column(
+            mainAxisSize: MainAxisSize.min,
+            children:[
+          const Icon(Icons.error_outline),
+          Text(errorMessage),
+          if (result['errormessage'] != null && result['errormessage'] != result['message'])
+            Text(result['errormessage'].toString())
+        ]);
+
+        // Show error message (not in setState)
+        showMessage(context, AppLocalizations.of(context).error, message);
       }
-      });
     }
   }
 
@@ -383,7 +449,7 @@ class ActivityScreenState extends State<ActivityScreen> {
               Text(
                 activity.name != null
                     ? activity.name.toString()
-                    : AppLocalizations.of(context)!.unnamedActivity,
+                    : AppLocalizations.of(context).unnamedActivity,
                 style: const TextStyle(color: Colors.white, fontSize: 20),
               ),
 
@@ -411,7 +477,7 @@ class ActivityScreenState extends State<ActivityScreen> {
           ? Center(
         child: ListTile(
           leading: const CircularProgressIndicator(),
-          title: Text(AppLocalizations.of(context)!.loading,
+          title: Text(AppLocalizations.of(context).loading,
               textAlign: TextAlign.center),
         ),
       )
@@ -434,7 +500,7 @@ class ActivityScreenState extends State<ActivityScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(AppLocalizations.of(context)!.yourLogDates,
+            Text(AppLocalizations.of(context).yourLogDates,
                 style: const TextStyle(color: Colors.white, fontSize: 20)),
             const SizedBox(
               height: 8.0,

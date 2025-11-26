@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:fiteens/l10n/app_localizations.dart';
+import 'package:fiteens/generated/l10n.dart';
 import 'package:fiteens/src/util/utils.dart';
 import 'package:fiteens/src/widgets/widgets.dart';
 import 'package:provider/provider.dart';
@@ -75,26 +75,44 @@ class WebPageViewState extends State<WebPageView> {
     try {
       dynamic details =
           await widget.provider.getDetails(widget._webPage.id!);
-        // if page has video, get base url
-      if(details['data']['videourl']!=null){
-        baseUrl = await core.ApiClient().baseUrl;
+
+      if (kDebugMode) {
+        log('webpageview: getDetails returned type: ${details.runtimeType}');
+        log('webpageview: getDetails data: $details');
       }
+
+      // Check for videourl - details is already the data object, not wrapped
+      if(details != null && details['videourl'] != null){
+        baseUrl = await core.ApiClient().baseUrl;
+        if (kDebugMode) {
+          log('webpageview: videourl found: ${details['videourl']}');
+          log('webpageview: baseUrl: $baseUrl');
+        }
+      }
+
       setState(() {
         if (details != null) {
           if(kDebugMode){
-            log('webpageview: loaded details for id ${widget._webPage.id} with data $details');
+            log('webpageview: loaded details for id ${widget._webPage.id}');
           }
           webPage = core.WebPage.fromJson(details);
           _loadingState = LoadingState.done;
         } else {
+          if(kDebugMode){
+            log('webpageview: details is null for id ${widget._webPage.id}');
+          }
           _loadingState = LoadingState.error;
         }
 
       });
-    } catch (e) {
-      //Notify(e.toString());
-      _loadingState = LoadingState.error;
-      e.toString();
+    } catch (e, stackTrace) {
+      if(kDebugMode){
+        log('webpageview: Error loading page: $e');
+        log('webpageview: StackTrace: $stackTrace');
+      }
+      setState(() {
+        _loadingState = LoadingState.error;
+      });
     }
   }
 
@@ -125,18 +143,51 @@ class WebPageViewState extends State<WebPageView> {
   Widget _buildAppBar() {
     core.WebPage page = webPage;
 
+    if (kDebugMode) {
+      log('=== _buildAppBar DEBUG ===', name: 'webpageview');
+      log('page.data: ${page.data}', name: 'webpageview');
+      log('page.data type: ${page.data?.runtimeType}', name: 'webpageview');
+      log('page.data["videourl"]: ${page.data?['videourl']}', name: 'webpageview');
+      log('baseUrl: $baseUrl', name: 'webpageview');
+      log('Should show video: ${page.data?['videourl'] != null}', name: 'webpageview');
+      log('baseUrl ready: ${baseUrl != null}', name: 'webpageview');
+
+      if (page.data?['videourl'] != null && baseUrl != null) {
+        String videoUrl = Uri.https(baseUrl!, page.data?['videourl']).toString();
+        log('Constructed video URL: $videoUrl', name: 'webpageview');
+      }
+      log('==========================', name: 'webpageview');
+    }
 
     Widget heroWidget = Hero(
       tag: "WebPage-Tag-${widget._webPage.id}",
       child: widget._webPage.thumbnailUrl != null
-          ? FadeInImage.assetNetwork(
-        fit: BoxFit.contain,
-        width: double.infinity,
-        placeholder: 'images/webPage-placeholder.png',
-        image: widget._webPage.thumbnailUrl!,
-      )
+          ? Image.network(
+              widget._webPage.thumbnailUrl!,
+              fit: BoxFit.contain,
+              width: double.infinity,
+              loadingBuilder: (context, child, loadingProgress) {
+                if (loadingProgress == null) return child;
+                return Center(
+                  child: CircularProgressIndicator(
+                    value: loadingProgress.expectedTotalBytes != null
+                        ? loadingProgress.cumulativeBytesLoaded /
+                            loadingProgress.expectedTotalBytes!
+                        : null,
+                  ),
+                );
+              },
+              errorBuilder: (context, error, stackTrace) {
+                // Fallback to placeholder when image fails to load
+                return const Image(
+                  image: AssetImage('images/webPage-placeholder.png'),
+                  fit: BoxFit.contain,
+                  width: double.infinity,
+                );
+              },
+            )
           : const Image(
-          image: AssetImage('images/webPage-placeholder.png')),
+              image: AssetImage('images/webPage-placeholder.png')),
     );
 
     return SliverAppBar(
@@ -146,20 +197,41 @@ class WebPageViewState extends State<WebPageView> {
         background: Stack(
           fit: StackFit.expand,
           children: <Widget>[
-            page.data?['videourl'] !=null ? (baseUrl!=null ?
-            VideoPlayerElement(
-              url: Uri.https(baseUrl!,page.data?['videourl']).toString(),
-            )
-                : const CircularProgressIndicator()) :
-            GestureDetector(
-              onTap: () {
-                if (widget._webPage.thumbnailUrl != null) {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return DetailScreen(widget._webPage.thumbnailUrl!);
-                  }));
+            page.data?['videourl'] != null ? (baseUrl != null ?
+            Builder(
+              builder: (context) {
+                if (kDebugMode) {
+                  log('Rendering VideoPlayerElement', name: 'webpageview');
                 }
-              },
-              child: heroWidget
+                return VideoPlayerElement(
+                  url: Uri.https(baseUrl!, page.data?['videourl']).toString(),
+                );
+              }
+            )
+                : Builder(
+                builder: (context) {
+                  if (kDebugMode) {
+                    log('Showing loading indicator - baseUrl not ready yet', name: 'webpageview');
+                  }
+                  return const Center(child: CircularProgressIndicator());
+                }
+              )) :
+            Builder(
+              builder: (context) {
+                if (kDebugMode) {
+                  log('Showing thumbnail image - no videourl', name: 'webpageview');
+                }
+                return GestureDetector(
+                  onTap: () {
+                    if (widget._webPage.thumbnailUrl != null) {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) {
+                        return DetailScreen(widget._webPage.thumbnailUrl!);
+                      }));
+                    }
+                  },
+                  child: heroWidget
+                );
+              }
             ),
             // BottomGradient(),
             //_buildMetaSection(webPage)
@@ -181,8 +253,8 @@ class WebPageViewState extends State<WebPageView> {
       onPressed: ()async{
         if (!await launchUrl(Uri.parse(webPage.videoUrl!)))
           Flushbar(
-            title: AppLocalizations.of(context)!.error,
-            message: AppLocalizations.of(context)!.couldNotOpenLink+' '+(webPage.videoUrl??''),
+            title: AppLocalizations.of(context).error,
+            message: AppLocalizations.of(context).couldNotOpenLink+' '+(webPage.videoUrl??''),
             duration: Duration(seconds: 10),
           ).show(context);
           //throw 'Linkin avaaminen ei onnistunut $webPage.videoUrl';
@@ -204,7 +276,7 @@ class WebPageViewState extends State<WebPageView> {
                 Text(
                   webPage.pagetitle != null
                       ? webPage.pagetitle.toString()
-                      : AppLocalizations.of(context)!.unnamedWebPage,
+                      : AppLocalizations.of(context).unnamedWebPage,
                   style: const TextStyle(
                       color: Colors.white,
                       fontSize: 20,
@@ -246,7 +318,7 @@ class WebPageViewState extends State<WebPageView> {
 
                 if(webPage.getValue('references')!=null)
                   Text(
-                    AppLocalizations.of(context)!.references,
+                    AppLocalizations.of(context).references,
                     style: const TextStyle(color: Colors.white, fontSize: 15.0),
                   ),
                 if(webPage.getValue('references')!=null)
@@ -405,6 +477,27 @@ class DetailScreen extends StatelessWidget {
               height: double.infinity,
               width: double.infinity,
               alignment: Alignment.center,
+              errorBuilder: (context, error, stackTrace) {
+                return const Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.error_outline, size: 60, color: Colors.red),
+                    SizedBox(height: 10),
+                    Text('Failed to load image'),
+                  ],
+                );
+              },
+              loadingBuilder: (context, child, loadingProgress) {
+                if (loadingProgress == null) return child;
+                return Center(
+                  child: CircularProgressIndicator(
+                    value: loadingProgress.expectedTotalBytes != null
+                        ? loadingProgress.cumulativeBytesLoaded /
+                            loadingProgress.expectedTotalBytes!
+                        : null,
+                  ),
+                );
+              },
             ),
           ),
         ),

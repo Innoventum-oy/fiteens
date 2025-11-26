@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:fiteens/l10n/app_localizations.dart'; // important
+import 'package:fiteens/generated/l10n.dart'; // important
 
 import '../../../util/navigator.dart';
 
@@ -47,7 +47,7 @@ class CalendarItem extends StatefulWidget {
       String dateinfo = activityItem.nexteventdate==null ? '':(widget.calculateDifference(activityItem.nexteventdate!)!=0 ? DateFormat('kk:mm dd.MM.yyyy').format(activityItem.nexteventdate!) : 'Today ${DateFormat('kk:mm ').format(activityItem.nexteventdate!)}');
       List<Widget> buttons=[];
       buttons.add(ElevatedButton(
-        child: Text(AppLocalizations.of(context)!.readMore),
+        child: Text(AppLocalizations.of(context).readMore),
         onPressed: () {
           /* open activity view */
           goToActivity(context, activityItem,visit:activityVisit);
@@ -60,7 +60,7 @@ class CalendarItem extends StatefulWidget {
           && ( activityItem.registrationenddate==null || activityItem.registrationenddate!.isAfter(DateTime.now()))
           && user.token!=null) {
         buttons.add(ElevatedButton(
-          child: activityProvider.loadingStatus == DataLoadingStatus.loading ? const CircularProgressIndicator() : Text(AppLocalizations.of(context)!.signUp),
+          child: activityProvider.loadingStatus == DataLoadingStatus.loading ? const CircularProgressIndicator() : Text(AppLocalizations.of(context).signUp),
           onPressed: () {
             activityProvider.loadingStatus == DataLoadingStatus.loading ? null : activityProvider.registerForActivity(activityItem.id, user,visit:activityVisit);
 
@@ -85,7 +85,7 @@ class CalendarItem extends StatefulWidget {
                       children: <Widget>[
                         ListTile(
                           leading: const Icon(Icons.event),
-                          title: Text((activityItem.name ?? AppLocalizations.of(context)!.unnamedActivity)),
+                          title: Text((activityItem.name ?? AppLocalizations.of(context).unnamedActivity)),
                           subtitle: Text(parse(subtitle).body!.text,maxLines: 3,style: const TextStyle(overflow: TextOverflow.ellipsis),
                              ),
                           isThreeLine: true,

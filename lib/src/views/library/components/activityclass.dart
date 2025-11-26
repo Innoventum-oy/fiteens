@@ -20,7 +20,27 @@ class ActivityClassItem extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         //  crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [activityClass.coverpictureurl != null ? Image.network(activityClass.coverpictureurl??'', fit: BoxFit.cover,) : Image.asset('images/logo.png', fit: BoxFit.cover,),
+        children: [
+          activityClass.coverpictureurl != null
+              ? Image.network(
+                  activityClass.coverpictureurl ?? '',
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Image.asset('images/logo.png', fit: BoxFit.cover);
+                  },
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Center(
+                      child: CircularProgressIndicator(
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes!
+                            : null,
+                      ),
+                    );
+                  },
+                )
+              : Image.asset('images/logo.png', fit: BoxFit.cover),
 
 
             Positioned(

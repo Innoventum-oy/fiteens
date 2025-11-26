@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fiteens/l10n/app_localizations.dart'; // important
+import 'package:fiteens/generated/l10n.dart'; // important
 import 'package:fiteens/src/util/utils.dart';
 import 'package:fiteens/src/widgets/widgets.dart';
 import 'package:fiteens/src/views/badge.dart';
@@ -63,7 +63,7 @@ class AchievementsViewState extends State<AchievementsView> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(AppLocalizations.of(context)!.achievements),
+          title: Text(AppLocalizations.of(context).achievements),
           actions: const [],
         ),
         body: Padding(

@@ -3,10 +3,12 @@ import 'dart:developer';
 import 'package:core/core.dart';
 import 'package:fiteens/src/util/styles.dart';
 import 'package:fiteens/src/views/calendar/calendarscreen.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:fiteens/src/views/user/card.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:fiteens/l10n/app_localizations.dart'; // important
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:fiteens/generated/l10n.dart'; // important
 import 'package:fiteens/src/views/achievements.dart';
 import 'package:fiteens/src/views/dashboard/dashboard.dart';
 import 'package:fiteens/src/views/webpage/pagelist.dart';
@@ -24,13 +26,14 @@ import 'package:provider/provider.dart';
 final navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
-  /*
+
   WidgetsFlutterBinding.ensureInitialized();
+  /*
   final appDocumentDirectory = await getApplicationDocumentsDirectory();
   final targetEnvironment = await Settings().getServerName();
   await Hive.initFlutter("${appDocumentDirectory.path}/$targetEnvironment");
 */
-
+  final fileStorage = await core.FileStorage.initialize();
   runApp(
     MultiProvider(
         providers: [
@@ -41,6 +44,7 @@ void main() async {
           ChangeNotifierProvider(create: (_) => core.ActivityProvider()),
           ChangeNotifierProvider(create: (_) => core.ActivityClassProvider()),
           ChangeNotifierProvider(create: (_) => core.ActivityVisitProvider()),
+          ChangeNotifierProvider(create: (_) => fileStorage), // FileStorage
           ChangeNotifierProvider(create: (_) => core.ImageProvider()),
           ChangeNotifierProvider(create: (_) => core.RoutineProvider()),
           ChangeNotifierProvider(create: (_) => core.RoutineItemProvider()),
@@ -51,8 +55,45 @@ void main() async {
 }
 
 
-class Fiteens extends StatelessWidget {
+class Fiteens extends StatefulWidget {
   const Fiteens({super.key});
+
+  @override
+  FiteensState createState() => FiteensState();
+}
+class FiteensState extends State<Fiteens> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addObserver(this);
+    // Listen to ApiClient isProcessingNotifier
+    core.ApiClient().isProcessingNotifier.addListener(_handleProcessing);
+  }
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+  }
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    core.ApiClient().isProcessingNotifier.removeListener(_handleProcessing);
+    super.dispose();
+  }
+
+  void _handleProcessing() {
+    if(kDebugMode || kProfileMode){
+      log('ApiClient isProcessingNotifier: ${core.ApiClient().isProcessingNotifier.value}',name:'main.dart FiteensState');
+    }
+    // if the ApiClient is processing, show the loader overlay
+    if (core.ApiClient().isProcessingNotifier.value) {
+      context.loaderOverlay.show();
+    } else {
+      // if the ApiClient is not processing, hide the loader overlay
+      context.loaderOverlay.hide();
+    }
+  }
 
   // This widget is the root of Fiteens  application.
 
@@ -66,8 +107,11 @@ class Fiteens extends StatelessWidget {
         title: 'Fiteens',
         debugShowCheckedModeBanner: false,
         navigatorKey: NavigationService.navigatorKey,
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          ...GlobalMaterialLocalizations.delegates,
+        ],
+        supportedLocales: AppLocalizations.delegate.supportedLocales,
 
         theme: appTheme,
         home: const AppLocalizationState(),
@@ -118,14 +162,15 @@ class _AppLocalizationState extends State<AppLocalizationState> {
   }
   @override
   Widget build(BuildContext context){
-    return FutureBuilder(
+    return LoaderOverlay(
+        child: FutureBuilder(
         initialData: User(),
         future: getUserData(),
         builder: (context, snapshot) {
           if (kDebugMode) {
             log("main.dart: snapshot connectionState: ${snapshot.connectionState.toString()}");
           }
-          log('Locales in use: ${AppLocalizations.supportedLocales}; Current locale: ${Localizations.localeOf(context)}, intl locale: ${Intl.getCurrentLocale()}');
+          log('Locales in use: ${AppLocalizations.delegate.supportedLocales}; Current locale: ${Localizations.localeOf(context)}, intl locale: ${Intl.getCurrentLocale()}');
           switch (snapshot.connectionState) {
             case ConnectionState.none:
             case ConnectionState.waiting:
@@ -159,6 +204,7 @@ class _AppLocalizationState extends State<AppLocalizationState> {
               }
               return const Login(); //Welcome(user: snapshot.data as User);
           }
-        });
+        })
+    );
   }
 }

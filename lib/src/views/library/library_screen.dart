@@ -6,7 +6,7 @@ import 'package:fiteens/src/views/webpage/pagelist_item.dart';
 import 'package:fiteens/src/widgets/screenscaffold.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:fiteens/l10n/app_localizations.dart';
+import 'package:fiteens/generated/l10n.dart';
 import 'package:provider/provider.dart';
 import '../../util/constants.dart' as constants;
 
@@ -67,8 +67,8 @@ class _LibraryScreenState extends State<LibraryScreen> {
     //Create TabBar
     TabBar tabBar = TabBar(
       tabs: [
-        Tab(text: AppLocalizations.of(context)!.challenges),
-        Tab(text: AppLocalizations.of(context)!.library),
+        Tab(text: AppLocalizations.of(context).challenges),
+        Tab(text: AppLocalizations.of(context).library),
       ],
     );
     //Create TabBarView
@@ -95,13 +95,13 @@ class _LibraryScreenState extends State<LibraryScreen> {
                           activityClass: item,
 
                         ));
-                      }) : Text(AppLocalizations.of(context)!.libraryIsEmpty);
+                      }) : Text(AppLocalizations.of(context).libraryIsEmpty);
                 } else {
-                  return Text(AppLocalizations.of(context)!.libraryIsEmpty);
+                  return Text(AppLocalizations.of(context).libraryIsEmpty);
                 }
               } else {
 
-                return Padding(padding:const EdgeInsets.all(20),child:Column(children:[defaultContent,Text(AppLocalizations.of(context)!.loading)]));
+                return Padding(padding:const EdgeInsets.all(20),child:Column(children:[defaultContent,Text(AppLocalizations.of(context).loading)]));
               }
             }),
         // Library
@@ -151,9 +151,9 @@ class _LibraryScreenState extends State<LibraryScreen> {
                            item,
 
                         ));
-                      }) : Text(AppLocalizations.of(context)!.libraryIsEmpty);
+                      }) : Text(AppLocalizations.of(context).libraryIsEmpty);
                 } else {
-                  return Text(AppLocalizations.of(context)!.libraryIsEmpty);
+                  return Text(AppLocalizations.of(context).libraryIsEmpty);
                 }
               } else {
                 return defaultContent;
@@ -163,7 +163,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
     );
 
     return DefaultTabController(length: 2, child: ScreenScaffold(
-        title: AppLocalizations.of(context)!.library,
+        title: AppLocalizations.of(context).library,
         navigationIndex: widget.navIndex,
         refresh: widget.refresh,
        child: Column(

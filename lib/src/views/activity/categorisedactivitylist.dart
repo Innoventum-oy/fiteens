@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:fiteens/l10n/app_localizations.dart'; // important
+import 'package:fiteens/generated/l10n.dart'; // important
 import 'package:fiteens/src/util/styles.dart';
 import 'package:fiteens/src/util/utils.dart';
 import 'package:fiteens/src/widgets/widgets.dart';
@@ -112,7 +112,7 @@ class CategorisedActivityListState extends State<CategorisedActivityList> {
     return Scaffold(
       backgroundColor: primary,
       appBar: AppBar(
-          title: Text(AppLocalizations.of(context)!.activities),
+          title: Text(AppLocalizations.of(context).activities),
           actions: [
             if(isTester) IconButton(
                 icon: const Icon(Icons.bug_report),
@@ -147,7 +147,7 @@ class CategorisedActivityListState extends State<CategorisedActivityList> {
             ListTile(
               leading: const Icon(Icons.error,color:Colors.white),
               title: Text(
-                  AppLocalizations.of(context)!.noActivitiesFound,
+                  AppLocalizations.of(context).noActivitiesFound,
                   style:const TextStyle(color:Colors.white)),
             ),
             ) :
@@ -186,7 +186,7 @@ class CategorisedActivityListState extends State<CategorisedActivityList> {
           child: Center(
             child: ListTile(
               leading: const CircularProgressIndicator(),
-              title: Text(AppLocalizations.of(context)!.loading,
+              title: Text(AppLocalizations.of(context).loading,
                   textAlign: TextAlign.center,
                   style: const TextStyle(color: Colors.white)
               ),

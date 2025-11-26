@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../util/constants.dart' as constants;
-import 'package:fiteens/l10n/app_localizations.dart';
+import 'package:fiteens/generated/l10n.dart';
 
 
 Widget bottomNavigation(BuildContext context, {int currentIndex = 0}) {
@@ -12,7 +12,7 @@ Widget bottomNavigation(BuildContext context, {int currentIndex = 0}) {
   return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       currentIndex: currentIndex,
-      items: [...bottomNavItems.map((navitem) =>  BottomNavigationBarItem(label: AppLocalizations.of(context)!.navitem(navitem.label), icon: navitem.icon))],
+      items: [...bottomNavItems.map((navitem) =>  BottomNavigationBarItem(label: AppLocalizations.of(context).navitem(navitem.label), icon: navitem.icon))],
       selectedItemColor: Colors.white,
       onTap: (index) {
           for(constants.NavigationItem navItem in constants.navItems){

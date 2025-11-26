@@ -2,7 +2,7 @@ import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:fiteens/src/widgets/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:fiteens/l10n/app_localizations.dart';
+import 'package:fiteens/generated/l10n.dart';
 
 import 'package:core/core.dart' as core;
 
@@ -44,8 +44,8 @@ class ResetPasswordState extends State<ResetPassword> {
           } else {
 
             Flushbar(
-              title: AppLocalizations.of(context)!.requestFailed,
-              message: response?['message'].toString()??AppLocalizations.of(context)!.requestFailed,
+              title: AppLocalizations.of(context).requestFailed,
+              message: response?['message'].toString()??AppLocalizations.of(context).requestFailed,
               duration: const Duration(seconds: 3),
             ).show(context);
           }
@@ -58,7 +58,7 @@ class ResetPasswordState extends State<ResetPassword> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         const CircularProgressIndicator(),
-        Text(AppLocalizations.of(context)!.processing)
+        Text(AppLocalizations.of(context).processing)
       ],
     );
 
@@ -66,7 +66,7 @@ class ResetPasswordState extends State<ResetPassword> {
     {
 
       String? msg;
-      if(value!.isEmpty) return AppLocalizations.of(context)!.pleaseEnterPhoneOrEmail;
+      if(value!.isEmpty) return AppLocalizations.of(context).pleaseEnterPhoneOrEmail;
 
       //test for phone number pattern
       String pattern = r'(^(?:[+0])?[0-9]{10,14}$)';
@@ -78,7 +78,7 @@ class ResetPasswordState extends State<ResetPassword> {
       RegExp regex = RegExp(
           r'^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
       if (!regex.hasMatch(value)) {
-        msg = AppLocalizations.of(context)!.pleaseProvideValidPhoneOrEmail;
+        msg = AppLocalizations.of(context).pleaseProvideValidPhoneOrEmail;
       }
       return msg;
     }
@@ -89,7 +89,7 @@ class ResetPasswordState extends State<ResetPassword> {
       validator: validateContact,
       onSaved: (value) => _contact = value,
       decoration: buildInputDecoration(
-          AppLocalizations.of(context)!.emailOrPhoneNumber, Icons.email),
+          AppLocalizations.of(context).emailOrPhoneNumber, Icons.email),
     );
 
 
@@ -97,13 +97,13 @@ class ResetPasswordState extends State<ResetPassword> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 15.0),
-        label(AppLocalizations.of(context)!.emailOrPhoneNumber),
+        label(AppLocalizations.of(context).emailOrPhoneNumber),
         const SizedBox(height: 5.0),
         contactField,
         const SizedBox(height: 20.0),
         auth.verificationStatus == core.VerificationStatus.validating
             ? loading
-            : longButtons(AppLocalizations.of(context)!.getCode,
+            : longButtons(AppLocalizations.of(context).getCode,
             getVerificationCode),
         const SizedBox(height: 5.0),
 
@@ -118,7 +118,7 @@ class ResetPasswordState extends State<ResetPassword> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         const CircularProgressIndicator(),
-        Text(AppLocalizations.of(context)!.processing)
+        Text(AppLocalizations.of(context).processing)
       ],
     );
 
@@ -126,10 +126,10 @@ class ResetPasswordState extends State<ResetPassword> {
       autofocus: true,
       controller: confirmationController,
       validator: (value) =>
-      value!.isEmpty ? AppLocalizations.of(context)!.pleaseEnterConfirmationKey : null,
+      value!.isEmpty ? AppLocalizations.of(context).pleaseEnterConfirmationKey : null,
       onSaved: (value) => _confirmKey = value,
       decoration: buildInputDecoration(
-          AppLocalizations.of(context)!.confirmationKey, Icons.vpn_key),
+          AppLocalizations.of(context).confirmationKey, Icons.vpn_key),
     );
 
     sendVerificationCode() {
@@ -154,7 +154,7 @@ class ResetPasswordState extends State<ResetPassword> {
             if(response['messages']!=null) msg+= response['messages'].join(', ');
 
             Flushbar(
-              title: AppLocalizations.of(context)!.requestFailed,
+              title: AppLocalizations.of(context).requestFailed,
               message: msg,
               duration: const Duration(seconds: 3),
             ).show(context);
@@ -168,14 +168,14 @@ class ResetPasswordState extends State<ResetPassword> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 15.0),
-        label(AppLocalizations.of(context)!.confirmationKey),
+        label(AppLocalizations.of(context).confirmationKey),
         const SizedBox(height: 5.0),
         confirmationKeyField,
 
         const SizedBox(height: 20.0),
         auth.verificationStatus == core.VerificationStatus.validating
             ? loading
-            : longButtons(AppLocalizations.of(context)!.btnSend,
+            : longButtons(AppLocalizations.of(context).btnSend,
             sendVerificationCode),
 
       ],
@@ -188,7 +188,7 @@ class ResetPasswordState extends State<ResetPassword> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         const CircularProgressIndicator(),
-        Text(AppLocalizations.of(context)!.processing)
+        Text(AppLocalizations.of(context).processing)
       ],
     );
 
@@ -196,10 +196,10 @@ class ResetPasswordState extends State<ResetPassword> {
       autofocus: false,
       obscureText: true,
       validator: (value) =>
-      value!.isEmpty ? AppLocalizations.of(context)!.pleaseEnterPassword : null,
+      value!.isEmpty ? AppLocalizations.of(context).pleaseEnterPassword : null,
       onSaved: (value) => _password = value,
       decoration: buildInputDecoration(
-          AppLocalizations.of(context)!.confirmPassword, Icons.lock),
+          AppLocalizations.of(context).confirmPassword, Icons.lock),
     );
 
     setPassword() {
@@ -220,7 +220,7 @@ class ResetPasswordState extends State<ResetPassword> {
 
           } else {
             Flushbar(
-              title: AppLocalizations.of(context)!.requestFailed,
+              title: AppLocalizations.of(context).requestFailed,
               message: response['message'].toString(),
               duration: const Duration(seconds: 3),
             ).show(context);
@@ -234,13 +234,13 @@ class ResetPasswordState extends State<ResetPassword> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 15.0),
-        label(AppLocalizations.of(context)!.password),
+        label(AppLocalizations.of(context).password),
         const SizedBox(height: 5.0),
         passwordField,
         const SizedBox(height: 20.0),
         auth.loggedInStatus == core.Status.authenticating
             ? loading
-            : longButtons(AppLocalizations.of(context)!.btnSetNewPassword,
+            : longButtons(AppLocalizations.of(context).btnSetNewPassword,
             setPassword),
         const SizedBox(height: 5.0),
 
@@ -249,7 +249,7 @@ class ResetPasswordState extends State<ResetPassword> {
   }
   Widget successForm()
   {
-    return Text(AppLocalizations.of(context)!.passwordChanged,
+    return Text(AppLocalizations.of(context).passwordChanged,
         style: const TextStyle(fontWeight: FontWeight.w300));
 
   }
@@ -259,7 +259,7 @@ class ResetPasswordState extends State<ResetPassword> {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Expanded(child:ElevatedButton(
-          child: Text(AppLocalizations.of(context)!.login,
+          child: Text(AppLocalizations.of(context).login,
               style: const TextStyle(fontWeight: FontWeight.w300)),
           onPressed: () {
             Navigator.pushReplacementNamed(context, '/login');
@@ -268,7 +268,7 @@ class ResetPasswordState extends State<ResetPassword> {
         const SizedBox(width:10),
         Expanded(child:ElevatedButton(
 
-          child: Text(AppLocalizations.of(context)!.signUp,
+          child: Text(AppLocalizations.of(context).signUp,
               style: const TextStyle(fontWeight: FontWeight.w300)),
           onPressed: () {
             Navigator.pushNamed(context, '/register');
@@ -284,7 +284,7 @@ class ResetPasswordState extends State<ResetPassword> {
       case core.VerificationStatus.verified:
       // display button to return to code request form
         return TextButton(
-            child: Text(AppLocalizations.of(context)!.requestNewCode,
+            child: Text(AppLocalizations.of(context).requestNewCode,
                 style: const TextStyle(fontWeight: FontWeight.w300)),
             onPressed: () async {
               setState(() {
@@ -294,7 +294,7 @@ class ResetPasswordState extends State<ResetPassword> {
 
       default:
         return TextButton(
-            child: Text(AppLocalizations.of(context)!.previous,
+            child: Text(AppLocalizations.of(context).previous,
                 style: const TextStyle(fontWeight: FontWeight.w300)),
             onPressed: () async {
               setState(() {
@@ -313,7 +313,7 @@ class ResetPasswordState extends State<ResetPassword> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text(AppLocalizations.of(context)!.requestNewPasswordTitle),
+          title: Text(AppLocalizations.of(context).requestNewPasswordTitle),
           elevation: 0.1,
         ),
         body: Container(

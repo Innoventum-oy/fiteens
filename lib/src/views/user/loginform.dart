@@ -6,9 +6,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fiteens/src/widgets/widgets.dart';
 import 'package:fiteens/src/views/webpage/webpagetextcontent.dart';
-import 'package:flutter_settings_ui/flutter_settings_ui.dart';
+//import 'package:flutter_settings_ui/flutter_settings_ui.dart';
 import 'package:provider/provider.dart';
-import 'package:fiteens/l10n/app_localizations.dart';
+import 'package:fiteens/generated/l10n.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:core/core.dart' as core;
 
@@ -35,7 +35,9 @@ class LoginState extends State<Login> {
   late core.AuthProvider auth;
   late core.UserProvider userProvider;
   late final Map? servers;
-
+  bool serversLoaded = false; // server list loaded state
+  String versionInfo='';
+  String appDataVersion='';
 
   LoginState() {
     PackageInfo.fromPlatform().then((PackageInfo packageInfo) => setState(() {
@@ -59,9 +61,18 @@ class LoginState extends State<Login> {
     getServers();
 
   }
+
   void getServers() async{
-    servers = await core.AppSettings().getMap('servers');
+    servers = await core.AppSettings().getMap('servers'); // get servers
+    setState(() {
+      serversLoaded = true; // set servers loaded state
+      if (kDebugMode) {
+        log('Defaulting to development server');
+        serverName = 'development'; // set default server to development in debug mode
+      }
+    });
   }
+
   @override
   void didChangeDependencies() {
      auth = Provider.of<core.AuthProvider>(context);
@@ -116,7 +127,7 @@ class LoginState extends State<Login> {
     {
 
       String? msg;
-      if(value!.isEmpty) return AppLocalizations.of(context)!.pleaseEnterPhoneOrEmail;
+      if(value!.isEmpty) return AppLocalizations.of(context).pleaseEnterPhoneOrEmail;
 
       //test for phone number pattern
       String pattern = r'(^(?:[+0])?[0-9]{10,12}$)';
@@ -128,7 +139,7 @@ class LoginState extends State<Login> {
       RegExp regex = RegExp(
           r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
       if (!regex.hasMatch(value)) {
-        msg = AppLocalizations.of(context)!.pleaseProvideValidPhoneOrEmail;
+        msg = AppLocalizations.of(context).pleaseProvideValidPhoneOrEmail;
       }
       return msg;
     }
@@ -138,7 +149,7 @@ class LoginState extends State<Login> {
         validator: validateContact,
         onSaved: (value) => _contact = value,
         decoration: buildInputDecoration(
-            AppLocalizations.of(context)!.phoneOrEmail, Icons.email),
+            AppLocalizations.of(context).phoneOrEmail, Icons.email),
         initialValue: contact);
 
     final passwordField = TextFormField(
@@ -146,10 +157,10 @@ class LoginState extends State<Login> {
       obscureText: !_showPassword,
       initialValue: _password,
       style: const TextStyle(color: Colors.white),
-      validator: (value) => value!.isEmpty ? AppLocalizations.of(context)!.pleaseEnterPassword : null,
+      validator: (value) => value!.isEmpty ? AppLocalizations.of(context).pleaseEnterPassword : null,
       onSaved: (value) => _password = value,
       decoration: buildInputDecoration(
-          AppLocalizations.of(context)!.password, Icons.lock,
+          AppLocalizations.of(context).password, Icons.lock,
       suffixIcon: showTextIconButton() ),
 
     );
@@ -158,7 +169,7 @@ class LoginState extends State<Login> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         const CircularProgressIndicator(),
-        Text(AppLocalizations.of(context)!.authenticating)
+        Text(AppLocalizations.of(context).authenticating)
       ],
     );
 
@@ -169,7 +180,7 @@ class LoginState extends State<Login> {
           flex:2,
     child:ElevatedButton(
 
-          child: Text(AppLocalizations.of(context)!.forgotPassword,
+          child: Text(AppLocalizations.of(context).forgotPassword,
               style: const TextStyle(fontWeight: FontWeight.w300)),
           onPressed: () {
             Navigator.pushNamed(context, '/reset-password');
@@ -182,7 +193,7 @@ class LoginState extends State<Login> {
           child:
         ElevatedButton(
 
-          child: Text(AppLocalizations.of(context)!.createAccount, style: const TextStyle(fontWeight: FontWeight.w300)),
+          child: Text(AppLocalizations.of(context).createAccount, style: const TextStyle(fontWeight: FontWeight.w300)),
           onPressed: () {
             auth.setRegisteredStatus(core.Status.notRegistered);
             Navigator.pushNamed(context, '/register');
@@ -197,7 +208,7 @@ class LoginState extends State<Login> {
       children: <Widget> [
         TextButton(
 
-          child: Text(AppLocalizations.of(context)!.cancel,
+          child: Text(AppLocalizations.of(context).cancel,
               style: const TextStyle(fontWeight: FontWeight.w300)),
           onPressed: () async {
 
@@ -222,29 +233,84 @@ class LoginState extends State<Login> {
         });
 
         final Future<core.ApiResponse> successfulMessage =
-        auth.login(_contact!, _password!);
+        auth.login(_contact ?? '', _password!);
 
         successfulMessage.then((responseData) {
-          Map response = responseData.data!;
-          if (response['status']) {
-            core.User user = response['user'];
+          if (kDebugMode) {
+            log('Login response status: ${responseData.status}', name: 'Login');
+            log('Login response data: ${responseData.data}', name: 'Login');
+            log('Login response data type: ${responseData.data?.runtimeType}', name: 'Login');
+            log('Login response rawData: ${responseData.rawData}', name: 'Login');
+          }
+
+          // Use rawData if data is null (login responses may not have 'data' wrapper)
+          dynamic response = responseData.data ?? responseData.rawData ?? {};
+
+          if (responseData.status == core.ResponseStatus.success) {
+            if (kDebugMode) {
+              log('Login successful, setting user', name: 'Login');
+              log('Response type: ${response.runtimeType}', name: 'Login');
+            }
+
+            core.User user;
+
+            // Handle different response formats
+            if (response is core.User) {
+              // Response data is already a User object
+              user = response;
+            } else if (response is Map && response['user'] != null) {
+              // Response has a 'user' key
+              if (response['user'] is core.User) {
+                user = response['user'];
+              } else {
+                user = core.User.fromJson(response['user']);
+              }
+            } else if (response is Map) {
+              // Response is a Map, convert to User
+              user = core.User.fromJson(Map<String, dynamic>.from(response));
+            } else {
+              if (kDebugMode) {
+                log('ERROR: Unexpected response format: ${response.runtimeType}', name: 'Login');
+              }
+              throw Exception('Unexpected response format');
+            }
+
             userProvider.setUser(user);
             // No longer required since main listens to auth state and reloads view
             // Navigator.pushReplacementNamed(context, '/dashboard');
           } else {
             // userProvider.clearUser();
+            if (kDebugMode) {
+              log('Login failed: ${response is Map ? response['message'] : 'Unknown error'}', name: 'Login');
+            }
             if(mounted) {
+              String errorMessage = (response is Map ? response['message']?.toString() : null) ??
+                                   responseData.message ??
+                                   AppLocalizations.of(context).loginFailed;
               Flushbar(
-              title: AppLocalizations.of(context)!.loginFailed,
-              message: response['message'].toString(),
+              title: AppLocalizations.of(context).loginFailed,
+              message: errorMessage,
               duration: const Duration(seconds: 3),
             ).show(context);
             }
           }
           setState(() {
             isLoading = false;
-
           });
+        }).catchError((error) {
+          if (kDebugMode) {
+            log('Login error: $error', name: 'Login');
+          }
+          if (mounted) {
+            setState(() {
+              isLoading = false;
+            });
+            Flushbar(
+              title: AppLocalizations.of(context).loginFailed,
+              message: error.toString(),
+              duration: const Duration(seconds: 3),
+            ).show(context);
+          }
         });
       }
 
@@ -254,7 +320,7 @@ class LoginState extends State<Login> {
     return SafeArea(
       child: Scaffold(
     /*    appBar: AppBar(
-          title: Text(AppLocalizations.of(context)!.appName+' / '+AppLocalizations.of(context)!.loginTitle),
+          title: Text(AppLocalizations.of(context).appName+' / '+AppLocalizations.of(context).loginTitle),
           elevation: 0.1,
         ),*/
         body:
@@ -274,26 +340,25 @@ class LoginState extends State<Login> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 15.0),
-                label(AppLocalizations.of(context)!.emailOrPhoneNumber),
+                label(AppLocalizations.of(context).emailOrPhoneNumber),
                 const SizedBox(height: 5.0),
                 contactField,
                 const SizedBox(height: 20.0),
-                label(AppLocalizations.of(context)!.yourPassword),
+                label(AppLocalizations.of(context).yourPassword),
                 const SizedBox(height: 5.0),
                 passwordField,
                 const SizedBox(height: 20.0),
                 isLoading
                     ? loading
-                    : longButtons(AppLocalizations.of(context)!.btnLogin, doLogin),
+                    : longButtons(AppLocalizations.of(context).btnLogin, doLogin),
                 const SizedBox(height: 15.0),
                 forgotLabel,
                 const SizedBox(height: 15.0),
                 auth.loggedInStatus == core.Status.authenticating
                     ? cancelButton : Container(),
                 Row(children:[
-                  if(kDebugMode) GestureDetector(child: Text("[$serverName] "), onTap: () {
-                    serverSelectDialog(context);
-                  },),getVersionInfo(),
+                  if(kDebugMode && serversLoaded) serverSelect(),
+                  getVersionInfo(),
                 ]),
                 policyLink(),
                 // Erasmus logo and Sepie logo
@@ -345,86 +410,41 @@ class LoginState extends State<Login> {
             );
           });
         },
-        child: Text(AppLocalizations.of(context)!.privacyPolicy,style: const TextStyle(
+        child: Text(AppLocalizations.of(context).privacyPolicy,style: const TextStyle(
             fontWeight: FontWeight.w300,
            //color: Color(0xFFffe8d7)
         ))
     );
   }
-  void serverSelectDialog(BuildContext context){
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-          title:  const Text(
-              'Server'),
-          content: SizedBox(
-            width: double.maxFinite,
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                  maxHeight:
-                  MediaQuery.of(context).size.height *
-                      0.9,
-                  minHeight:
-                  MediaQuery.of(context).size.height *
-                      0.5,
-                  maxWidth:
-                  MediaQuery.of(context).size.width * 0.9,
-                  minWidth:
-                  MediaQuery.of(context).size.width *
-                      0.9),
-              child: SettingsList(sections:[SettingsSection(
-                  title: const Text('Choose server'),
-                  tiles: environmentOptions(context)),
-            ]
-            ),
-            ),
+
+  Widget serverSelect() {
+    return Row(
+        children:[
+          DropdownMenu<String>(
+            label: Text(AppLocalizations.of(context).server),
+            initialSelection: serverName,
+            onSelected: (String? newValue) async {
+              serverName = newValue!;
+              await core.ApiClient().setServer(serverName);
+
+              setState(() {
+
+              });
+            },
+            dropdownMenuEntries: servers!.keys.map<DropdownMenuEntry<String>>((dynamic value) {
+              return DropdownMenuEntry<String>(
+                  value: value as String,
+                  label: value
+              );
+            }).toList(),
           ),
-          insetPadding: const EdgeInsets.symmetric(horizontal: 20),
-          actions: <Widget>[
-            ElevatedButton(
-              child:
-              const Text('Close'),
-              onPressed: () {
-                Navigator.of(context, rootNavigator: true).pop();
-              },
-            ),
-          ]),
-    );
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: () {
+              core.FileStorage().empty();
 
-  }
-  List<SettingsTile> environmentOptions(BuildContext context) {
-    
-    List<SettingsTile> tiles = [];
-    servers?.forEach((serverTitle, itemUrl) {
-      tiles.add(SettingsTile(
-        title: Text(serverTitle),
-
-        // subtitle: serverUrl,
-
-        leading: trailingWidget(serverTitle),
-        onPressed: (BuildContext context) {
-          
-          serverName = serverTitle;
-          serverUrl = itemUrl;
-          
-          core.Settings().setValue('server', serverUrl);
-          core.Settings().setValue('servername', serverTitle);
-          core.ApiClient().reset();
-          core.UserPreferences.removeUser();
-          if(kDebugMode){
-            /// Clear hive
-            core.FileStorage().empty();
-          }
-          //  Provider.of<UserProvider>(context, listen: false).clearUser();
-          //  Navigator.pushReplacementNamed(context, '/login');
-          Navigator.of(context, rootNavigator: true).pop();
-          setState(() {
-
-          });
-        },
-      ));
-    });
-
-    return tiles.isNotEmpty ? tiles : [SettingsTile(title: const Text('No servers found'))];
+            },
+          ),
+        ]);
   }
 }

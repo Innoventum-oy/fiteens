@@ -6,7 +6,7 @@ import 'package:core/core.dart';
 import 'package:fiteens/src/views/routines/components/weekitems.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:fiteens/l10n/app_localizations.dart';
+import 'package:fiteens/generated/l10n.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:loading_gifs/loading_gifs.dart';
 import 'package:provider/provider.dart';
@@ -69,7 +69,7 @@ class _RoutineScreenState extends State<RoutineScreen> {
 
     List<Widget> widgets = [
       Text(
-        routine?.name ?? AppLocalizations.of(context)!.unnamedRoutine,
+        routine?.name ?? AppLocalizations.of(context).unnamedRoutine,
         style: textTheme.bodyMedium
             ?.copyWith(fontSize: 20, fontWeight: FontWeight.bold),
       ),
@@ -93,44 +93,79 @@ class _RoutineScreenState extends State<RoutineScreen> {
               width: 20,
               child: CircularProgressIndicator(
                 value: null,
-                semanticsLabel: AppLocalizations.of(context)!.loading,
+                semanticsLabel: AppLocalizations.of(context).loading,
               ))
-          : Text(AppLocalizations.of(context)!.btnAddToCalendar),
+          : Text(AppLocalizations.of(context).btnAddToCalendar),
       onPressed: () async {
         DateTimeRange? routineRange = await showDateRangePicker(
             context: context,
             firstDate: currentDate,
             lastDate: currentDate.add(const Duration(days: 365)));
+
+        if (routineRange == null) {
+          // User cancelled the date picker
+          return;
+        }
+
         Map<String, dynamic> params = {
           'action': 'addroutine',
           'objectid': routine?.id.toString(),
-          'startdate': routineRange?.start.toString(),
-          'enddate': routineRange?.end.toString()
+          'startdate': routineRange.start.toString(),
+          'enddate': routineRange.end.toString()
         };
 
-        var result = await _apiClient.dispatcherRequest('activity', params);
+        core.ApiResponse apiResponse = await _apiClient.dispatcherRequest('activity', params);
 
-        if (result['status'] == 'success') {
+        if (kDebugMode) {
+          log('dispatcherRequest response type: ${apiResponse.runtimeType}');
+          log('dispatcherRequest status: ${apiResponse.status}');
+          log('dispatcherRequest data type: ${apiResponse.data?.runtimeType}');
+          log('dispatcherRequest rawData: ${apiResponse.rawData}');
+        }
+
+        // Use rawData since dispatcher responses don't have a 'data' wrapper
+        Map<String, dynamic>? result = apiResponse.rawData as Map<String, dynamic>?;
+
+        if (kDebugMode) {
+          log('Result: $result');
+          if (result != null) {
+            log('Result keys: ${result.keys.join(", ")}');
+            log('Result status: ${result['status']}');
+          }
+        }
+
+        // Check for success - the response has both root 'status' and nested 'json.status'
+        String status = result?['status']?.toString() ?? 'unknown';
+
+        if (status == 'success') {
           log('displaying success message');
           Provider.of<RoutineProvider>(context,listen: false).getItems({}, reload: true);
+
+          String message = result?['message']?.toString() ??
+                          result?['json']?['message']?.toString() ??
+                          AppLocalizations.of(context).routineAddedToCalendar;
+
           showMessage(
               context,
-              AppLocalizations.of(context)!.calendarUpdated,
+              AppLocalizations.of(context).calendarUpdated,
               Row(
                 children: [
                   const Icon(Icons.check),
-                  Text(AppLocalizations.of(context)!.routineAddedToCalendar)
+                  Text(message)
                 ],
               ));
         } else {
           log('displaying error message');
+          String errorMsg = result?['message']?.toString() ??
+                           result?['error']?.toString() ??
+                           'Unknown error occurred';
+
           var message = Column(children: [
             const Icon(Icons.error_outline),
-            if (result['message'] != null) Text(result['message']),
-            if (result['error'] != null) Text(result['error'])
+            Text(errorMsg)
           ]);
           showMessage(context,
-              AppLocalizations.of(context)!.addingRoutineFailed, message);
+              AppLocalizations.of(context).addingRoutineFailed, message);
         }
         setState(() {});
       },
@@ -143,7 +178,7 @@ class _RoutineScreenState extends State<RoutineScreen> {
       ));
       if (weeks > 1) {
         widgets.add(
-            Text('${AppLocalizations.of(context)!.week} ${start ~/ 7 + 1}'));
+            Text('${AppLocalizations.of(context).week} ${start ~/ 7 + 1}'));
       }
       widgets.add(WeekView(startDay: start, items: items));
     }

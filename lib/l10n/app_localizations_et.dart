@@ -572,6 +572,9 @@ class AppLocalizationsEt extends AppLocalizations {
   String get settings => 'Seaded';
 
   @override
+  String get server => 'Server';
+
+  @override
   String get signUp => 'Registreeru';
 
   @override

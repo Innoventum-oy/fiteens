@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 
 import 'package:fiteens/src/widgets/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:fiteens/l10n/app_localizations.dart';
+import 'package:fiteens/generated/l10n.dart';
 import 'package:core/core.dart' as core;
 class ScoreList extends StatefulWidget {
   final core.ScoreProvider scoreprovider = core.ScoreProvider();
@@ -42,7 +42,7 @@ class ScoreListState extends State<ScoreList> {
     myScoreItems = Provider.of<core.UserProvider>(context).myScore;
     return Scaffold(
         appBar: AppBar(
-          title: Text(AppLocalizations.of(context)!.myPoints),
+          title: Text(AppLocalizations.of(context).myPoints),
         ),
         body: scoreList(),
         bottomNavigationBar: bottomNavigation(context, currentIndex: 3));
@@ -56,7 +56,7 @@ class ScoreListState extends State<ScoreList> {
             return scoreListRow(myScoreItems[index]);
           });
     } else {
-      return Text(AppLocalizations.of(context)!.scoreListIsEmpty);
+      return Text(AppLocalizations.of(context).scoreListIsEmpty);
     }
   }
 
@@ -65,7 +65,7 @@ class ScoreListState extends State<ScoreList> {
       //minLeadingWidth: 80,
       leading: Text(item.score.toString()),
       title: Text(
-          (item.description ?? AppLocalizations.of(context)!.noDescription)),
+          (item.description ?? AppLocalizations.of(context).noDescription)),
       subtitle: Text(
           "${item.scorestatus ?? ''}\n${DateFormat('dd.MM.yyyy').format((item.scoredate ?? DateTime.now()))}",
           overflow: TextOverflow.ellipsis,

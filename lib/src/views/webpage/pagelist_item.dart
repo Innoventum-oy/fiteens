@@ -1,7 +1,7 @@
 import 'package:core/core.dart' as core;
 import 'package:flutter/material.dart';
 import 'package:fiteens/src/util/navigator.dart';
-import 'package:fiteens/l10n/app_localizations.dart';
+import 'package:fiteens/generated/l10n.dart';
 
 import '../../util/styles.dart';
 
@@ -21,7 +21,7 @@ class WebPageListItem extends StatelessWidget{
    List<Widget> buttons=[];
 
     buttons.add(ElevatedButton(
-      child: Text(AppLocalizations.of(context)!.readMore),
+      child: Text(AppLocalizations.of(context).readMore),
       onPressed: () {
         /* open library view */
         goToWebPage(context, webPage);
@@ -41,8 +41,27 @@ class WebPageListItem extends StatelessWidget{
          Stack(
              fit: StackFit.expand,
              //  crossAxisAlignment: CrossAxisAlignment.stretch,
-             children: [webPage.thumbnailUrl!=null ? Image.network(
-               webPage.thumbnailUrl!, fit: BoxFit.cover,) : Image.asset('images/logo.png', fit: BoxFit.cover,),
+             children: [
+               webPage.thumbnailUrl != null
+                   ? Image.network(
+                       webPage.thumbnailUrl!,
+                       fit: BoxFit.cover,
+                       errorBuilder: (context, error, stackTrace) {
+                         return Image.asset('images/logo.png', fit: BoxFit.cover);
+                       },
+                       loadingBuilder: (context, child, loadingProgress) {
+                         if (loadingProgress == null) return child;
+                         return Center(
+                           child: CircularProgressIndicator(
+                             value: loadingProgress.expectedTotalBytes != null
+                                 ? loadingProgress.cumulativeBytesLoaded /
+                                     loadingProgress.expectedTotalBytes!
+                                 : null,
+                           ),
+                         );
+                       },
+                     )
+                   : Image.asset('images/logo.png', fit: BoxFit.cover),
 
 
                Positioned(
@@ -57,7 +76,7 @@ class WebPageListItem extends StatelessWidget{
 
                          padding: const EdgeInsets.all(5),
                          child:
-                         Text( webPage.pagetitle ?? AppLocalizations.of(context)!.unnamedWebPage,
+                         Text( webPage.pagetitle ?? AppLocalizations.of(context).unnamedWebPage,
                              style: const TextStyle(fontSize: 18))
                      )
                  ),

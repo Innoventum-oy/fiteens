@@ -2,7 +2,7 @@ import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:fiteens/src/widgets/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:fiteens/l10n/app_localizations.dart';
+import 'package:fiteens/generated/l10n.dart';
 import 'package:core/core.dart' as core;
 
 class ValidateContact extends StatefulWidget {
@@ -65,7 +65,7 @@ class ValidateContactState extends State<ValidateContact> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text(AppLocalizations.of(context)!.validateContactTitle),
+          title: Text(AppLocalizations.of(context).validateContactTitle),
           elevation: 0.1,
             actions: const [
 
@@ -127,7 +127,7 @@ class ValidateContactState extends State<ValidateContact> {
 
           } else {
             Flushbar(
-              title: AppLocalizations.of(context)!.requestFailed,
+              title: AppLocalizations.of(context).requestFailed,
               message: response?['message'].toString(),
               duration: const Duration(seconds: 3),
             ).show(context);
@@ -140,7 +140,7 @@ class ValidateContactState extends State<ValidateContact> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         const CircularProgressIndicator(),
-        Text(AppLocalizations.of(context)!.processing)
+        Text(AppLocalizations.of(context).processing)
       ],
     );
 
@@ -150,7 +150,7 @@ class ValidateContactState extends State<ValidateContact> {
       validator: validateContact,
       onSaved: (value) => _contact = value,
       decoration: buildInputDecoration(
-          AppLocalizations.of(context)!.email, Icons.email),
+          AppLocalizations.of(context).email, Icons.email),
     );
 */
 
@@ -173,7 +173,7 @@ class ValidateContactState extends State<ValidateContact> {
                 groupValue: selectedMethod ,
               ),
               title: Text(contactmethod.address),
-              subtitle: Text(contactmethod.verified ? AppLocalizations.of(context)!.verified : AppLocalizations.of(context)!.notVerified),
+              subtitle: Text(contactmethod.verified ? AppLocalizations.of(context).verified : AppLocalizations.of(context).notVerified),
             ),
 
           ]
@@ -190,7 +190,7 @@ class ValidateContactState extends State<ValidateContact> {
             });
       } else {
         //No contact methods found error
-        return Text(AppLocalizations.of(context)!.noContactMethodsFound);
+        return Text(AppLocalizations.of(context).noContactMethodsFound);
 
       }
     }
@@ -199,7 +199,7 @@ class ValidateContactState extends State<ValidateContact> {
       mainAxisSize: MainAxisSize.max,
       children: [
         const SizedBox(height: 15.0),
-        Text(AppLocalizations.of(context)!.contactMethod, style: Theme.of(context).textTheme.headlineSmall,),
+        Text(AppLocalizations.of(context).contactMethod, style: Theme.of(context).textTheme.headlineSmall,),
         const SizedBox(height: 5.0),
         widget.contactMethod!=null ? Text(_contact ?? '') : SizedBox(
           height:200,
@@ -210,7 +210,7 @@ class ValidateContactState extends State<ValidateContact> {
         const SizedBox(height: 20.0),
         auth.verificationStatus == core.VerificationStatus.validating
             ? loading
-            : longButtons(AppLocalizations.of(context)!.getCode,
+            : longButtons(AppLocalizations.of(context).getCode,
             getVerificationCode),
         const SizedBox(height: 5.0),
 
@@ -249,7 +249,7 @@ class ValidateContactState extends State<ValidateContact> {
               groupValue: selectedMethod ,
             ),
             title: Text(contactmethod.address),
-            subtitle: Text(contactmethod.verified ? AppLocalizations.of(context)!.verified : AppLocalizations.of(context)!.notVerified),
+            subtitle: Text(contactmethod.verified ? AppLocalizations.of(context).verified : AppLocalizations.of(context).notVerified),
           ),
 
         ]
@@ -262,7 +262,7 @@ class ValidateContactState extends State<ValidateContact> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         const CircularProgressIndicator(),
-        Text(AppLocalizations.of(context)!.processing)
+        Text(AppLocalizations.of(context).processing)
       ],
     );
 
@@ -270,10 +270,10 @@ class ValidateContactState extends State<ValidateContact> {
       autofocus: true,
       controller: confirmationController,
       validator: (value) =>
-      value!.isEmpty ? AppLocalizations.of(context)!.pleaseEnterConfirmationKey : null,
+      value!.isEmpty ? AppLocalizations.of(context).pleaseEnterConfirmationKey : null,
       onSaved: (value) => _confirmKey = value,
       decoration: buildInputDecoration(
-          AppLocalizations.of(context)!.confirmationKey, Icons.vpn_key),
+          AppLocalizations.of(context).confirmationKey, Icons.vpn_key),
     );
 
     sendVerificationCode() {
@@ -295,7 +295,7 @@ class ValidateContactState extends State<ValidateContact> {
 
           } else {
             Flushbar(
-              title: AppLocalizations.of(context)!.requestFailed,
+              title: AppLocalizations.of(context).requestFailed,
               message: response['message'].toString(),
               duration: const Duration(seconds: 3),
             ).show(context);
@@ -310,14 +310,14 @@ class ValidateContactState extends State<ValidateContact> {
       children: [
         if(selectedMethod!=null) Text(selectedMethod!.address ?? '',style:const TextStyle(fontSize:15,fontWeight:FontWeight.bold)),
         const SizedBox(height: 15.0),
-        label(AppLocalizations.of(context)!.confirmationKey),
+        label(AppLocalizations.of(context).confirmationKey),
         const SizedBox(height: 5.0),
         confirmationKeyField,
 
         const SizedBox(height: 20.0),
         auth.verificationStatus == core.VerificationStatus.validating
             ? loading
-            : longButtons(AppLocalizations.of(context)!.btnConfirm,
+            : longButtons(AppLocalizations.of(context).btnConfirm,
             sendVerificationCode),
 
       ],
@@ -329,7 +329,7 @@ class ValidateContactState extends State<ValidateContact> {
     return Row(
         children:[
           const Icon(Icons.check),
-          Text(AppLocalizations.of(context)!.contactInformationValidated,
+          Text(AppLocalizations.of(context).contactInformationValidated,
               style: const TextStyle(
                   fontWeight: FontWeight.w300,
                   fontSize:20)),
@@ -341,7 +341,7 @@ class ValidateContactState extends State<ValidateContact> {
     List<Widget> elements = [];
     if(auth.loggedInStatus != core.Status.loggedIn ) {
       elements.add(ElevatedButton(
-        child: Text(AppLocalizations.of(context)!.login,
+        child: Text(AppLocalizations.of(context).login,
             style: const TextStyle(fontWeight: FontWeight.w300)),
         onPressed: () {
           Navigator.pushReplacementNamed(context, '/login');
@@ -350,7 +350,7 @@ class ValidateContactState extends State<ValidateContact> {
     }
     else{
       elements.add(ElevatedButton(
-        child: Text(AppLocalizations.of(context)!.btnDashboard,
+        child: Text(AppLocalizations.of(context).btnDashboard,
             style: const TextStyle(fontWeight: FontWeight.w300)),
         onPressed: () {
           Navigator.pushReplacementNamed(context, '/dashboard');
@@ -369,7 +369,7 @@ class ValidateContactState extends State<ValidateContact> {
       case core.VerificationStatus.verified:
       // display button to return to code request form
         return ElevatedButton(
-            child: Text(AppLocalizations.of(context)!.requestNewCode,
+            child: Text(AppLocalizations.of(context).requestNewCode,
                 style: const TextStyle(fontWeight: FontWeight.w300)),
             onPressed: () async {
               setState(() {
@@ -381,7 +381,7 @@ class ValidateContactState extends State<ValidateContact> {
       case core.VerificationStatus.userNotFound:
       case core.VerificationStatus.codeReceived:
         return ElevatedButton(
-            child: Text(AppLocalizations.of(context)!.previous,
+            child: Text(AppLocalizations.of(context).previous,
                 style: const TextStyle(fontWeight: FontWeight.w300)),
             onPressed: () async {
               setState(() {

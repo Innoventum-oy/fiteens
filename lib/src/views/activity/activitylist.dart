@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:fiteens/l10n/app_localizations.dart'; // important
+import 'package:fiteens/generated/l10n.dart'; // important
 import 'package:fiteens/src/util/utils.dart';
 import 'package:fiteens/src/widgets/widgets.dart';
 import 'package:fiteens/src/views/activity/activitylist_item.dart';
@@ -59,7 +59,7 @@ class ActivityListState extends State<ActivityList>  {
       case 'locations':
         params['activitytype'] = 'location';
         params['accesslevel']='modify';
-        params['sort'] = 'name';
+      //  params['sort'] = 'name';
         params['grouping']='activity.id';
         break;
       case 'own':
@@ -72,7 +72,7 @@ class ActivityListState extends State<ActivityList>  {
       default:
         params['activitytype'] = 'activity';
     //    params['startfrom'] = DateFormat('yyyy-MM-dd').format(now);
-        params['sort'] ='name';
+     //   params['sort'] ='name';
         params['grouping']='activity.id';
 
 
@@ -88,6 +88,8 @@ class ActivityListState extends State<ActivityList>  {
           if(kDebugMode) {
             print('${data.length} activities currently loaded!');
           }
+          // Sort the data by name
+          data.sort((a, b) => a.name?.compareTo(b.name ?? '') ?? 0);
           _isLoading = false;
           _pageNumber++;
         }
@@ -133,7 +135,7 @@ class ActivityListState extends State<ActivityList>  {
   return Scaffold(
       appBar: AppBar(
           title: Text(
-            widget.viewType=='locations' ? AppLocalizations.of(context)!.locations : AppLocalizations.of(context)!.activities),
+            widget.viewType=='locations' ? AppLocalizations.of(context).locations : AppLocalizations.of(context).activities),
           actions: [
           if(isTester) IconButton(
       icon: const Icon(Icons.bug_report),
@@ -177,7 +179,7 @@ class ActivityListState extends State<ActivityList>  {
           child:Center(
             child:ListTile(
               leading:const CircularProgressIndicator(),
-              title: Text(AppLocalizations.of(context)!.loading,textAlign: TextAlign.center),
+              title: Text(AppLocalizations.of(context).loading,textAlign: TextAlign.center),
           ),
           ),
         );

@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:fiteens/l10n/app_localizations.dart'; // important
+import 'package:fiteens/generated/l10n.dart'; // important
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:fiteens/src/views/user/card.dart';
@@ -92,7 +92,7 @@ class ActivityParticipantListState extends State<ActivityParticipantList> {
     var titleDateFormat = DateFormat('dd.MM hh:mm');
     return Scaffold(
         appBar: AppBar(
-          title: Text('${AppLocalizations.of(context)!.participants} ${widget._activityDate.startdate !=null ? titleDateFormat.format(widget._activityDate.startdate ?? DateTime.now()).toString() : ''}')
+          title: Text('${AppLocalizations.of(context).participants} ${widget._activityDate.startdate !=null ? titleDateFormat.format(widget._activityDate.startdate ?? DateTime.now()).toString() : ''}')
         ),
         body: userListLoaded ? userList() : const Center(child:CircularProgressIndicator(),
         ),
@@ -110,7 +110,7 @@ class ActivityParticipantListState extends State<ActivityParticipantList> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children:[
               const Icon(Icons.info),
-              Text(AppLocalizations.of(context)!.noUsersFound,textAlign:TextAlign.center,)
+              Text(AppLocalizations.of(context).noUsersFound,textAlign:TextAlign.center,)
           ]),
       );
     }
@@ -140,7 +140,7 @@ class ActivityParticipantListState extends State<ActivityParticipantList> {
             }),//Icon(Icons.supervised_user_circle_sharp),
         onChanged: (bool value) async {
 
-            notify(value ? AppLocalizations.of(context)!.activityRecorded : AppLocalizations.of(context)!.visitRemoved);
+            notify(value ? AppLocalizations.of(context).activityRecorded : AppLocalizations.of(context).visitRemoved);
             Map<String,dynamic>? result = await Provider.of<core.ActivityProvider>(context,listen: false).updateActivityRegistration(activityId:widget._activity.id!,visitStatus:value ? 'visited':'cancelled',visitor: user,user:loggedInUser,visitDate:widget._activityDate) ;
             setState(() {
             if(result?['visitstatus']!=null) {

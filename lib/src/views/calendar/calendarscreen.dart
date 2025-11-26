@@ -5,7 +5,7 @@ import 'package:fiteens/src/widgets/screenscaffold.dart';
 import 'package:flutter/foundation.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter/material.dart';
-import 'package:fiteens/l10n/app_localizations.dart'; // important
+import 'package:fiteens/generated/l10n.dart'; // important
 import 'package:provider/provider.dart';
 import '../../util/constants.dart' as constants;
 import 'components/calendaritem.dart';
@@ -84,7 +84,34 @@ class CalendarScreenState extends State<CalendarScreen> with TickerProviderState
           if(kDebugMode) {
             log('Retrieving details for activity ${item.activity?.id}');
           }
-          Activity activity = Activity.fromJson(await Provider.of<ActivityProvider>(context,listen:false).getDetails(item.activity?.id??0,reload: true));
+
+          dynamic activityData = await Provider.of<ActivityProvider>(context,listen:false).getDetails(item.activity?.id??0,reload: true);
+
+          // Check if activityData is valid
+          if (activityData == null) {
+            if (kDebugMode) {
+              log('WARNING: getDetails returned null for activity ${item.activity?.id}');
+            }
+            continue; // Skip this activity
+          }
+
+          // Handle case where API returns a List instead of Map
+          if (activityData is List) {
+            if (kDebugMode) {
+              log('WARNING: getDetails returned a List for activity ${item.activity?.id}, expected Map');
+            }
+            // Try to use the first item if it exists and is a Map
+            if (activityData.isNotEmpty && activityData[0] is Map) {
+              activityData = activityData[0];
+            } else {
+              if (kDebugMode) {
+                log('ERROR: Cannot extract valid activity data from List');
+              }
+              continue; // Skip this activity
+            }
+          }
+
+          Activity activity = Activity.fromJson(activityData);
           data.putIfAbsent(item.activity?.id??0, () => activity);
 
         }
@@ -143,7 +170,7 @@ class CalendarScreenState extends State<CalendarScreen> with TickerProviderState
     }
 
     return ScreenScaffold(
-        title: AppLocalizations.of(context)!.calendar,
+        title: AppLocalizations.of(context).calendar,
         navigationIndex: widget.navIndex,
         refresh: widget.refresh ,
         onRefresh:(){
@@ -187,9 +214,9 @@ class CalendarScreenState extends State<CalendarScreen> with TickerProviderState
         TableCalendar<Map<String,dynamic>>(
           locale: Localizations.localeOf(context).toString(),//Intl.getCurrentLocale(),
           availableCalendarFormats: {
-            CalendarFormat.month: AppLocalizations.of(context)!.month,
-            CalendarFormat.week: AppLocalizations.of(context)!.week,
-            CalendarFormat.twoWeeks: AppLocalizations.of(context)!.twoWeeks,
+            CalendarFormat.month: AppLocalizations.of(context).month,
+            CalendarFormat.week: AppLocalizations.of(context).week,
+            CalendarFormat.twoWeeks: AppLocalizations.of(context).twoWeeks,
           },
           firstDay: kFirstDay ?? kNow,
           lastDay: kLastDay ?? kNow,
@@ -231,7 +258,7 @@ class CalendarScreenState extends State<CalendarScreen> with TickerProviderState
                     return CalendarItem(value[index]);
                   }) : Padding(
                 padding: const EdgeInsets.all(30),
-                child: Text(AppLocalizations.of(context)!.noEventsFound),
+                child: Text(AppLocalizations.of(context).noEventsFound),
               );
             },
           ),

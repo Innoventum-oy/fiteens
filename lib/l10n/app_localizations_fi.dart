@@ -573,6 +573,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get settings => 'Asetukset';
 
   @override
+  String get server => 'Palvelin';
+
+  @override
   String get signUp => 'Uusi tili';
 
   @override

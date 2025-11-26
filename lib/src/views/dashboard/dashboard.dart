@@ -4,7 +4,7 @@ import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:fiteens/l10n/app_localizations.dart'; // important
+import 'package:fiteens/generated/l10n.dart'; // important
 
 import 'package:core/core.dart' as core;
 import 'package:fiteens/src/views/webpage/webpagetextcontent.dart';
@@ -94,7 +94,7 @@ class DashBoardState extends State<DashBoard> {
 
       return Scaffold(
           appBar: AppBar(
-            title: Text(AppLocalizations.of(context)!.appName),
+            title: Text(AppLocalizations.of(context).appName),
             elevation: 0.1,
             actions: [
               //Info page button
@@ -154,7 +154,7 @@ class DashBoardState extends State<DashBoard> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            AppLocalizations.of(context)!.collectedBadges,
+                            AppLocalizations.of(context).collectedBadges,
                             style: const TextStyle(fontSize: 20),
                           ),
                           GridView.count(
@@ -187,7 +187,7 @@ class DashBoardState extends State<DashBoard> {
         child: ListTile(
           visualDensity: const VisualDensity(vertical: VisualDensity.maximumDensity),
           title: Text(
-            AppLocalizations.of(context)!.navitem(item.label),
+            AppLocalizations.of(context).navitem(item.label),
             style: const TextStyle(
               fontSize: 20,
             ),

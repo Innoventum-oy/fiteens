@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:fiteens/l10n/app_localizations.dart'; // important
+import 'package:fiteens/generated/l10n.dart'; // important
 import 'package:fiteens/src/util/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
@@ -61,7 +61,7 @@ class ActivityListSliverState extends State<ActivityListSliver> {
       'offset': offset.toString(),
      // 'startfrom': DateFormat('yyyy-MM-dd').format(now),
       if(user.token !=null) 'api_key': user.token,
-      'sort': 'name',
+      //'sort': 'name',
     };
 
     try {
@@ -118,7 +118,7 @@ class ActivityListSliverState extends State<ActivityListSliver> {
           ListTile(
             leading: const Icon(Icons.error,color:Colors.white),
             title: Text(
-                AppLocalizations.of(context)!.noActivitiesFound,
+                AppLocalizations.of(context).noActivitiesFound,
                 style:const TextStyle(color:Colors.white)),
           ),
         );
@@ -153,7 +153,7 @@ class ActivityListSliverState extends State<ActivityListSliver> {
           child: Center(
             child: ListTile(
               leading: const CircularProgressIndicator(),
-              title: Text(AppLocalizations.of(context)!.loading,
+              title: Text(AppLocalizations.of(context).loading,
                   textAlign: TextAlign.center,
                   style: const TextStyle(color: Colors.white)),
             ),
@@ -167,7 +167,7 @@ class ActivityListSliverState extends State<ActivityListSliver> {
   Widget activityHorizontal(activity) {
     List<Widget> buttons = [];
     buttons.add(TextButton(
-      child: Text(AppLocalizations.of(context)!.readMore),
+      child: Text(AppLocalizations.of(context).readMore),
       onPressed: () {
         /* open library view */
         goToActivity(context, activity);
@@ -183,7 +183,7 @@ class ActivityListSliverState extends State<ActivityListSliver> {
         ? ''
         : (calculateDifference(activity.nexteventdate!) != 0
             ? DateFormat('kk:mm dd.MM.yyyy').format(activity.nexteventdate!)
-            : AppLocalizations.of(context)!.today + DateFormat('kk:mm ').format(activity.startdate!));
+            : AppLocalizations.of(context).today + DateFormat('kk:mm ').format(activity.startdate!));
 
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 4.0),
@@ -196,18 +196,85 @@ class ActivityListSliverState extends State<ActivityListSliver> {
                   Card(
                     elevation: 18.0,
                     child: activity.coverpictureurl != null
-                        ? Image.network(activity.coverpictureurl!,
-                            width: 150, height: 230, fit: BoxFit.cover)
+                        ? Image.network(
+                            activity.coverpictureurl!,
+                            width: 150,
+                            height: 230,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return widget.activityClass.coverpictureurl != null
+                                  ? Image.network(
+                                      widget.activityClass.coverpictureurl!,
+                                      width: 150,
+                                      height: 230,
+                                      fit: BoxFit.cover,
+                                      errorBuilder: (context, error, stackTrace) {
+                                        return const SizedBox(
+                                          width: 150,
+                                          height: 230,
+                                          child: Icon(Icons.group_rounded, size: 80),
+                                        );
+                                      },
+                                    )
+                                  : const SizedBox(
+                                      width: 150,
+                                      height: 230,
+                                      child: Icon(Icons.group_rounded, size: 80),
+                                    );
+                            },
+                            loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return SizedBox(
+                                width: 150,
+                                height: 230,
+                                child: Center(
+                                  child: CircularProgressIndicator(
+                                    value: loadingProgress.expectedTotalBytes != null
+                                        ? loadingProgress.cumulativeBytesLoaded /
+                                            loadingProgress.expectedTotalBytes!
+                                        : null,
+                                  ),
+                                ),
+                              );
+                            },
+                          )
                         : widget.activityClass.coverpictureurl != null
                             ? Image.network(
                                 widget.activityClass.coverpictureurl!,
                                 width: 150,
                                 height: 230,
-                                fit: BoxFit.cover)
-                            : const Icon(Icons.group_rounded, size: 150),
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return const SizedBox(
+                                    width: 150,
+                                    height: 230,
+                                    child: Icon(Icons.group_rounded, size: 80),
+                                  );
+                                },
+                                loadingBuilder: (context, child, loadingProgress) {
+                                  if (loadingProgress == null) return child;
+                                  return SizedBox(
+                                    width: 150,
+                                    height: 230,
+                                    child: Center(
+                                      child: CircularProgressIndicator(
+                                        value: loadingProgress.expectedTotalBytes != null
+                                            ? loadingProgress.cumulativeBytesLoaded /
+                                                loadingProgress.expectedTotalBytes!
+                                            : null,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              )
+                            : const SizedBox(
+                                width: 150,
+                                height: 230,
+                                child: Icon(Icons.group_rounded, size: 80),
+                              ),
                   ),
                   Text(
-                      (activity.name ?? AppLocalizations.of(context)!.unnamedActivity)!,
+                      (activity.name ?? AppLocalizations.of(context).unnamedActivity)!,
                       style: const TextStyle(color: Colors.white)),
                   Text(dateinfo, style: const TextStyle(color: Colors.white)),
                   Row(

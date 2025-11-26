@@ -1,5 +1,22 @@
 {
   "es": [
-    "alreadyDone"
+    "alreadyDone",
+    "server"
+  ],
+
+  "et": [
+    "server"
+  ],
+
+  "nl": [
+    "server"
+  ],
+
+  "pl": [
+    "server"
+  ],
+
+  "pt": [
+    "server"
   ]
 }

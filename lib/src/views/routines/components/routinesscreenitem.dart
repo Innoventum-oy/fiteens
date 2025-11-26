@@ -4,7 +4,7 @@ import 'package:core/core.dart';
 import 'package:fiteens/src/views/routines/routinescreen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:fiteens/l10n/app_localizations.dart';
+import 'package:fiteens/generated/l10n.dart';
 import 'package:fiteens/src/util/navigator.dart';
 class RoutinesScreenItem extends StatelessWidget{
 
@@ -30,11 +30,31 @@ class RoutinesScreenItem extends StatelessWidget{
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       ListTile(
-                        leading: routine.imageUrl!=null ? Image.network(routine.imageUrl! ,width:50): const Icon(Icons.sports_gymnastics),
-                        title: Text((routine.name ?? AppLocalizations.of(context)!.unnamedRoutine),
-
+                        leading: routine.imageUrl != null
+                            ? SizedBox(
+                                width: 40,
+                                height: 40,
+                                child: Image.network(
+                                  routine.imageUrl!,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return const Icon(Icons.sports_gymnastics);
+                                  },
+                                  loadingBuilder: (context, child, loadingProgress) {
+                                    if (loadingProgress == null) return child;
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  },
+                                ),
+                              )
+                            : const Icon(Icons.sports_gymnastics),
+                        title: Text((routine.name ?? AppLocalizations.of(context).unnamedRoutine)),
+                        subtitle: Text(
+                          parse(routine.description ?? '').body!.text,
+                          maxLines: 3,
+                          style: const TextStyle(overflow: TextOverflow.ellipsis),
                         ),
-                        subtitle: Text(parse(routine.description??'').body!.text,maxLines:3,style: const TextStyle(overflow: TextOverflow.ellipsis),),
 
                         isThreeLine: true,
                       ),

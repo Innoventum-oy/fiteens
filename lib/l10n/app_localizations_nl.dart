@@ -577,6 +577,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get settings => 'Instellingen';
 
   @override
+  String get server => 'Server';
+
+  @override
   String get signUp => 'Aanmelden';
 
   @override

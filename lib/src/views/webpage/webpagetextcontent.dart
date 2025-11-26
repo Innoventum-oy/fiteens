@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:fiteens/l10n/app_localizations.dart';
+import 'package:fiteens/generated/l10n.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:core/core.dart';
 import '../../util/constants.dart';
@@ -53,7 +53,7 @@ class ContentPageViewState extends State<ContentPageView> {
   @override
   Widget build(BuildContext context) {
     page ??= Provider.of<WebPageProvider>(context).page;
-    String pageTitle = page?.pagetitle ?? AppLocalizations.of(context)!.pageContent;
+    String pageTitle = page?.pagetitle ?? AppLocalizations.of(context).pageContent;
     return Scaffold(
         appBar: AppBar(
           title: Text(pageTitle),
@@ -88,7 +88,7 @@ class ContentPageViewState extends State<ContentPageView> {
                 Navigator.pop(context);
               }
             },
-            child: Text(AppLocalizations.of(context)!.btnReturn)),
+            child: Text(AppLocalizations.of(context).btnReturn)),
       ));
     }
     return Column(children: textContents);

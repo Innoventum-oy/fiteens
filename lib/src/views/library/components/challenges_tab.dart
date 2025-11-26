@@ -4,7 +4,7 @@ import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:fiteens/l10n/app_localizations.dart';
+import 'package:fiteens/generated/l10n.dart';
 import 'activityclass.dart';
 
 class ChallengesTab extends StatefulWidget{
@@ -56,10 +56,10 @@ class ChallengesTabState extends State<ChallengesTab> with AutomaticKeepAliveCli
                 activityClass: item,
 
               ));
-            }) : Text(AppLocalizations.of(context)!.libraryIsEmpty);
+            }) : Text(AppLocalizations.of(context).libraryIsEmpty);
       }
       else {
-        challengesTabContent = Text(AppLocalizations.of(context)!.libraryIsEmpty);
+        challengesTabContent = Text(AppLocalizations.of(context).libraryIsEmpty);
       }
     }
     else {

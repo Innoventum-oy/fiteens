@@ -1,6 +1,6 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:fiteens/l10n/app_localizations.dart';
+import 'package:fiteens/generated/l10n.dart';
 
 class EventLogView extends StatefulWidget {
   const EventLogView({super.key});
@@ -16,7 +16,7 @@ class EventLogViewState extends State<EventLogView> {
     Future<List<String>?> getEventLog() => EventLog().getMessages();
     return Scaffold(
       appBar: AppBar(
-          title: Text(AppLocalizations.of(context)!.eventLog)),
+          title: Text(AppLocalizations.of(context).eventLog)),
       body: FutureBuilder(
         initialData: const [],
           future: getEventLog(),

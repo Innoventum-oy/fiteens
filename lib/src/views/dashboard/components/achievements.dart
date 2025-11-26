@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../achievements.dart';
-import 'package:fiteens/l10n/app_localizations.dart'; // important
+import 'package:fiteens/generated/l10n.dart'; // important
 
 import 'badgedisplays.dart';
 Widget achievements(user,badges,context)
@@ -23,7 +23,7 @@ return Row(children: <Widget>[
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          AppLocalizations.of(context)!.achievements,
+                          AppLocalizations.of(context).achievements,
                           textAlign: TextAlign.left,
                           style: const TextStyle(fontSize: 20),
                         ),

@@ -1188,6 +1188,12 @@ abstract class AppLocalizations {
   /// **'settings'**
   String get settings;
 
+  /// No description provided for @server.
+  ///
+  /// In en, this message translates to:
+  /// **'Server'**
+  String get server;
+
   /// No description provided for @signUp.
   ///
   /// In en, this message translates to:

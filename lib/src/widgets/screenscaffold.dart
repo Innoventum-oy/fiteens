@@ -61,7 +61,7 @@ class _ScreenScaffoldState extends State<ScreenScaffold>{
 
         title: Text(widget.title),
         elevation: 0.1,
-        leading: (Navigator.canPop(context) && ModalRoute.of(context)!.canPop) ? const BackButton() : ClipOval(child:Image.asset('images/logo.png',
+        leading: (Navigator.canPop(context) && ModalRoute.of(context)?.canPop == true) ? const BackButton() : ClipOval(child:Image.asset('images/logo.png',
           fit: BoxFit.scaleDown,
         )
         ),

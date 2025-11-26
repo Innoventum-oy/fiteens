@@ -5,7 +5,7 @@ import 'package:fiteens/src/widgets/screenscaffold.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:flutter/material.dart';
-import 'package:fiteens/l10n/app_localizations.dart';
+import 'package:fiteens/generated/l10n.dart';
 import 'package:provider/provider.dart';
 import '../../util/constants.dart' as constants;
 import 'components/routinesscreenitem.dart';
@@ -46,7 +46,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
         children:[
       const CircularProgressIndicator(),
-      Text(AppLocalizations.of(context)!.loading)])
+      Text(AppLocalizations.of(context).loading)])
     );
     if (loaded) {
 
@@ -67,15 +67,15 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
                   background: Container(color:Colors.red),
               child:RoutinesScreenItem(item)
               );
-            }) : Text(AppLocalizations.of(context)!.noRoutinesFound);
+            }) : Text(AppLocalizations.of(context).noRoutinesFound);
       }
       else {
-        routineView = defaultContent(Text(AppLocalizations.of(context)!.noRoutinesFound));
+        routineView = defaultContent(Text(AppLocalizations.of(context).noRoutinesFound));
       }
     }
 
     return ScreenScaffold(
-        title: AppLocalizations.of(context)!.routines_title,
+        title: AppLocalizations.of(context).routines_title,
         navigationIndex: widget.navIndex,
         refresh: widget.refresh ,
         onRefresh:(){

@@ -8,7 +8,7 @@ import 'package:fiteens/src/views/mywellbeing/wellbeingscreen.dart';
 import 'package:fiteens/src/views/routines/routinesscreen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:fiteens/l10n/app_localizations.dart'; // important
+import 'package:fiteens/generated/l10n.dart'; // important
 
 
 import '../widgets/notifydialog.dart';
@@ -22,7 +22,7 @@ class AppUrl {
   };
   static const String liveBaseURL = "dev.fiteens.eu";
   static const String localBaseURL = "http://10.0.2.2:4000/api/";
-  static const int appId = 1; //App id for Lukudiplomi
+  static const int appId = 1; // Fiteens
   static const String baseURL = liveBaseURL;
   static const String login = "/api/login";
   static const String logout = "/api/logout";
@@ -104,7 +104,7 @@ class Router {
       }
       else {
         // Display error
-        notifyDialog(AppLocalizations.of(context)!.error,targetWidget,context);
+        notifyDialog(AppLocalizations.of(context).error,targetWidget,context);
       }
     }
 }

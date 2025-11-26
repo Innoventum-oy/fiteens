@@ -5,7 +5,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:fiteens/l10n/app_localizations.dart'; // important
+import 'package:fiteens/generated/l10n.dart'; // important
 
 import 'package:core/core.dart';
 
@@ -96,7 +96,7 @@ Future<void> feedbackAction(BuildContext context, User user) async {
   String appName = '';
 
   String version = '';
-  String feedbackText = AppLocalizations.of(context)!.feedback;
+  String feedbackText = AppLocalizations.of(context).feedback;
   await PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
     appName = packageInfo.appName;
     version = packageInfo.version;
@@ -128,8 +128,8 @@ Future<void> feedbackAction(BuildContext context, User user) async {
       apiClient.sendFeedback(params, data)!.then((var response) async {
         switch (response['status']) {
           case 'success':
-            String title = AppLocalizations.of(context)!.feedbackSent;
-            String content = AppLocalizations.of(context)!.thankyouForFeedback;
+            String title = AppLocalizations.of(context).feedbackSent;
+            String content = AppLocalizations.of(context).thankyouForFeedback;
             showDialog<String>(
                 context: context,
                 builder: (BuildContext context) =>

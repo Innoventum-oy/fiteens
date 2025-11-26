@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:fiteens/l10n/app_localizations.dart'; // important
+import 'package:fiteens/generated/l10n.dart'; // important
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:fiteens/src/util/utils.dart';
@@ -62,7 +62,7 @@ class ActivityVisitListState extends State<ActivityVisitList> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("${widget._activity.name??'Activity'}: ${AppLocalizations.of(context)!.eventLog}"),
+        title: Text("${widget._activity.name??'Activity'}: ${AppLocalizations.of(context).eventLog}"),
         elevation: 0.1,
 
       ),
@@ -94,7 +94,7 @@ class ActivityVisitListState extends State<ActivityVisitList> {
                     var titleDateFormat = DateFormat('dd.MM HH:mm');
                     return ListTile(
                       leading: const Icon(Icons.error),
-                      title: Text('${titleDateFormat.format(visit.startdate?? DateTime.now())}: ${AppLocalizations.of(context)!.userNotFound}'),
+                      title: Text('${titleDateFormat.format(visit.startdate?? DateTime.now())}: ${AppLocalizations.of(context).userNotFound}'),
                     );
                   }
                   if(snapshot.data.id!=null ){
@@ -108,14 +108,14 @@ class ActivityVisitListState extends State<ActivityVisitList> {
                     var titleDateFormat = DateFormat('dd.MM HH:mm');
                     return ListTile(
                       leading: const CircularProgressIndicator(),
-                      title: Text('${titleDateFormat.format(visit.startdate?? DateTime.now())}: ${AppLocalizations.of(context)!.loading}'),
+                      title: Text('${titleDateFormat.format(visit.startdate?? DateTime.now())}: ${AppLocalizations.of(context).loading}'),
                     );
                   }
                 }
             );
           }
       ),) :  ListTile(
-          leading: const Icon(Icons.info_outline),title:Text('${AppLocalizations.of(context)!.noVisitsFound} ${DateFormat('d.M.y').format(myDateRange.start)}${myDateRange.duration.inDays > 0 ? ' - ${DateFormat('d.M.y').format(myDateRange.end)}' :''}')
+          leading: const Icon(Icons.info_outline),title:Text('${AppLocalizations.of(context).noVisitsFound} ${DateFormat('d.M.y').format(myDateRange.start)}${myDateRange.duration.inDays > 0 ? ' - ${DateFormat('d.M.y').format(myDateRange.end)}' :''}')
       )
      ] ),
 
@@ -158,7 +158,7 @@ class ActivityVisitListState extends State<ActivityVisitList> {
               return _userBenefitListItem(user.userbenefits[index]);
             }),
       )
-          : Text(AppLocalizations.of(context)!.noActiveBenefits), */
+          : Text(AppLocalizations.of(context).noActiveBenefits), */
     );
   }
 }

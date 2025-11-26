@@ -320,6 +320,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "No score earned yet",
     ),
     "sendAnswer": MessageLookupByLibrary.simpleMessage("Send answer"),
+    "server": MessageLookupByLibrary.simpleMessage("Server"),
     "settings": MessageLookupByLibrary.simpleMessage("settings"),
     "signUp": MessageLookupByLibrary.simpleMessage("Sign up"),
     "startAssessment": MessageLookupByLibrary.simpleMessage(

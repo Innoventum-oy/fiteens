@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:fiteens/l10n/app_localizations.dart';
+import 'package:fiteens/generated/l10n.dart';
 import 'package:fiteens/src/util/utils.dart';
 import 'package:fiteens/src/widgets/widgets.dart';
 import 'package:fiteens/src/views/webpage/pagelist_item.dart';
@@ -86,7 +86,7 @@ class VerticalPageListState extends State<VerticalPageList> {
       length: 3,
       child: Scaffold(
           appBar: AppBar(
-            title: Text(AppLocalizations.of(context)!.resources),
+            title: Text(AppLocalizations.of(context).resources),
             actions: [
               if (hasInfoPage)
                 IconButton(
@@ -110,13 +110,13 @@ class VerticalPageListState extends State<VerticalPageList> {
                 //TODO: replace with pagecategories retrieved from server
                 tabs: [
                   Tab(
-                    text: AppLocalizations.of(context)!.physicalActivities,
+                    text: AppLocalizations.of(context).physicalActivities,
                   ),
                   Tab(
-                    text: AppLocalizations.of(context)!.healthyLifestyle,
+                    text: AppLocalizations.of(context).healthyLifestyle,
                   ),
                   Tab(
-                    text: AppLocalizations.of(context)!.healthyFood,
+                    text: AppLocalizations.of(context).healthyFood,
                   ),
                 ]), // Tabs
           ),
@@ -151,7 +151,7 @@ class VerticalPageListState extends State<VerticalPageList> {
                 return WebPageListItem(pages[index]);
               });
         } else {
-          return Text(AppLocalizations.of(context)!.noResourcesFound);
+          return Text(AppLocalizations.of(context).noResourcesFound);
         }
       case LoadingState.error:
         //data loading returned error state
@@ -171,7 +171,7 @@ class VerticalPageListState extends State<VerticalPageList> {
           child: Center(
             child: ListTile(
               leading: const CircularProgressIndicator(),
-              title: Text(AppLocalizations.of(context)!.loading,
+              title: Text(AppLocalizations.of(context).loading,
                   textAlign: TextAlign.center),
             ),
           ),

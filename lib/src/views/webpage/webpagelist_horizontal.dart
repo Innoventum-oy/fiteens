@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fiteens/l10n/app_localizations.dart';
+import 'package:fiteens/generated/l10n.dart';
 import 'package:fiteens/src/util/utils.dart';
 import 'package:fiteens/src/util/navigator.dart';
 import 'package:provider/provider.dart';
@@ -130,7 +130,7 @@ class WebPageListState extends State<WebPageList> {
           child: Center(
             child: ListTile(
               leading: const CircularProgressIndicator(),
-              title: Text(AppLocalizations.of(context)!.loading,
+              title: Text(AppLocalizations.of(context).loading,
                   textAlign: TextAlign.center),
             ),
           ),
@@ -144,7 +144,7 @@ class WebPageListState extends State<WebPageList> {
     //print('item id: '+webPage.id.toString());
     List<Widget> buttons = [];
     buttons.add(TextButton(
-      child: Text(AppLocalizations.of(context)!.readMore),
+      child: Text(AppLocalizations.of(context).readMore),
       onPressed: () {
         /* open library view */
         goToWebPage(context, webPage);
@@ -209,11 +209,39 @@ class WebPageListState extends State<WebPageList> {
                         elevation: 18.0,
                         child: Stack(alignment: Alignment.topCenter, children: [
                           webPage.coverpictureurl != null
-                              ? Image.network(webPage.coverpictureurl!,
+                              ? Image.network(
+                                  webPage.coverpictureurl!,
                                   width: (widget.width - 10),
                                   height: (widget.height - 105),
-                                  fit: BoxFit.cover)
-                              : const Icon(Icons.book),
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return SizedBox(
+                                      width: (widget.width - 10),
+                                      height: (widget.height - 105),
+                                      child: const Icon(Icons.book, size: 60),
+                                    );
+                                  },
+                                  loadingBuilder: (context, child, loadingProgress) {
+                                    if (loadingProgress == null) return child;
+                                    return SizedBox(
+                                      width: (widget.width - 10),
+                                      height: (widget.height - 105),
+                                      child: Center(
+                                        child: CircularProgressIndicator(
+                                          value: loadingProgress.expectedTotalBytes != null
+                                              ? loadingProgress.cumulativeBytesLoaded /
+                                                  loadingProgress.expectedTotalBytes!
+                                              : null,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                )
+                              : SizedBox(
+                                  width: (widget.width - 10),
+                                  height: (widget.height - 105),
+                                  child: const Icon(Icons.book, size: 60),
+                                ),
                           Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: readStatusInfo)

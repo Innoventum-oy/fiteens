@@ -1,6 +1,6 @@
 import 'package:core/core.dart' as core;
 import 'package:flutter/material.dart';
-import 'package:fiteens/l10n/app_localizations.dart';
+import 'package:fiteens/generated/l10n.dart';
 import '../util/utils.dart';
 
 class TextFormFieldItem extends StatefulWidget {
@@ -58,7 +58,7 @@ class TextFormFieldItemState extends State<TextFormFieldItem> {
         maxLines: widget.params['maxlines'] ?? 1,
         decoration: InputDecoration(
             hintText: widget.element.description ??
-                AppLocalizations.of(context)!.writeAnswerHere,
+                AppLocalizations.of(context).writeAnswerHere,
             //+': '+widget.element.title.toString(),
             fillColor: createMaterialColor('#FFEDE30E')),
         validator: (String? value) {
@@ -68,7 +68,7 @@ class TextFormFieldItemState extends State<TextFormFieldItem> {
           }
           return value != null
               ? null
-              : AppLocalizations.of(context)!.fieldCannotBeEmpty;
+              : AppLocalizations.of(context).fieldCannotBeEmpty;
         });
   }
 }
