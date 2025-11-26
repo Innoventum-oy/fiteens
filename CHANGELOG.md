@@ -1,4 +1,4 @@
-# FITeens v2.x - Change Summary
+# FITeens v1.0.1 - Change Summary
 **Date:** November 26, 2025
 
 ## Overview
@@ -230,7 +230,7 @@ For issues or questions:
 
 ---
 
-**Version:** 2.x  
+**Version:** 1.0.1 
 **Build Date:** November 26, 2025  
 **Status:** Production Ready ✅
 
